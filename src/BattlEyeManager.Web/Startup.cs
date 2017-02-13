@@ -17,17 +17,27 @@ namespace BattlEyeManager.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
             loggerFactory.AddConsole();
+            loggerFactory.AddDebug();
+
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            // Configure a rewrite rule to auto-lookup for standard default files such as index.html.    
+            app.UseDefaultFiles();
+
+            // Serve static files (html, css, js, images & more). See also the following URL:    
+            // https://docs.asp.net/en/latest/fundamentals/static-files.html for further reference.    
+            app.UseStaticFiles();
+
+            // Add MVC to the pipeline     
+            app.UseMvc();
         }
     }
 }
