@@ -185,4 +185,4 @@
 --resource:"D:\Code\bitbucket\battleyemanager\src\BattlEyeManager.Web\obj\Debug\netcoreapp1.0\BattlEyeManager.Webdotnet-compile.deps.json",BattlEyeManager.Web.deps.json
 D:\Code\bitbucket\battleyemanager\src\BattlEyeManager.Web\Program.cs
 D:\Code\bitbucket\battleyemanager\src\BattlEyeManager.Web\Startup.cs
-D:\Code\bitbucket\battleyemanager\src\BattlEyeManager.Web\Controllers\ValueController.cs
+D:\Code\bitbucket\battleyemanager\src\BattlEyeManager.Web\Controllers\ValuesController.cs
