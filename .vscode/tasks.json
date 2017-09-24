@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/BattlEyeManager.Web.csproj"
+                "${workspaceRoot}/src/BattlEyeManager.Web/BattlEyeManager.Web.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
