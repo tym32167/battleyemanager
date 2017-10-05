@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace BattlEyeManager.Web
+namespace BattlEyeManagerWeb
 {
     public class Program
     {

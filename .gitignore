@@ -4,6 +4,7 @@
 # User-specific files
 *.suo
 *.user
+*.userosscache
 *.sln.docstates
 
 # Build results
@@ -17,6 +18,13 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+
+
+# Visual Studio 2015 cache/options directory
+.vs/
+/src/BattlEyeManager.Web/wwwroot/dist/
+/src/BattlEyeManager.Web/client/dist/
+/src/BattlEyeManager.Web/node_modules
 
 # Roslyn cache directories
 *.ide/
@@ -74,6 +82,7 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+*.sap
 
 # TFS 2012 Local Workspace
 $tf/
@@ -143,8 +152,18 @@ publish/
 csx/
 *.build.csdef
 
+# Microsoft Azure ApplicationInsights config file
+ApplicationInsights.config
+
 # Windows Store app package directory
 AppPackages/
+BundleArtifacts/
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!*.[Cc]ache/
 
 # Others
 sql/
@@ -157,7 +176,10 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
-node_modules/
+
+
+/yarn.lock
+orleans.codegen.cs
 
 # RIA/Silverlight projects
 Generated_Code/
@@ -184,8 +206,28 @@ FakesAssemblies/
 src/.vs/
 *.orig
 
+# GhostDoc plugin setting file
+*.GhostDoc.xml
 
-src/BattlEyeManager.Web/wwwroot/js/@angular/
-src/BattlEyeManager.Web/wwwroot/js/rxjs/
-src/BattlEyeManager.Web/wwwroot/app/
-src/BattlEyeManager.Web/wwwroot/js/
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+
+# Visual Studio 6 build log
+*.plg
+
+# Visual Studio 6 workspace options file
+*.opt
+
+# Visual Studio LightSwitch build output
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+
+# Paket dependency manager
+.paket/paket.exe
+
+# FAKE - F# Make
+.fake/

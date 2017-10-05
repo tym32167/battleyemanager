@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BattlEyeManager.Web
+namespace BattlEyeManagerWeb
 {
     public class Startup
     {

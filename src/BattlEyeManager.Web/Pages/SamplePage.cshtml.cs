@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BattlEyeManager.Web.Pages
+namespace BattlEyeManagerWeb.Pages
 {
     public class SamplePageModel : PageModel
     {

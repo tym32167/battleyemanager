@@ -1,8 +1,10 @@
-﻿@model object
-
 @{
-    ViewBag.Title = "Sampe title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Home Page";
 }
 
-<h2>title</h2>
+<app asp-prerender-module="client/dist/main-server">Loading...</app>
+
+<script src="~/dist/vendor.js" asp-append-version="true"></script>
+@section scripts {
+    <script src="~/dist/main-client.js" asp-append-version="true"></script>
+}
