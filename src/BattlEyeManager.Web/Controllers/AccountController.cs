@@ -40,7 +40,9 @@ namespace BattlEyeManager.Web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Redirect(returnUrl);
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        return Redirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
