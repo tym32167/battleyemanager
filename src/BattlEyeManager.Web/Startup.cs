@@ -1,4 +1,5 @@
-﻿using BattlEyeManager.Models;
+﻿using System;
+using BattlEyeManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,9 @@ namespace BattlEyeManager.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+
+            services.AddSingleton<IKeyValueStore<UserModel, Guid>, InMemoryStore<UserModel, Guid>>();
 
             services.AddSingleton<IUserStore<UserModel>, UserStore>();
             services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();

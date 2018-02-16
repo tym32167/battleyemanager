@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,9 +8,12 @@ namespace BattlEyeManager.Models
 {
     public class UserStore : IUserPasswordStore<UserModel>
     {
-        private readonly Dictionary<Guid, UserModel> _byId = new Dictionary<Guid, UserModel>();
-        private readonly Dictionary<string, UserModel> _byName = new Dictionary<string, UserModel>();
-        private readonly Dictionary<string, UserModel> _byEmail = new Dictionary<string, UserModel>();
+        private readonly IKeyValueStore<UserModel, Guid> _store;
+
+        public UserStore(IKeyValueStore<UserModel, Guid> store)
+        {
+            _store = store;
+        }
 
         public void Dispose()
         {
@@ -29,7 +32,7 @@ namespace BattlEyeManager.Models
 
         public Task SetUserNameAsync(UserModel user, string userName, CancellationToken cancellationToken)
         {
-            _byId[user.Id].UserName = userName;
+            user.UserName = userName;
             return Task.CompletedTask;
         }
 
@@ -45,57 +48,36 @@ namespace BattlEyeManager.Models
             return Task.CompletedTask;
         }
 
-        public Task<IdentityResult> CreateAsync(UserModel user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(UserModel user, CancellationToken cancellationToken)
         {
-            _byId.Add(user.Id, user);
-            _byName.Add(user.NormalizedUserName, user);
-            _byEmail.Add(user.Email, user);
-
-            return Task.FromResult(IdentityResult.Success);
+            await _store.AddAsync(user);
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> UpdateAsync(UserModel user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(UserModel user, CancellationToken cancellationToken)
         {
-            if (_byId.ContainsKey(user.Id))
-                _byId.Remove(user.Id);
+            await _store.UpdateAsync(user);
 
-            if (_byName.ContainsKey(user.NormalizedUserName))
-                _byName.Remove(user.NormalizedUserName);
-
-            if (_byEmail.ContainsKey(user.Email))
-                _byEmail.Remove(user.Email);
-
-            _byId.Add(user.Id, user);
-            _byName.Add(user.NormalizedUserName, user);
-            _byEmail.Add(user.Email, user);
-
-            return Task.FromResult(IdentityResult.Success);
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> DeleteAsync(UserModel user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(UserModel user, CancellationToken cancellationToken)
         {
-            if (_byId.ContainsKey(user.Id))
-                _byId.Remove(user.Id);
+            await _store.DeleteAsync(user.Id);
 
-            if (_byName.ContainsKey(user.NormalizedUserName))
-                _byName.Remove(user.NormalizedUserName);
-
-            if (_byEmail.ContainsKey(user.Email))
-                _byEmail.Remove(user.Email);
-
-            return Task.FromResult(IdentityResult.Success);
+            return IdentityResult.Success;
         }
 
         public Task<UserModel> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var gid = Guid.Parse(userId);
-            return Task.FromResult(_byId[gid]);
+            return _store.FindAsync(gid);
         }
 
-        public Task<UserModel> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<UserModel> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            if (!_byName.ContainsKey(normalizedUserName)) return Task.FromResult<UserModel>(null);
-            return Task.FromResult(_byName[normalizedUserName]);
+            var res = await _store.FindAsync(u => u.NormalizedUserName == normalizedUserName);
+            return res.FirstOrDefault();
         }
 
         public Task SetPasswordHashAsync(UserModel user, string passwordHash, CancellationToken cancellationToken)

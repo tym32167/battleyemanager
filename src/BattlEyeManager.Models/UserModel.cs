@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BattlEyeManager.Models
 {
-    public class UserModel : IdentityUser<Guid>
+    public class UserModel : IdentityUser<Guid>, IEntity<Guid>
     {
         [Display(Name = "FirstName")]
         [Required(ErrorMessage = "FirstNameRequired")]
