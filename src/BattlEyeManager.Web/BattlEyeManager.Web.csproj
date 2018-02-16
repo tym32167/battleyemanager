@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BattlEyeManager.Models\BattlEyeManager.Models.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.MongoDB\BattlEyeManager.MongoDB.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.RavenDB\BattlEyeManager.RavenDB.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,10 @@
-﻿using System;
-using BattlEyeManager.Models;
+﻿using BattlEyeManager.Models;
+using BattlEyeManager.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace BattlEyeManager.Web
 {
@@ -16,13 +17,15 @@ namespace BattlEyeManager.Web
             services.AddMvc();
 
 
-            services.AddSingleton<IKeyValueStore<UserModel, Guid>, InMemoryStore<UserModel, Guid>>();
+            services.AddSingleton<IKeyValueStore<UserModel, Guid>, MongoDBStoreGuid<UserModel>>();
+            services.AddSingleton<IKeyValueStore<RoleModel, Guid>, MongoDBStoreGuid<RoleModel>>();
+
 
             services.AddSingleton<IUserStore<UserModel>, UserStore>();
             services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();
-            services.AddSingleton<IRoleStore<IdentityRole>, RoleStore>();
+            services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
 
-            services.AddIdentity<UserModel, IdentityRole>().AddDefaultTokenProviders();
+            services.AddIdentity<UserModel, RoleModel>().AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

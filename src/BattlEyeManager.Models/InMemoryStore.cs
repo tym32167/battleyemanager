@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Models
@@ -15,9 +16,9 @@ namespace BattlEyeManager.Models
             return item;
         }
 
-        public IQueryable<T> Find(Func<T, bool> predicate)
+        public IQueryable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            var res = _values.Values.Where(predicate);
+            var res = _values.Values.Where(predicate.Compile());
             return res.AsQueryable();
         }
 
@@ -43,7 +44,7 @@ namespace BattlEyeManager.Models
             return Task.FromResult(Find(key));
         }
 
-        public Task<IQueryable<T>> FindAsync(Func<T, bool> predicate)
+        public Task<IQueryable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return Task.FromResult(Find(predicate));
         }

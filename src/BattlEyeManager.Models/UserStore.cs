@@ -83,6 +83,7 @@ namespace BattlEyeManager.Models
         public Task SetPasswordHashAsync(UserModel user, string passwordHash, CancellationToken cancellationToken)
         {
             user.PasswordHash = passwordHash;
+            user.Password = null;
             return Task.CompletedTask;
         }
 
