@@ -1,6 +1,7 @@
-﻿using BattlEyeManager.Web.Services;
+﻿using BattlEyeManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BattlEyeManager.Web
@@ -13,7 +14,11 @@ namespace BattlEyeManager.Web
         {
             services.AddMvc();
 
-            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IUserStore<UserModel>, UserStore>();
+            services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();
+            services.AddSingleton<IRoleStore<IdentityRole>, RoleStore>();
+
+            services.AddIdentity<UserModel, IdentityRole>().AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,6 +35,7 @@ namespace BattlEyeManager.Web
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

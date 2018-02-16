@@ -1,5 +1,4 @@
-﻿@using BattlEyeManager.Web.Models
-@model BattlEyeManager.Web.Models.UserModel
+﻿@model BattlEyeManager.Models.UserModel
 
 @{
     ViewData["Title"] = "Index";
@@ -24,11 +23,13 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Nickname" class="control-label"></label>
-                <input asp-for="Nickname" class="form-control" />
-                <span asp-validation-for="Nickname" class="text-danger"></span>
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />

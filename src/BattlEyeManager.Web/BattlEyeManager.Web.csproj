@@ -9,7 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Managers\" />
     <Folder Include="Pages\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
