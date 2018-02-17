@@ -23,41 +23,6 @@ namespace BattlEyeManager.Web.Controllers
             _roleManager = roleManager;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Register(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(UserModel user, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var result = await _userManager.CreateAsync(user, user.Password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(returnUrl);
-                }
-                else
-                {
-                    foreach (var identityError in result.Errors)
-                    {
-                        ModelState.AddModelError(String.Empty, identityError.Description);
-                    }
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(user);
-        }
 
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)

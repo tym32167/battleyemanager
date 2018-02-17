@@ -14,7 +14,7 @@ namespace BattlEyeManager.Models
         public string RoleName { get; set; }
     }
 
-    public class UserStore : IUserPasswordStore<UserModel>, IUserRoleStore<UserModel>
+    public class UserStore : IUserPasswordStore<UserModel>, IUserRoleStore<UserModel>, IQueryableUserStore<UserModel>
     {
         private readonly IKeyValueStore<UserModel, Guid> _store;
         private readonly IKeyValueStore<UserRole, Guid> _userRoleStore;
@@ -139,6 +139,11 @@ namespace BattlEyeManager.Models
             var ids = uroles.Select(x => x.UserId).ToArray();
             var res = await _store.FindAsync(x => ids.Contains(x.Id));
             return res.ToArray();
+        }
+
+        public IQueryable<UserModel> Users
+        {
+            get { return _store.Find(x => true); }
         }
     }
 }

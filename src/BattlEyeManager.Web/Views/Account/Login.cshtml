@@ -97,7 +97,7 @@
 
 <body class="text-center">
 
-    <form class="form-signin" asp-action="Login">
+    <form class="form-signin" asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
