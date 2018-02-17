@@ -16,14 +16,16 @@ namespace BattlEyeManager.Web
         {
             services.AddMvc();
 
-
             services.AddSingleton<IKeyValueStore<UserModel, Guid>, MongoDBStoreGuid<UserModel>>();
             services.AddSingleton<IKeyValueStore<RoleModel, Guid>, MongoDBStoreGuid<RoleModel>>();
+            services.AddSingleton<IKeyValueStore<UserRole, Guid>, MongoDBStoreGuid<UserRole>>();
 
 
+            services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
+
+            services.AddSingleton<IUserRoleStore<UserModel>, UserStore>();
             services.AddSingleton<IUserStore<UserModel>, UserStore>();
             services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();
-            services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
 
             services.AddIdentity<UserModel, RoleModel>().AddDefaultTokenProviders();
         }

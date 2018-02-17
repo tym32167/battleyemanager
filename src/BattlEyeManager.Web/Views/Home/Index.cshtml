@@ -1,12 +1,14 @@
-﻿ @{ 
-     ViewBag.Title = "Home Page"; 
-     Layout = "~/Views/Shared/_Layout.cshtml"; 
- } 
-<div class="row"> 
-    <div class="col-lg-12"> 
-        <p> 
-            <h3>Register by clicking <a asp-controller="Account"
-                                        asp-view="Index">here</a></h3> 
-        </p> 
-    </div> 
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-12">
+        <p>
+            <h3>
+                Register by clicking <a asp-controller="Account"
+                                        asp-action="Register">here</a>
+            </h3>
+        </p>
+    </div>
 </div> 

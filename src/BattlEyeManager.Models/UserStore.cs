@@ -1,18 +1,28 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Models
 {
-    public class UserStore : IUserPasswordStore<UserModel>
+    public class UserRole : IEntity<Guid>
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid UserId { get; set; }
+        public string RoleName { get; set; }
+    }
+
+    public class UserStore : IUserPasswordStore<UserModel>, IUserRoleStore<UserModel>
     {
         private readonly IKeyValueStore<UserModel, Guid> _store;
+        private readonly IKeyValueStore<UserRole, Guid> _userRoleStore;
 
-        public UserStore(IKeyValueStore<UserModel, Guid> store)
+        public UserStore(IKeyValueStore<UserModel, Guid> store, IKeyValueStore<UserRole, Guid> userRoleStore)
         {
             _store = store;
+            _userRoleStore = userRoleStore;
         }
 
         public void Dispose()
@@ -95,6 +105,40 @@ namespace BattlEyeManager.Models
         public Task<bool> HasPasswordAsync(UserModel user, CancellationToken cancellationToken)
         {
             return Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
+        }
+
+        public Task AddToRoleAsync(UserModel user, string roleName, CancellationToken cancellationToken)
+        {
+            return _userRoleStore.AddAsync(new UserRole() { RoleName = roleName, UserId = user.Id });
+        }
+
+        public async Task RemoveFromRoleAsync(UserModel user, string roleName, CancellationToken cancellationToken)
+        {
+            var roles = await _userRoleStore.FindAsync(r => r.UserId == user.Id && r.RoleName == roleName);
+            foreach (var role in roles)
+            {
+                await _userRoleStore.DeleteAsync(role.Id);
+            }
+        }
+
+        public async Task<IList<string>> GetRolesAsync(UserModel user, CancellationToken cancellationToken)
+        {
+            var roleIds = await _userRoleStore.FindAsync(r => r.UserId == user.Id);
+            return roleIds.Select(x => x.RoleName).ToArray();
+        }
+
+        public async Task<bool> IsInRoleAsync(UserModel user, string roleName, CancellationToken cancellationToken)
+        {
+            var usr = await _userRoleStore.FindAsync(x => x.Id == user.Id && x.RoleName == roleName);
+            return usr.Any();
+        }
+
+        public async Task<IList<UserModel>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            var uroles = await _userRoleStore.FindAsync(x => x.RoleName == roleName);
+            var ids = uroles.Select(x => x.UserId).ToArray();
+            var res = await _store.FindAsync(x => ids.Contains(x.Id));
+            return res.ToArray();
         }
     }
 }

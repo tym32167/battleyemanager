@@ -10,7 +10,7 @@ namespace BattlEyeManager.Models
     {
         public override Guid Id { get; set; } = Guid.NewGuid();
     }
-
+    
 
     public class RoleStore : IRoleStore<RoleModel>
     {
