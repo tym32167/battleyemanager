@@ -1,4 +1,5 @@
 ﻿using BattlEyeManager.Models;
+using BattlEyeManager.Web.Core;
 using BattlEyeManager.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<UserModel> _userManager;
         private readonly SignInManager<UserModel> _signInManager;
@@ -28,9 +28,6 @@ namespace BattlEyeManager.Web.Controllers
         public async Task<IActionResult> Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-
-            await CheckAdminUser();
-
             return View();
         }
 
@@ -62,23 +59,6 @@ namespace BattlEyeManager.Web.Controllers
             return View(user);
         }
 
-
-        private async Task CheckAdminUser()
-        {
-            var admin = await _userManager.FindByNameAsync("admin");
-            if (admin == null)
-            {
-                var adminModel = new UserModel() { UserName = "admin", Password = "12qw!@QW", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
-                var result = await _userManager.CreateAsync(adminModel, adminModel.Password);
-
-                var role = new RoleModel() { Name = "Administrator" };
-                await _roleManager.CreateAsync(role);
-
-                await _userManager.AddToRoleAsync(adminModel, "Administrator");
-            }
-        }
-
-
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -91,18 +71,24 @@ namespace BattlEyeManager.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model, string returnUrl)
         {
-
-
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                if (user != null)
+                {
+                    var pass = await _userManager.CheckPasswordAsync(user, model.Password);
+                    if (pass)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: model.RememberMe);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
             }
 
             return View();
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
             await _signInManager.SignOutAsync();

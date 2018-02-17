@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BattlEyeManager.Web.Core;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BattlEyeManager.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {

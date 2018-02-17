@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web
 {
@@ -31,7 +32,8 @@ namespace BattlEyeManager.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<UserModel> userManager,
+            RoleManager<RoleModel> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -46,12 +48,36 @@ namespace BattlEyeManager.Web
             app.UseStaticFiles();
             app.UseAuthentication();
 
+            CheckAdminUser(userManager, roleManager).Wait();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+
+        private async Task CheckAdminUser(
+            UserManager<UserModel> userManager,
+            RoleManager<RoleModel> roleManager)
+        {
+            const string adminRole = "Administrator";
+
+            if (!await roleManager.RoleExistsAsync(adminRole))
+            {
+                var role = new RoleModel { Name = adminRole };
+                await roleManager.CreateAsync(role);
+            }
+
+            var admin = await userManager.FindByNameAsync("admin");
+            if (admin == null)
+            {
+                var adminModel = new UserModel { UserName = "admin", Password = "12qw!@QW", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
+                await userManager.CreateAsync(adminModel, adminModel.Password);
+                await userManager.AddToRoleAsync(adminModel, adminRole);
+            }
         }
     }
 }
