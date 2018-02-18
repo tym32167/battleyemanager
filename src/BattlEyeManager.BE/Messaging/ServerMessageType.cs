@@ -1,4 +1,4 @@
-﻿namespace Arma3BE.Server.Messaging
+﻿namespace BattlEyeManager.BE.Messaging
 {
     public enum ServerMessageType
     {

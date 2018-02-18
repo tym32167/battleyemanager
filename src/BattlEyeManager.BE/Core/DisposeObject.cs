@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arma3BEClient.Common.Core
+namespace BattlEyeManager.BE.Core
 {
     public abstract class DisposeObject : IDisposable
     {

@@ -1,7 +1,7 @@
 ﻿using BattlEyeManager.BE.BeNet;
 using System;
 
-namespace Arma3BE.Server.Abstract
+namespace BattlEyeManager.BE.Abstract
 {
     public interface IBattlEyeServer : IDisposable
     {

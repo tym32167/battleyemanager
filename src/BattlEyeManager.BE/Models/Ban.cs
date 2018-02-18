@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Arma3BE.Server.Models
+namespace BattlEyeManager.BE.Models
 {
     public class Ban
     {

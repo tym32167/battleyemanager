@@ -1,4 +1,4 @@
-﻿namespace Arma3BE.Server
+﻿namespace BattlEyeManager.BE
 {
     public enum CommandType
     {

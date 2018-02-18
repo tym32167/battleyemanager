@@ -1,7 +1,7 @@
-﻿using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Models;
+﻿using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Models;
 
-namespace Arma3BE.Server.Abstract
+namespace BattlEyeManager.BE.Abstract
 {
     public interface IServerMessageRecognizer
     {

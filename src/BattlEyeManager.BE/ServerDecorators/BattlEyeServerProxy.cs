@@ -1,9 +1,9 @@
-using Arma3BE.Server.Abstract;
-using Arma3BEClient.Common.Core;
-using Arma3BEClient.Common.Logging;
+using BattlEyeManager.BE.Core;
+using BattlEyeManager.BE.Logging;
+using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.BeNet;
 
-namespace Arma3BE.Server.ServerDecorators
+namespace BattlEyeManager.BE.ServerDecorators
 {
     public class BattlEyeServerProxy : DisposeObject, IBattlEyeServer
     {

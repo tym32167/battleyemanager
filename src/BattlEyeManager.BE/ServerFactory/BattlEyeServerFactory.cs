@@ -1,8 +1,8 @@
-using Arma3BE.Server.Abstract;
-using Arma3BE.Server.ServerDecorators;
+using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.BeNet;
+using BattlEyeManager.BE.ServerDecorators;
 
-namespace Arma3BE.Server.ServerFactory
+namespace BattlEyeManager.BE.ServerFactory
 {
     public class BattlEyeServerFactory : IBattlEyeServerFactory
     {

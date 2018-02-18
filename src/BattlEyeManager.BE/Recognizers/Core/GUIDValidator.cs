@@ -1,4 +1,4 @@
-﻿namespace Arma3BE.Server.Recognizers.Core
+﻿namespace BattlEyeManager.BE.Recognizers.Core
 {
     public class GUIDValidator
     {

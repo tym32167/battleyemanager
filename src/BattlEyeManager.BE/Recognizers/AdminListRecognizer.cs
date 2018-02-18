@@ -1,10 +1,10 @@
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Models;
+using BattlEyeManager.BE.Recognizers.Core;
 using System;
-using Arma3BE.Server.Abstract;
-using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Models;
-using Arma3BE.Server.Recognizers.Core;
 
-namespace Arma3BE.Server.Recognizers
+namespace BattlEyeManager.BE.Recognizers
 {
     public class AdminListRecognizer : IServerMessageRecognizer
     {
@@ -13,7 +13,7 @@ namespace Arma3BE.Server.Recognizers
             return ServerMessageType.AdminList;
         }
 
-        
+
         public bool CanRecognize(ServerMessage serverMessage)
         {
             var firstLines = new[]
@@ -60,12 +60,12 @@ namespace Arma3BE.Server.Recognizers
         }
     }
 
-//Sample
-//
-//Connected RCon admins:
-//[#] [IP Address]:[Port]
-//-----------------------------
-//0 94.181.44.100:50960
-//1 213.21.12.135:54678
+    //Sample
+    //
+    //Connected RCon admins:
+    //[#] [IP Address]:[Port]
+    //-----------------------------
+    //0 94.181.44.100:50960
+    //1 213.21.12.135:54678
 
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Arma3BE.Server.Models
+namespace BattlEyeManager.BE.Models
 {
     public abstract class StateList<T> : IEnumerable<T>
     {

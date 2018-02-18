@@ -1,10 +1,10 @@
 ﻿using System;
-using Arma3BE.Server.Abstract;
-using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Models;
-using Arma3BE.Server.Recognizers.Core;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Models;
+using BattlEyeManager.BE.Recognizers.Core;
 
-namespace Arma3BE.Server.Recognizers
+namespace BattlEyeManager.BE.Recognizers
 {
     public class BanListRecognizer : IServerMessageRecognizer
     {

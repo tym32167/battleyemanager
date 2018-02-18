@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Arma3BE.Server.Recognizers.Core
+namespace BattlEyeManager.BE.Recognizers.Core
 {
     public class IPAndPortValidator
     {

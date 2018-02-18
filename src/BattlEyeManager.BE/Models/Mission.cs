@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Arma3BE.Server.Models
+namespace BattlEyeManager.BE.Models
 {
     public class Mission
     {

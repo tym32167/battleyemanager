@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Arma3BE.Server.Models
+namespace BattlEyeManager.BE.Models
 {
     public class BanList : StateList<Ban>
     {

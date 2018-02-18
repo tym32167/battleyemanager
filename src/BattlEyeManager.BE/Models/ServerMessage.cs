@@ -1,10 +1,10 @@
-﻿using Arma3BE.Server.Abstract;
-using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Recognizers;
+﻿using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Recognizers;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Arma3BE.Server.Models
+namespace BattlEyeManager.BE.Models
 {
     public class ServerMessage
     {

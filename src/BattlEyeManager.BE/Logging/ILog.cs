@@ -1,4 +1,4 @@
-﻿namespace Arma3BEClient.Common.Logging
+﻿namespace BattlEyeManager.BE.Logging
 {
     public interface ILog
     {

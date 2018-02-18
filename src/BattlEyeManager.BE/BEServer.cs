@@ -1,9 +1,9 @@
-﻿using Arma3BE.Server.Abstract;
-using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Models;
-using Arma3BEClient.Common.Core;
-using Arma3BEClient.Common.Logging;
+﻿using BattlEyeManager.BE.Core;
+using BattlEyeManager.BE.Logging;
+using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.BeNet;
+using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Net;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Arma3BE.Server
+namespace BattlEyeManager.BE
 {
     public sealed class BEServer : DisposeObject, IBEServer
     {
@@ -408,16 +408,5 @@ namespace Arma3BE.Server
                 _battlEyeServer = null;
             }
         }
-    }
-
-
-    public class BEClientEventArgs<T> : EventArgs
-    {
-        public BEClientEventArgs(T data)
-        {
-            Data = data;
-        }
-
-        public T Data { get; private set; }
     }
 }

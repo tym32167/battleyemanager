@@ -1,8 +1,8 @@
-using Arma3BE.Server.Abstract;
-using Arma3BE.Server.Messaging;
-using Arma3BE.Server.Models;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Messaging;
+using BattlEyeManager.BE.Models;
 
-namespace Arma3BE.Server.Recognizers
+namespace BattlEyeManager.BE.Recognizers
 {
     public class MissionsListRecognizer : IServerMessageRecognizer
     {

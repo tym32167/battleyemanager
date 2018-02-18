@@ -1,9 +1,8 @@
-using Arma3BE.Server.Models;
+using BattlEyeManager.BE.Models;
 using System;
 using System.Collections.Generic;
-using BattlEyeManager.BE.BeNet;
 
-namespace Arma3BE.Server.Abstract
+namespace BattlEyeManager.BE.Abstract
 {
     public interface IBEServer : IDisposable
     {
