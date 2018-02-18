@@ -15,7 +15,7 @@ namespace BattlEyeManager.Models
         public string NormalizedRoleName { get; set; }
     }
 
-    public class UserStore : IUserPasswordStore<UserModel>, IUserRoleStore<UserModel>, IQueryableUserStore<UserModel>
+    public class UserStore : IUserPasswordStore<UserModel>, IUserRoleStore<UserModel>, IQueryableUserStore<UserModel>, IUserEmailStore<UserModel>
     {
         private readonly IKeyValueStore<UserModel, Guid> _store;
         private readonly IKeyValueStore<UserRole, Guid> _userRoleStore;
@@ -148,6 +148,45 @@ namespace BattlEyeManager.Models
         public IQueryable<UserModel> Users
         {
             get { return _store.Find(x => true); }
+        }
+
+        public Task SetEmailAsync(UserModel user, string email, CancellationToken cancellationToken)
+        {
+            user.Email = email;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetEmailAsync(UserModel user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(UserModel user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(UserModel user, bool confirmed, CancellationToken cancellationToken)
+        {
+            user.EmailConfirmed = confirmed;
+            user.EmailConfirmationDate = DateTime.UtcNow;
+            return Task.CompletedTask;
+        }
+
+        public async Task<UserModel> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            return (await _store.FindAsync(u => u.NormalizedEmail == normalizedEmail)).FirstOrDefault();
+        }
+
+        public Task<string> GetNormalizedEmailAsync(UserModel user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.NormalizedEmail);
+        }
+
+        public Task SetNormalizedEmailAsync(UserModel user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            user.NormalizedEmail = normalizedEmail;
+            return Task.CompletedTask;
         }
     }
 }

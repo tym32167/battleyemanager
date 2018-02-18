@@ -1,7 +1,6 @@
 ﻿using BattlEyeManager.Models;
 using BattlEyeManager.Web.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,64 +26,78 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: User/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
             return View();
         }
 
 
         // GET: User/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(string username)
         {
-            return View();
+            var user = await _userManager.FindByNameAsync(username);
+
+            return View(user);
         }
 
         // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(UserModel user)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
+                var dbuser = await _userManager.FindByNameAsync(user.UserName);
+
+                if (dbuser.Email != user.Email)
+                {
+                    var res = await _userManager.SetEmailAsync(dbuser, user.Email);
+
+                    if (!res.Succeeded)
+                    {
+                        foreach (var identityError in res.Errors)
+                        {
+                            ModelState.AddModelError(String.Empty, identityError.Description);
+                        }
+                    }
+                }
+
+                dbuser = await _userManager.FindByNameAsync(user.UserName);
+
+                if (!string.IsNullOrEmpty(user.Password))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(dbuser);
+                    var res = await _userManager.ResetPasswordAsync(dbuser, token, user.Password);
+
+                    if (!res.Succeeded)
+                    {
+                        foreach (var identityError in res.Errors)
+                        {
+                            ModelState.AddModelError(String.Empty, identityError.Description);
+                        }
+                    }
+                }
+
+                return RedirectToAction("Index", "User");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View();
         }
 
         // GET: User/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(string username)
         {
-            return View();
+            var usr = await _userManager.FindByNameAsync(username);
+            if (usr != null)
+                await _userManager.DeleteAsync(usr);
+
+            return RedirectToAction("Index", "User");
         }
-
-        // POST: User/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-
 
 
         [HttpGet]
-        public async Task<IActionResult> Create(string returnUrl = null)
+        public IActionResult Create(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -93,9 +106,8 @@ namespace BattlEyeManager.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserModel user, string returnUrl = null)
+        public async Task<IActionResult> Create(UserModel user)
         {
-            ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 var result = await _userManager.CreateAsync(user, user.Password);

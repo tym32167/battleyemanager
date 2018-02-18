@@ -145,7 +145,8 @@ namespace BattlEyeManager.MongoDB
         public Task UpdateAsync(T item)
         {
             var coll = GetCollection();
-            return coll.ReplaceOneAsync(u => u.Id == item.Id, item);
+            var filter = Builders<T>.Filter.Eq(s => s.Id, item.Id);
+            return coll.ReplaceOneAsync(filter, item);
         }
 
         public Task DeleteAsync(Guid key)
