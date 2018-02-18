@@ -20,15 +20,9 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: User
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             return View(_userManager.Users.ToArray());
-        }
-
-        // GET: User/Details/5
-        public ActionResult Details(Guid id)
-        {
-            return View();
         }
 
 

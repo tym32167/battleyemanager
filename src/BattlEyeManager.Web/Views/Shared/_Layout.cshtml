@@ -50,15 +50,18 @@
                                 Dashboard <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file"></span>
-                                Servers
-                            </a>
-                        </li>
 
                         @if (User.IsInRole("Administrator"))
                         {
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Server" asp-action="Index">
+                                    <span data-feather="file"></span>
+                                    Servers
+                                </a>
+                            </li>
+
+
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="User" asp-action="Index">
                                     <span data-feather="shopping-cart"></span>

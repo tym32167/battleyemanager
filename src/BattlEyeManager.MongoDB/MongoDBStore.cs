@@ -21,6 +21,11 @@ namespace BattlEyeManager.MongoDB
             return coll.Find(predicate).ToList().AsQueryable();
         }
 
+        public IQueryable<T> All()
+        {
+            return GetCollection().AsQueryable();
+        }
+
         public void Update(T item)
         {
             var coll = GetCollection();
@@ -38,6 +43,11 @@ namespace BattlEyeManager.MongoDB
             var coll = GetCollection();
             coll.InsertOne(item);
             return Find(item.Id);
+        }
+
+        public Task<IQueryable<T>> AllAsync()
+        {
+            return Task.FromResult(All());
         }
 
         public async Task<T> FindAsync(TK key)
@@ -106,6 +116,16 @@ namespace BattlEyeManager.MongoDB
         {
             var coll = GetCollection();
             return coll.Find(predicate).ToList().AsQueryable();
+        }
+
+        public IQueryable<T> All()
+        {
+            return GetCollection().AsQueryable();
+        }
+
+        public Task<IQueryable<T>> AllAsync()
+        {
+            return Task.FromResult(All());
         }
 
         public void Update(T item)

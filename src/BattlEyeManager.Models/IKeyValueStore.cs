@@ -9,9 +9,14 @@ namespace BattlEyeManager.Models
     {
         T Find(TK key);
         IQueryable<T> Find(Expression<Func<T, bool>> predicate);
+
+        IQueryable<T> All();
+
         void Update(T item);
         void Delete(TK key);
         T Add(T item);
+
+        Task<IQueryable<T>> AllAsync();
 
 
         Task<T> FindAsync(TK key);

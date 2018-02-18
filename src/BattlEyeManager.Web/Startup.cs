@@ -21,14 +21,16 @@ namespace BattlEyeManager.Web
             services.AddSingleton<IKeyValueStore<RoleModel, Guid>, MongoDBStoreGuid<RoleModel>>();
             services.AddSingleton<IKeyValueStore<UserRole, Guid>, MongoDBStoreGuid<UserRole>>();
 
-
             services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
-
             services.AddSingleton<IUserRoleStore<UserModel>, UserStore>();
             services.AddSingleton<IUserStore<UserModel>, UserStore>();
             services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();
 
             services.AddIdentity<UserModel, RoleModel>().AddDefaultTokenProviders();
+
+
+
+            services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

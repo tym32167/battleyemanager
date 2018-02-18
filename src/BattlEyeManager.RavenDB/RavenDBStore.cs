@@ -26,6 +26,14 @@ namespace BattlEyeManager.RavenDB
             }
         }
 
+        public IQueryable<T> All()
+        {
+            using (var session = CreateSession())
+            {
+                return session.Query<T>();
+            }
+        }
+
         public void Update(T item)
         {
             using (var session = CreateSession())
@@ -52,6 +60,11 @@ namespace BattlEyeManager.RavenDB
                 session.SaveChanges();
                 return Find(item.Id);
             }
+        }
+
+        public Task<IQueryable<T>> AllAsync()
+        {
+            return Task.FromResult(All());
         }
 
         public Task<T> FindAsync(TK key)

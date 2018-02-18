@@ -22,6 +22,11 @@ namespace BattlEyeManager.Models
             return res.AsQueryable();
         }
 
+        public IQueryable<T> All()
+        {
+            return _values.Values.AsQueryable();
+        }
+
         public void Update(T item)
         {
             var old = Find(item.Id);
@@ -37,6 +42,11 @@ namespace BattlEyeManager.Models
         {
             if (!_values.TryAdd(item.Id, item)) return default(T);
             return item;
+        }
+
+        public Task<IQueryable<T>> AllAsync()
+        {
+            return Task.FromResult(All());
         }
 
         public Task<T> FindAsync(TK key)
