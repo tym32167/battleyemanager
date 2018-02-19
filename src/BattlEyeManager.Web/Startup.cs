@@ -1,4 +1,8 @@
-﻿using BattlEyeManager.Models;
+﻿using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Net;
+using BattlEyeManager.BE.ServerFactory;
+using BattlEyeManager.BE.Services;
+using BattlEyeManager.Models;
 using BattlEyeManager.MongoDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +32,10 @@ namespace BattlEyeManager.Web
 
             services.AddIdentity<UserModel, RoleModel>().AddDefaultTokenProviders();
 
+            services.AddSingleton<IIpService, IpService>();
+
+            services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
+            services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
 
 
             services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();

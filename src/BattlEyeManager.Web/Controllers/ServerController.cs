@@ -1,4 +1,5 @@
-﻿using BattlEyeManager.Models;
+﻿using BattlEyeManager.BE.Services;
+using BattlEyeManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,10 +12,12 @@ namespace BattlEyeManager.Web.Controllers
     public class ServerController : Controller
     {
         private readonly IKeyValueStore<ServerModel, Guid> _store;
+        private readonly IBeServerAggregator _beServerAggregator;
 
-        public ServerController(IKeyValueStore<ServerModel, Guid> store)
+        public ServerController(IKeyValueStore<ServerModel, Guid> store, IBeServerAggregator beServerAggregator)
         {
             _store = store;
+            _beServerAggregator = beServerAggregator;
         }
 
         // GET: Server
@@ -37,6 +40,16 @@ namespace BattlEyeManager.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _store.AddAsync(server);
+
+                if (server.Active)
+                    _beServerAggregator.AddServer(new ServerInfo()
+                    {
+                        Id = server.Id,
+                        Password = server.Password,
+                        Port = server.Port,
+                        Host = server.Host
+                    });
+
                 return RedirectToAction("Index");
             }
 
@@ -59,6 +72,20 @@ namespace BattlEyeManager.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _store.UpdateAsync(server);
+
+                if (server.Active)
+                    _beServerAggregator.AddServer(new ServerInfo()
+                    {
+                        Id = server.Id,
+                        Password = server.Password,
+                        Port = server.Port,
+                        Host = server.Host
+                    });
+                else
+                {
+                    _beServerAggregator.RemoveServer(server.Id);
+                }
+
                 return RedirectToAction("Index");
             }
 

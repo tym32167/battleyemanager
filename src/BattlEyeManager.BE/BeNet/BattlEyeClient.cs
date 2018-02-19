@@ -245,7 +245,7 @@ namespace BattlEyeManager.BE.BeNet
 
             if (packetType != BattlEyePacketType.Acknowledge)
             {
-                if (command != null) command = Encoding.GetEncoding(1252).GetString(Encoding.UTF8.GetBytes(command));
+                if (command != null) command = CodePagesEncodingProvider.Instance.GetEncoding(1252).GetString(Encoding.UTF8.GetBytes(command));
             }
 
             string count = Helpers.Bytes2String(new byte[] { (byte)sequenceNumber });

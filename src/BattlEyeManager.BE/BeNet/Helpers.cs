@@ -31,12 +31,14 @@ namespace BattlEyeManager.BE.BeNet
 
         public static byte[] String2Bytes(string s)
         {
-            return Encoding.GetEncoding(1252).GetBytes(s);
+            return CodePagesEncodingProvider.Instance.GetEncoding(1252).GetBytes(s);
         }
 
         public static string Bytes2String(byte[] bytes)
         {
-            return Encoding.GetEncoding(1252).GetString(bytes);
+            var enc = CodePagesEncodingProvider.Instance.GetEncoding(1252);
+
+            return enc.GetString(bytes);
         }
 
         public static string Bytes2String(byte[] bytes, int index, int count)
