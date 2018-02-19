@@ -1,13 +1,16 @@
 ﻿using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.BeNet;
 using BattlEyeManager.BE.Core;
+using BattlEyeManager.BE.Logging;
+using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Net;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
-using System.Threading;
 
 namespace BattlEyeManager.BE.Services
 {
@@ -16,12 +19,13 @@ namespace BattlEyeManager.BE.Services
         private readonly IBattlEyeServerFactory _battlEyeServerFactory;
         private readonly IIpService _ipService;
         private readonly ConcurrentDictionary<Guid, ServerItem> _servers = new ConcurrentDictionary<Guid, ServerItem>();
+        private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
 
         public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory, IIpService ipService)
         {
             _battlEyeServerFactory = battlEyeServerFactory;
-            _ipService = ipService;            
-        }       
+            _ipService = ipService;
+        }
 
         public bool AddServer(ServerInfo info)
         {
@@ -56,6 +60,106 @@ namespace BattlEyeManager.BE.Services
             return false;
         }
 
+
+        public void Send(Guid serverId, BattlEyeCommand command, string param = null)
+        {
+            if (_servers.TryGetValue(serverId, out ServerItem item))
+            {
+                item.Send(command, param);
+            }
+        }
+
+        public IEnumerable<ServerInfo> GetConnectedServers()
+        {
+            return _servers.Values.Select(x => x.ServerInfo).ToArray();
+        }
+
+        private void ProcessMessage(ServerInfo server, ServerMessage message)
+        {
+            var logMessage = new LogMessage
+            {
+                Date = DateTime.UtcNow,
+                Message = message.Message
+            };
+
+            switch (message.Type)
+            {
+                case ServerMessageType.PlayerList:
+                    var list = new PlayerList(message);
+                    OnPlayerHandler(new BEServerEventArgs<IEnumerable<Player>>(server, list));
+                    break;
+                case ServerMessageType.BanList:
+                    var banList = new BanList(message);
+                    OnBanHandler(new BEServerEventArgs<IEnumerable<Ban>>(server, banList));
+                    break;
+
+                case ServerMessageType.AdminList:
+                    var adminList = new AdminList(message);
+                    OnAdminHandler(new BEServerEventArgs<IEnumerable<Admin>>(server, adminList));
+                    break;
+
+                case ServerMessageType.MissionList:
+                    var missinlist = new MissionList(message);
+                    OnMissionHandler(new BEServerEventArgs<IEnumerable<Mission>>(server, missinlist));
+                    break;
+
+                case ServerMessageType.ChatMessage:
+                    var chatMessage = new ChatMessage
+                    {
+                        Date = DateTime.UtcNow,
+                        Message = message.Message
+                    };
+
+                    OnChatMessageHandler(new BEServerEventArgs<ChatMessage>(server, chatMessage));
+                    break;
+
+                case ServerMessageType.RconAdminLog:
+                    OnRConAdminLog(new BEServerEventArgs<LogMessage>(server, logMessage));
+                    break;
+
+                case ServerMessageType.PlayerLog:
+                    OnPlayerLog(new BEServerEventArgs<LogMessage>(server, logMessage));
+                    break;
+
+                case ServerMessageType.BanLog:
+                    OnBanLog(new BEServerEventArgs<LogMessage>(server, logMessage));
+                    break;
+
+                case ServerMessageType.Unknown:
+                    //var unknownMessage = new ChatMessage
+                    //{
+                    //    Date = DateTime.UtcNow,
+                    //    Message = message.Message
+                    //};
+
+                    //OnChatMessageHandler(unknownMessage);
+                    break;
+            }
+
+            RegisterMessage(server, message);
+        }
+
+        // ReSharper disable once UnusedParameter.Local
+        private void RegisterMessage(ServerInfo server, ServerMessage message)
+        {
+            if (message.Type == ServerMessageType.Unknown)
+            {
+                _log.Info(
+                    $"UNKNOWN MESSAGE: message [\nserver: {server.Host}\nmessageId:{message.MessageId}\n{message.Message}\n]");
+            }
+            // _log.Info($"message [\nserver ip: {_host}\nmessageId:{message.MessageId}\n{message.Message}\n]");
+        }
+
+        private void Connect(ServerInfo server)
+        {
+            OnConnectingHandler(new BEServerEventArgs<ServerInfo>(server, server));
+        }
+
+        private void Disconnect(ServerInfo server)
+        {
+            OnDisconnectHandler(new BEServerEventArgs<ServerInfo>(server, server));
+        }
+
         public event EventHandler<BEServerEventArgs<IEnumerable<Player>>> PlayerHandler;
         public event EventHandler<BEServerEventArgs<IEnumerable<Ban>>> BanHandler;
         public event EventHandler<BEServerEventArgs<IEnumerable<Admin>>> AdminHandler;
@@ -67,19 +171,18 @@ namespace BattlEyeManager.BE.Services
         public event EventHandler<BEServerEventArgs<LogMessage>> PlayerLog;
         public event EventHandler<BEServerEventArgs<LogMessage>> BanLog;
 
-        public event EventHandler<BEServerEventArgs<Guid>> ConnectingHandler;
-        public event EventHandler<BEServerEventArgs<Guid>> DisconnectHandler;
-
+        public event EventHandler<BEServerEventArgs<ServerInfo>> ConnectingHandler;
+        public event EventHandler<BEServerEventArgs<ServerInfo>> DisconnectHandler;
 
         private class ServerItem : DisposeObject
         {
-            private readonly ServerInfo _serverInfo;
+            public ServerInfo ServerInfo { get; }
             private readonly BeServerAggregator _aggregator;
             private IBattlEyeServer _server;
 
             public ServerItem(ServerInfo serverInfo, BeServerAggregator aggregator, IBattlEyeServer server)
             {
-                _serverInfo = serverInfo;
+                ServerInfo = serverInfo;
                 _aggregator = aggregator;
                 _server = server;
             }
@@ -95,19 +198,21 @@ namespace BattlEyeManager.BE.Services
                 }
             }
 
+            public bool Connected => _server?.Connected == true;
+
             private void _server_BattlEyeMessageReceived(BattlEyeMessageEventArgs args)
             {
-                //System.Diagnostics.Debug.WriteLine(args.Message);
+                _aggregator.ProcessMessage(ServerInfo, new ServerMessage(args.Id, args.Message));
             }
 
             private void _server_BattlEyeDisconnected(BattlEyeDisconnectEventArgs args)
             {
-                System.Diagnostics.Debug.WriteLine("DIS_CONNECTED");
+                _aggregator.Disconnect(ServerInfo);
             }
 
             private void _server_BattlEyeConnected(BattlEyeConnectEventArgs args)
             {
-                System.Diagnostics.Debug.WriteLine("CONNECTED");
+                _aggregator.Connect(ServerInfo);
             }
 
             public void Send(BattlEyeCommand command, string param = null)
@@ -148,6 +253,56 @@ namespace BattlEyeManager.BE.Services
                 _server = null;
             }
         }
+
+        protected virtual void OnConnectingHandler(BEServerEventArgs<ServerInfo> e)
+        {
+            ConnectingHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnDisconnectHandler(BEServerEventArgs<ServerInfo> e)
+        {
+            DisconnectHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnPlayerHandler(BEServerEventArgs<IEnumerable<Player>> e)
+        {
+            PlayerHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnBanHandler(BEServerEventArgs<IEnumerable<Ban>> e)
+        {
+            BanHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnAdminHandler(BEServerEventArgs<IEnumerable<Admin>> e)
+        {
+            AdminHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnMissionHandler(BEServerEventArgs<IEnumerable<Mission>> e)
+        {
+            MissionHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnChatMessageHandler(BEServerEventArgs<ChatMessage> e)
+        {
+            ChatMessageHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnRConAdminLog(BEServerEventArgs<LogMessage> e)
+        {
+            RConAdminLog?.Invoke(this, e);
+        }
+
+        protected virtual void OnPlayerLog(BEServerEventArgs<LogMessage> e)
+        {
+            PlayerLog?.Invoke(this, e);
+        }
+
+        protected virtual void OnBanLog(BEServerEventArgs<LogMessage> e)
+        {
+            BanLog?.Invoke(this, e);
+        }
     }
 
 
@@ -159,17 +314,19 @@ namespace BattlEyeManager.BE.Services
         public string Host { get; set; }
         public int Port { get; set; }
         public string Password { get; set; }
+
+        public string Name { get; set; }
     }
 
     public class BEServerEventArgs<T> : EventArgs
     {
-        public BEServerEventArgs(Guid serverId, T data)
+        public BEServerEventArgs(ServerInfo server, T data)
         {
-            ServerId = serverId;
+            Server = server;
             Data = data;
         }
 
-        public Guid ServerId { get; }
+        public ServerInfo Server { get; }
         public T Data { get; }
     }
 }

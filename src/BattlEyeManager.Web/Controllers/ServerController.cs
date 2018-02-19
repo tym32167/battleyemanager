@@ -47,7 +47,8 @@ namespace BattlEyeManager.Web.Controllers
                         Id = server.Id,
                         Password = server.Password,
                         Port = server.Port,
-                        Host = server.Host
+                        Host = server.Host,
+                        Name = server.Name
                     });
 
                 return RedirectToAction("Index");
@@ -79,7 +80,8 @@ namespace BattlEyeManager.Web.Controllers
                         Id = server.Id,
                         Password = server.Password,
                         Port = server.Port,
-                        Host = server.Host
+                        Host = server.Host,
+                        Name = server.Name
                     });
                 else
                 {
@@ -96,7 +98,7 @@ namespace BattlEyeManager.Web.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             _beServerAggregator.RemoveServer(id);
-            await _store.DeleteAsync(id);             
+            await _store.DeleteAsync(id);
             return RedirectToAction("Index");
         }
     }

@@ -51,6 +51,14 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="ActiveServer" asp-action="Index">
+                                <span data-feather="home"></span>
+                                Active servers
+                            </a>
+                        </li>
+
                         @if (User.IsInRole("Administrator"))
                         {
 

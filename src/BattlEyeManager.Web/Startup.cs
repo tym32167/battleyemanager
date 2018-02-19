@@ -4,6 +4,7 @@ using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Models;
 using BattlEyeManager.MongoDB;
+using BattlEyeManager.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,8 @@ namespace BattlEyeManager.Web
             services.AddSingleton<IKeyValueStore<UserModel, Guid>, MongoDBStoreGuid<UserModel>>();
             services.AddSingleton<IKeyValueStore<RoleModel, Guid>, MongoDBStoreGuid<RoleModel>>();
             services.AddSingleton<IKeyValueStore<UserRole, Guid>, MongoDBStoreGuid<UserRole>>();
+            services.AddSingleton<IKeyValueStore<ChatModel, Guid>, MongoDBStoreGuid<ChatModel>>();
+
 
             services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
             services.AddSingleton<IUserRoleStore<UserModel>, UserStore>();
@@ -36,6 +39,8 @@ namespace BattlEyeManager.Web
 
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
+
+            services.AddSingleton<ServerStateService, ServerStateService>();
 
 
             services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();
