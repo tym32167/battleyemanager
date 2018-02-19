@@ -102,12 +102,12 @@ namespace BattlEyeManager.BE.Services
 
             private void _server_BattlEyeDisconnected(BattlEyeDisconnectEventArgs args)
             {
-                System.Diagnostics.Debug.WriteLine("CONNECTED");
+                System.Diagnostics.Debug.WriteLine("DIS_CONNECTED");
             }
 
             private void _server_BattlEyeConnected(BattlEyeConnectEventArgs args)
             {
-                System.Diagnostics.Debug.WriteLine("DIS_CONNECTED");
+                System.Diagnostics.Debug.WriteLine("CONNECTED");
             }
 
             public void Send(BattlEyeCommand command, string param = null)

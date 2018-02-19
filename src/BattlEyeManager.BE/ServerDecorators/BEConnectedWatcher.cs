@@ -1,7 +1,7 @@
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
 using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.BeNet;
+using BattlEyeManager.BE.Core;
+using BattlEyeManager.BE.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -15,8 +15,8 @@ namespace BattlEyeManager.BE.ServerDecorators
 
         private static readonly ILog Log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
 
-        private readonly Timer _timer;
-        private readonly Timer _keepAliveTimer;
+        private Timer _timer;
+        private Timer _keepAliveTimer;
 
         private volatile IBattlEyeServer _battlEyeServer;
         private DateTime _lastReceived = DateTime.UtcNow;
@@ -29,9 +29,6 @@ namespace BattlEyeManager.BE.ServerDecorators
         {
             _battlEyeServerFactory = battlEyeServerFactory;
             _credentials = credentials;
-
-            _timer = new Timer(_timer_Elapsed, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
-            _keepAliveTimer = new Timer(_timer_KeepAlive, null, TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(2));
 
             _battlEyeServer = Init(_credentials);
         }
@@ -50,12 +47,27 @@ namespace BattlEyeManager.BE.ServerDecorators
 
         public BattlEyeConnectionResult Connect()
         {
+            _timer?.Dispose();
+            _timer = null;
+
+            _keepAliveTimer?.Dispose();
+            _keepAliveTimer = null;
+
+            _timer = new Timer(_timer_Elapsed, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
+            _keepAliveTimer = new Timer(_timer_KeepAlive, null, TimeSpan.FromMinutes(2), TimeSpan.FromMinutes(2));
+
             var result = _battlEyeServer?.Connect();
             return result ?? BattlEyeConnectionResult.ConnectionFailed;
         }
 
         public void Disconnect()
         {
+            _timer?.Dispose();
+            _timer = null;
+
+            _keepAliveTimer?.Dispose();
+            _keepAliveTimer = null;
+
             _battlEyeServer?.Disconnect();
         }
 
