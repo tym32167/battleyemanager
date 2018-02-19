@@ -95,7 +95,8 @@ namespace BattlEyeManager.Web.Controllers
         // GET: Server/Delete/5
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _store.DeleteAsync(id);
+            _beServerAggregator.RemoveServer(id);
+            await _store.DeleteAsync(id);             
             return RedirectToAction("Index");
         }
     }

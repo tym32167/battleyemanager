@@ -17,24 +17,11 @@ namespace BattlEyeManager.BE.Services
         private readonly IIpService _ipService;
         private readonly ConcurrentDictionary<Guid, ServerItem> _servers = new ConcurrentDictionary<Guid, ServerItem>();
 
-        private readonly Timer _timer;
-
         public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory, IIpService ipService)
         {
             _battlEyeServerFactory = battlEyeServerFactory;
-            _ipService = ipService;
-
-            _timer = new Timer(Callback, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
-        }
-
-        private void Callback(object state)
-        {
-            foreach (var item in _servers.Values)
-            {
-                item.Send(BattlEyeCommand.Players);
-            }
-
-        }
+            _ipService = ipService;            
+        }       
 
         public bool AddServer(ServerInfo info)
         {
@@ -110,7 +97,7 @@ namespace BattlEyeManager.BE.Services
 
             private void _server_BattlEyeMessageReceived(BattlEyeMessageEventArgs args)
             {
-                System.Diagnostics.Debug.WriteLine(args.Message);
+                //System.Diagnostics.Debug.WriteLine(args.Message);
             }
 
             private void _server_BattlEyeDisconnected(BattlEyeDisconnectEventArgs args)
