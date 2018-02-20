@@ -29,6 +29,9 @@ public string GetClass(ChatMessage message)
         case ChatMessage.MessageType.Direct:
             return "table-active";
 
+        case ChatMessage.MessageType.RCon:
+            return "table-danger";
+
         case ChatMessage.MessageType.Global:
 
         default:
