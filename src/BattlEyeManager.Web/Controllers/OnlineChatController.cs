@@ -4,20 +4,19 @@ using System;
 
 namespace BattlEyeManager.Web.Controllers
 {
-    public class OnlinePlayerController : Controller
+    public class OnlineChatController : Controller
     {
         private readonly ServerStateService _serverStateService;
 
-        public OnlinePlayerController(ServerStateService serverStateService)
+        public OnlineChatController(ServerStateService serverStateService)
         {
             _serverStateService = serverStateService;
         }
 
-        // GET: OnlinePlayer
+        // GET: OnlineChat
         public ActionResult Index(Guid serverId)
         {
-            var players = _serverStateService.GetPlayers(serverId);
-            return View(players);
+            return View(_serverStateService.GetChat(serverId));
         }
     }
 }

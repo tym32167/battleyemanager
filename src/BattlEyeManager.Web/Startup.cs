@@ -48,7 +48,10 @@ namespace BattlEyeManager.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<UserModel> userManager,
-            RoleManager<RoleModel> roleManager)
+            RoleManager<RoleModel> roleManager,
+            IBeServerAggregator beServerAggregator, IKeyValueStore<ServerModel, Guid> store,
+            ServerStateService service
+            )
         {
             if (env.IsDevelopment())
             {
@@ -64,6 +67,8 @@ namespace BattlEyeManager.Web
             app.UseAuthentication();
 
             CheckAdminUser(userManager, roleManager).Wait();
+
+            RunActiveServers(beServerAggregator, store, service).Wait();
 
             app.UseMvc(routes =>
             {
@@ -92,6 +97,23 @@ namespace BattlEyeManager.Web
                 var adminModel = new UserModel { UserName = "admin", Password = "12qw!@QW", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
                 await userManager.CreateAsync(adminModel, adminModel.Password);
                 await userManager.AddToRoleAsync(adminModel, adminRole);
+            }
+        }
+
+
+        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, IKeyValueStore<ServerModel, Guid> store, ServerStateService service)
+        {
+            var activeServers = await store.FindAsync(s => s.Active);
+            foreach (var server in activeServers)
+            {
+                beServerAggregator.AddServer(new ServerInfo
+                {
+                    Id = server.Id,
+                    Password = server.Password,
+                    Port = server.Port,
+                    Host = server.Host,
+                    Name = server.Name
+                });
             }
         }
     }

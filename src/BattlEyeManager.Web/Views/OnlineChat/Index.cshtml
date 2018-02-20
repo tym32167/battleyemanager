@@ -1,0 +1,87 @@
+﻿@using BattlEyeManager.BE.Models
+@model IEnumerable<BattlEyeManager.BE.Models.ChatMessage>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@functions
+{
+
+public string GetClass(ChatMessage message)
+{
+    switch (message.Type)
+    {
+        case ChatMessage.MessageType.Vehicle:
+        case ChatMessage.MessageType.Command:
+            return "table-warning";
+
+
+        case ChatMessage.MessageType.Group:
+            return "table-success";
+
+        case ChatMessage.MessageType.Side:
+            return "table-info";
+
+
+        case ChatMessage.MessageType.Direct:
+            return "table-active";
+
+        case ChatMessage.MessageType.Global:
+
+        default:
+            return string.Empty;
+    }
+}
+
+}
+
+<h2>Chat</h2>
+
+<table class="table-sm">
+    <tr>
+        <td>
+            <a asp-controller="OnlinePlayer" asp-action="Index" asp-route-serverId="@Context.Request.Query["serverId"]">Players</a>
+        </td>
+        <td>
+            Chat
+        </td>
+    </tr>
+</table>
+
+<div style="overflow: auto; height: 100%;">
+
+    <table class="table table-sm table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Message)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@GetClass(item)">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Message)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

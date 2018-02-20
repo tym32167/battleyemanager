@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace BattlEyeManager.Web.Services
 {
@@ -18,6 +19,8 @@ namespace BattlEyeManager.Web.Services
 
         private readonly ConcurrentDictionary<Guid, ConcurrentQueue<ChatMessage>> _chat = new ConcurrentDictionary<Guid, ConcurrentQueue<ChatMessage>>();
 
+        private Timer _timer;
+
         public ServerStateService(IBeServerAggregator aggregator, IKeyValueStore<ChatModel, Guid> chatStore)
         {
             _aggregator = aggregator;
@@ -25,6 +28,37 @@ namespace BattlEyeManager.Web.Services
 
             _aggregator.PlayerHandler += _aggregator_PlayerHandler;
             _aggregator.ChatMessageHandler += _aggregator_ChatMessageHandler;
+
+            _aggregator.DisconnectHandler += _aggregator_DisconnectHandler;
+
+            _timer = new Timer(PlayersUpdate, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+        }
+
+        private void _aggregator_DisconnectHandler(object sender, BEServerEventArgs<ServerInfo> e)
+        {
+            var emptyPlayer = Enumerable.Empty<Player>();
+            _playerState.AddOrUpdate(e.Server.Id, guid => emptyPlayer, (guid, players) => emptyPlayer);
+
+            _chat.AddOrUpdate(e.Server.Id, guid =>
+            {
+                var queue = new ConcurrentQueue<ChatMessage>();
+                queue.Clear();
+                return queue;
+            }, (guid, queue) =>
+            {
+                queue.Clear();
+                return queue;
+            });
+        }
+
+        private void PlayersUpdate(object state)
+        {
+            var servers = _aggregator.GetConnectedServers().ToArray();
+
+            foreach (var server in servers)
+            {
+                _aggregator.Send(server.Id, BattlEyeCommand.Players);
+            }
         }
 
         private async void _aggregator_ChatMessageHandler(object sender, BEServerEventArgs<ChatMessage> e)

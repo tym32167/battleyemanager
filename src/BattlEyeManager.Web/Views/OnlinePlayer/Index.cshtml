@@ -5,7 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+
+<h2>Players: @Model.Count()</h2>
+
+<table class="table-sm">
+    <tr>
+        <td>
+            Players
+        </td>
+        <td>
+            <a asp-controller="OnlineChat" asp-action="Index" asp-route-serverId="@Context.Request.Query["serverId"]">Chat</a>
+        </td>
+    </tr>
+</table>
 
 
 <table class="table table-sm table-striped table-bordered table-hover" style="max-width: 650px">
