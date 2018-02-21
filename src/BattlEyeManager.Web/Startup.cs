@@ -103,6 +103,8 @@ namespace BattlEyeManager.Web
 
         private async Task RunActiveServers(IBeServerAggregator beServerAggregator, IKeyValueStore<ServerModel, Guid> store, ServerStateService service)
         {
+            await service.InitAsync();
+
             var activeServers = await store.FindAsync(s => s.Active);
             foreach (var server in activeServers)
             {

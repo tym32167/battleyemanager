@@ -24,3 +24,6 @@
      display: none; 
  } 
 
+ .table-sm {
+     line-height: 1em;
+ }

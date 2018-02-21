@@ -1,6 +1,7 @@
 ﻿using BattlEyeManager.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Diagnostics;
 
 namespace BattlEyeManager.Web.Controllers
 {
@@ -17,6 +18,18 @@ namespace BattlEyeManager.Web.Controllers
         public ActionResult Index(Guid serverId)
         {
             return View(_serverStateService.GetChat(serverId));
+        }
+
+
+        [HttpPost]
+        public ActionResult Post(Guid serverId, string chatMessage)
+        {
+            _serverStateService.PostChat(serverId, chatMessage);
+
+            Debug.WriteLine(serverId);
+            Debug.WriteLine(chatMessage);
+
+            return RedirectToAction("Index", new { serverId });
         }
     }
 }

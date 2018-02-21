@@ -41,6 +41,8 @@ public string GetClass(ChatMessage message)
 
 }
 
+
+
 <h2>Chat</h2>
 
 <table class="table-sm">
@@ -54,37 +56,50 @@ public string GetClass(ChatMessage message)
     </tr>
 </table>
 
-<div style="overflow: auto; height: 100%;">
 
-    <table class="table table-sm table-striped table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Message)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="@GetClass(item)">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Message)
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+<div id="chatBox" class="my-3 p-3 bg-white rounded box-shadow" style="line-height: 1em; max-height: 500px; overflow: auto;">
+
+    @foreach (var item in Model)
+    {
+        <div class="media text-muted @GetClass(item)">
+            <p class="media-body mb-0 small lh-125 ">
+                <strong>@Html.DisplayFor(modelItem => item.Date)</strong>
+                @Html.DisplayFor(modelItem => item.Message)
+            </p>
+        </div>
+    }
+
 </div>
+
+
+<form asp-action="Post" class="form-inline" asp-route-serverId="@Context.Request.Query["serverId"]">
+
+    <input type="text" class="form-control col-sm" id="chatMessage" name="chatMessage" placeholder="Chat message">
+    <input type="submit" class="btn btn-primary" value="Send" />
+
+
+</form>
+
+
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            var wtf = $('#chatBox');
+            var height = wtf[0].scrollHeight;
+            wtf.scrollTop(height);
+        });
+
+    </script>
+}
+
+

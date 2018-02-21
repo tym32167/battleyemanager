@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web.Services
 {
@@ -28,8 +29,18 @@ namespace BattlEyeManager.Web.Services
 
             _aggregator.PlayerHandler += _aggregator_PlayerHandler;
             _aggregator.ChatMessageHandler += _aggregator_ChatMessageHandler;
-
             _aggregator.DisconnectHandler += _aggregator_DisconnectHandler;
+        }
+
+
+        public async Task InitAsync()
+        {
+            var history = (await _chatStore.FindAsync(x => x.Date > DateTime.Today)).OrderByDescending(x => x.Date).Take(100).Reverse();
+
+            foreach (var chat in history)
+            {
+                AddChatMessage(chat.ServerId, new ChatMessage() { Message = chat.Text, Date = chat.Date });
+            }
 
             _timer = new Timer(PlayersUpdate, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
         }
@@ -63,14 +74,20 @@ namespace BattlEyeManager.Web.Services
 
         private async void _aggregator_ChatMessageHandler(object sender, BEServerEventArgs<ChatMessage> e)
         {
-            _chat.AddOrUpdate(e.Server.Id, guid =>
+            AddChatMessage(e.Server.Id, e.Data);
+            await _chatStore.AddAsync(new ChatModel { Date = e.Data.Date, ServerId = e.Server.Id, Text = e.Data.Message });
+        }
+
+        private void AddChatMessage(Guid serverId, ChatMessage message)
+        {
+            _chat.AddOrUpdate(serverId, guid =>
             {
                 var queue = new ConcurrentQueue<ChatMessage>();
-                queue.Enqueue(e.Data);
+                queue.Enqueue(message);
                 return queue;
             }, (guid, queue) =>
             {
-                queue.Enqueue(e.Data);
+                queue.Enqueue(message);
                 if (queue.Count > 100)
                 {
                     queue.TryDequeue(out ChatMessage _);
@@ -79,8 +96,6 @@ namespace BattlEyeManager.Web.Services
                 }
                 return queue;
             });
-
-            await _chatStore.AddAsync(new ChatModel { Date = e.Data.Date, ServerId = e.Server.Id, Text = e.Data.Message });
         }
 
         private void _aggregator_PlayerHandler(object sender, BEServerEventArgs<IEnumerable<Player>> e)
@@ -114,6 +129,11 @@ namespace BattlEyeManager.Web.Services
         public void RefreshPlayers(Guid serverId)
         {
             _aggregator.Send(serverId, BattlEyeCommand.Players);
+        }
+
+        public void PostChat(Guid serverId, string chatMessage)
+        {
+            _aggregator.Send(serverId, BattlEyeCommand.Say, $" -1 tim: {chatMessage}");
         }
     }
 }
