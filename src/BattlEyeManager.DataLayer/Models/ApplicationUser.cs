@@ -26,8 +26,4 @@ namespace BattlEyeManager.DataLayer.Models
         [Required(ErrorMessage = "EmailRequired"), DataType(DataType.EmailAddress)]
         public override string Email { get; set; }
     }
-
-    public class ApplicationRole : IdentityRole
-    {
-    }
 }

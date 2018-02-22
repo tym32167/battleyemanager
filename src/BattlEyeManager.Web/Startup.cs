@@ -5,7 +5,6 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Models;
-using BattlEyeManager.MongoDB;
 using BattlEyeManager.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -96,7 +95,7 @@ namespace BattlEyeManager.Web
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
             services.AddSingleton<ServerStateService, ServerStateService>();
-            services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();
+            //services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

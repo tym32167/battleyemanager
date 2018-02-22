@@ -24,5 +24,8 @@ namespace BattlEyeManager.DataLayer.Context
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Server> Servers { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
     }
 }
