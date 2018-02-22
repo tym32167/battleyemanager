@@ -1,22 +1,21 @@
-﻿using BattlEyeManager.Models;
+﻿using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Web.Core;
 using BattlEyeManager.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly UserManager<UserModel> _userManager;
-        private readonly SignInManager<UserModel> _signInManager;
-        private readonly RoleManager<RoleModel> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public AccountController(UserManager<UserModel> userManager,
-            SignInManager<UserModel> signInManager, RoleManager<RoleModel> roleManager)
+        public AccountController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

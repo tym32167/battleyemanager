@@ -20,10 +20,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BattlEyeManager.BE\BattlEyeManager.BE.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj" />
     <ProjectReference Include="..\BattlEyeManager.Models\BattlEyeManager.Models.csproj" />
     <ProjectReference Include="..\BattlEyeManager.MongoDB\BattlEyeManager.MongoDB.csproj" />
     <ProjectReference Include="..\BattlEyeManager.RavenDB\BattlEyeManager.RavenDB.csproj" />

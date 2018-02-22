@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.Models;
+﻿using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Web.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +12,9 @@ namespace BattlEyeManager.Web.Controllers
     [Authorize(Roles = "Administrator")]
     public class UserController : BaseController
     {
-        private readonly UserManager<UserModel> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserController(UserManager<UserModel> userManager, RoleManager<RoleModel> roleManager)
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
         }
@@ -37,7 +37,7 @@ namespace BattlEyeManager.Web.Controllers
         // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserModel user)
+        public async Task<IActionResult> Edit(ApplicationUser user)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +100,7 @@ namespace BattlEyeManager.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserModel user)
+        public async Task<IActionResult> Create(ApplicationUser user)
         {
             if (ModelState.IsValid)
             {
