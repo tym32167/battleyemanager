@@ -1,7 +1,9 @@
 ﻿using BattlEyeManager.BE.BeNet;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
-using BattlEyeManager.Models;
+using BattlEyeManager.DataLayer.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace BattlEyeManager.Web.Services
     public class ServerStateService
     {
         private readonly IBeServerAggregator _aggregator;
-        private readonly IKeyValueStore<ChatModel, Guid> _chatStore;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly ConcurrentDictionary<Guid, IEnumerable<Player>> _playerState = new ConcurrentDictionary<Guid, IEnumerable<Player>>();
 
@@ -22,10 +24,10 @@ namespace BattlEyeManager.Web.Services
 
         private Timer _timer;
 
-        public ServerStateService(IBeServerAggregator aggregator, IKeyValueStore<ChatModel, Guid> chatStore)
+        public ServerStateService(IBeServerAggregator aggregator, IServiceScopeFactory scopeFactory)
         {
             _aggregator = aggregator;
-            _chatStore = chatStore;
+            _scopeFactory = scopeFactory;
 
             _aggregator.PlayerHandler += _aggregator_PlayerHandler;
             _aggregator.ChatMessageHandler += _aggregator_ChatMessageHandler;
@@ -35,11 +37,18 @@ namespace BattlEyeManager.Web.Services
 
         public async Task InitAsync()
         {
-            var history = (await _chatStore.FindAsync(x => x.Date > DateTime.Today)).OrderByDescending(x => x.Date).Take(100).Reverse();
-
-            foreach (var chat in history)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                AddChatMessage(chat.ServerId, new ChatMessage() { Message = chat.Text, Date = chat.Date });
+                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                {
+                    var history = await ctx.ChatMessages.OrderByDescending(x => x.Date).Take(100).OrderBy(x => x.Date).ToListAsync();
+
+                    foreach (var chat in history)
+                    {
+                        AddChatMessage(chat.ServerId, new ChatMessage() { Message = chat.Text, Date = chat.Date });
+                    }
+                }
+
             }
 
             _timer = new Timer(PlayersUpdate, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
@@ -75,7 +84,23 @@ namespace BattlEyeManager.Web.Services
         private async void _aggregator_ChatMessageHandler(object sender, BEServerEventArgs<ChatMessage> e)
         {
             AddChatMessage(e.Server.Id, e.Data);
-            await _chatStore.AddAsync(new ChatModel { Date = e.Data.Date, ServerId = e.Server.Id, Text = e.Data.Message });
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                {
+
+                    await ctx.ChatMessages.AddAsync(
+                        new DataLayer.Models.ChatMessage
+                        {
+                            Date = e.Data.Date,
+                            ServerId = e.Server.Id,
+                            Text = e.Data.Message
+                        });
+
+                    await ctx.SaveChangesAsync();
+                }
+            }
         }
 
         private void AddChatMessage(Guid serverId, ChatMessage message)

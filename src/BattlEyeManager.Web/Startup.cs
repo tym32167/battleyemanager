@@ -4,7 +4,6 @@ using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.Models;
 using BattlEyeManager.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web
@@ -60,55 +60,32 @@ namespace BattlEyeManager.Web
                 options.SlidingExpiration = true;
             });
 
-
-
-
-
-
-
-
-
-
             //--------------------------------------------------------------------------
 
             services.AddMvc();
 
-            //services.AddSingleton<IKeyValueStore<UserModel, Guid>, MongoDBStoreGuid<UserModel>>();
-            //services.AddSingleton<IKeyValueStore<RoleModel, Guid>, MongoDBStoreGuid<RoleModel>>();
-            //services.AddSingleton<IKeyValueStore<UserRole, Guid>, MongoDBStoreGuid<UserRole>>();
-            //services.AddSingleton<IKeyValueStore<ChatModel, Guid>, MongoDBStoreGuid<ChatModel>>();
-
-
-            //services.AddSingleton<IRoleStore<RoleModel>, RoleStore>();
-            //services.AddSingleton<IUserRoleStore<UserModel>, UserStore>();
-            //services.AddSingleton<IUserStore<UserModel>, UserStore>();
-            //services.AddSingleton<IUserPasswordStore<UserModel>, UserStore>();
-            //services.AddIdentity<UserModel, RoleModel>().AddDefaultTokenProviders();
-
-
-
-
-
-
-
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
+
             services.AddSingleton<ServerStateService, ServerStateService>();
+
+
             //services.AddSingleton<IKeyValueStore<ServerModel, Guid>, MongoDBStoreGuid<ServerModel>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env
-            ,
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager
-            //,
-            //IBeServerAggregator beServerAggregator,
-            //IKeyValueStore<ServerModel, Guid> store,
-            //ServerStateService service
+            RoleManager<ApplicationRole> roleManager,
+            IBeServerAggregator beServerAggregator,
+            AppDbContext store,
+            ServerStateService service
             )
         {
+
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -122,9 +99,14 @@ namespace BattlEyeManager.Web
             app.UseStaticFiles();
             app.UseAuthentication();
 
+
+
             CheckAdminUser(userManager, roleManager).Wait();
 
-            //RunActiveServers(beServerAggregator, store, service).Wait();
+
+
+
+            RunActiveServers(beServerAggregator, store, service).Wait();
 
             app.UseMvc(routes =>
             {
@@ -133,7 +115,6 @@ namespace BattlEyeManager.Web
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-
 
         private async Task CheckAdminUser(
             UserManager<ApplicationUser> userManager,
@@ -157,11 +138,11 @@ namespace BattlEyeManager.Web
         }
 
 
-        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, IKeyValueStore<ServerModel, Guid> store, ServerStateService service)
+        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, AppDbContext store, ServerStateService service)
         {
             await service.InitAsync();
 
-            var activeServers = await store.FindAsync(s => s.Active);
+            var activeServers = await store.Servers.Where(s => s.Active).ToListAsync();
             foreach (var server in activeServers)
             {
                 beServerAggregator.AddServer(new ServerInfo

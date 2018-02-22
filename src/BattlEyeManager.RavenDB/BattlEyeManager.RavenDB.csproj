@@ -8,8 +8,4 @@
     <PackageReference Include="RavenDB.Client" Version="4.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BattlEyeManager.Models\BattlEyeManager.Models.csproj" />
-  </ItemGroup>
-
 </Project>

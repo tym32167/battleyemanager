@@ -5,15 +5,9 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Web", "BattlEyeManager.Web\BattlEyeManager.Web.csproj", "{D0505D1F-3CFC-40FE-BE3F-A636275841AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Models", "BattlEyeManager.Models\BattlEyeManager.Models.csproj", "{E857E0DB-853D-46DF-BE30-363B9807A96A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.RavenDB", "BattlEyeManager.RavenDB\BattlEyeManager.RavenDB.csproj", "{EAD86DA2-134B-4DE3-9AA1-87797A8B91C3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.MongoDB", "BattlEyeManager.MongoDB\BattlEyeManager.MongoDB.csproj", "{7EE459AC-955B-4773-AE4F-84355CC7A9B4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.BE", "BattlEyeManager.BE\BattlEyeManager.BE.csproj", "{93B22071-10B8-43DB-AFAE-22A0B1C093D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.DataLayer", "BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj", "{FD53DBFF-9ECC-44E6-86D2-A982CE1E5EF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.DataLayer", "BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj", "{FD53DBFF-9ECC-44E6-86D2-A982CE1E5EF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +19,6 @@ Global
 		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E857E0DB-853D-46DF-BE30-363B9807A96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E857E0DB-853D-46DF-BE30-363B9807A96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E857E0DB-853D-46DF-BE30-363B9807A96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E857E0DB-853D-46DF-BE30-363B9807A96A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAD86DA2-134B-4DE3-9AA1-87797A8B91C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAD86DA2-134B-4DE3-9AA1-87797A8B91C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAD86DA2-134B-4DE3-9AA1-87797A8B91C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAD86DA2-134B-4DE3-9AA1-87797A8B91C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7EE459AC-955B-4773-AE4F-84355CC7A9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EE459AC-955B-4773-AE4F-84355CC7A9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EE459AC-955B-4773-AE4F-84355CC7A9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EE459AC-955B-4773-AE4F-84355CC7A9B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
