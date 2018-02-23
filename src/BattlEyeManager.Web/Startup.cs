@@ -24,7 +24,7 @@ namespace BattlEyeManager.Web
         {
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root "));
+                options.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root;"));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -83,7 +83,7 @@ namespace BattlEyeManager.Web
             ServerStateService service
             )
         {
-
+            store.Database.Migrate();
 
 
             if (env.IsDevelopment())
