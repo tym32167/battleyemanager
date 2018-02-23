@@ -14,7 +14,7 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: OnlinePlayer
-        public ActionResult Index(Guid serverId)
+        public ActionResult Index(int serverId)
         {
             var players = _serverStateService.GetPlayers(serverId);
             return View(players);

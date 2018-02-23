@@ -111,7 +111,7 @@ namespace BattlEyeManager.DataLayer.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<Guid>("ServerId");
+                    b.Property<int>("ServerId");
 
                     b.Property<string>("Text");
 
@@ -124,7 +124,7 @@ namespace BattlEyeManager.DataLayer.Migrations
 
             modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Server", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Active");

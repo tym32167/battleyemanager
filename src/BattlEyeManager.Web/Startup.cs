@@ -83,7 +83,7 @@ namespace BattlEyeManager.Web
             ServerStateService service
             )
         {
-            store.Database.Migrate();
+            //store.Database.Migrate();
 
 
             if (env.IsDevelopment())
@@ -102,10 +102,6 @@ namespace BattlEyeManager.Web
 
 
             CheckAdminUser(userManager, roleManager).Wait();
-
-
-
-
             RunActiveServers(beServerAggregator, store, service).Wait();
 
             app.UseMvc(routes =>

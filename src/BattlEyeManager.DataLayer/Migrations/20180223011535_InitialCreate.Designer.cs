@@ -11,8 +11,8 @@ using System;
 namespace BattlEyeManager.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180222225953_AppUserUpdate")]
-    partial class AppUserUpdate
+    [Migration("20180223011535_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,6 +105,48 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("ServerId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Server", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Host")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Password");
+
+                    b.Property<int>("Port");
+
+                    b.Property<int>("SteamPort");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Servers");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -187,6 +229,14 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ChatMessage", b =>
+                {
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Server", "Server")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

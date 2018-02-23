@@ -1,14 +1,11 @@
-using MySql.Data.EntityFrameworkCore.DataAnnotations;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BattlEyeManager.DataLayer.Models
 {
-    [MySqlCharset("utf8")]
     public class Server
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Id { get; set; }
 
         [Required]
         public string Host { get; set; }
@@ -19,7 +16,6 @@ namespace BattlEyeManager.DataLayer.Models
         public string Password { get; set; }
 
         [Required]
-        [MySqlCharset("utf8")]
         public string Name { get; set; }
 
         [Required]

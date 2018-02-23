@@ -15,14 +15,14 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: OnlineChat
-        public ActionResult Index(Guid serverId)
+        public ActionResult Index(int serverId)
         {
             return View(_serverStateService.GetChat(serverId));
         }
 
 
         [HttpPost]
-        public ActionResult Post(Guid serverId, string chatMessage)
+        public ActionResult Post(int serverId, string chatMessage)
         {
             _serverStateService.PostChat(serverId, chatMessage);
 

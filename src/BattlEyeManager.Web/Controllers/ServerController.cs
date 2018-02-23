@@ -3,9 +3,8 @@ using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web.Controllers
 {
@@ -61,7 +60,7 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: Server/Edit/5
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(int id)
         {
             var item = await _appContext.Servers.FindAsync(id);
             return View(item);
@@ -98,7 +97,7 @@ namespace BattlEyeManager.Web.Controllers
         }
 
         // GET: Server/Delete/5
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             _beServerAggregator.RemoveServer(id);
             _appContext.Servers.Remove(_appContext.Servers.Find(id));

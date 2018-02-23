@@ -19,9 +19,9 @@ namespace BattlEyeManager.BE.Services
         event EventHandler<BEServerEventArgs<LogMessage>> RConAdminLog;
 
         bool AddServer(ServerInfo info);
-        bool RemoveServer(Guid serverId);
+        bool RemoveServer(int serverId);
 
         IEnumerable<ServerInfo> GetConnectedServers();
-        void Send(Guid serverId, BattlEyeCommand command, string param = null);
+        void Send(int serverId, BattlEyeCommand command, string param = null);
     }
 }

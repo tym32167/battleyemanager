@@ -18,7 +18,7 @@ namespace BattlEyeManager.BE.Services
     {
         private readonly IBattlEyeServerFactory _battlEyeServerFactory;
         private readonly IIpService _ipService;
-        private readonly ConcurrentDictionary<Guid, ServerItem> _servers = new ConcurrentDictionary<Guid, ServerItem>();
+        private readonly ConcurrentDictionary<int, ServerItem> _servers = new ConcurrentDictionary<int, ServerItem>();
         private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
 
         public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory, IIpService ipService)
@@ -47,7 +47,7 @@ namespace BattlEyeManager.BE.Services
             return false;
         }
 
-        public bool RemoveServer(Guid serverId)
+        public bool RemoveServer(int serverId)
         {
             ServerItem item;
 
@@ -61,7 +61,7 @@ namespace BattlEyeManager.BE.Services
         }
 
 
-        public void Send(Guid serverId, BattlEyeCommand command, string param = null)
+        public void Send(int serverId, BattlEyeCommand command, string param = null)
         {
             if (_servers.TryGetValue(serverId, out ServerItem item))
             {
@@ -310,7 +310,7 @@ namespace BattlEyeManager.BE.Services
 
     public class ServerInfo
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Host { get; set; }
         public int Port { get; set; }
         public string Password { get; set; }

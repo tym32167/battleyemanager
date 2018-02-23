@@ -18,9 +18,9 @@ namespace BattlEyeManager.Web.Services
         private readonly IBeServerAggregator _aggregator;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private readonly ConcurrentDictionary<Guid, IEnumerable<Player>> _playerState = new ConcurrentDictionary<Guid, IEnumerable<Player>>();
+        private readonly ConcurrentDictionary<int, IEnumerable<Player>> _playerState = new ConcurrentDictionary<int, IEnumerable<Player>>();
 
-        private readonly ConcurrentDictionary<Guid, ConcurrentQueue<ChatMessage>> _chat = new ConcurrentDictionary<Guid, ConcurrentQueue<ChatMessage>>();
+        private readonly ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>> _chat = new ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>>();
 
         private Timer _timer;
 
@@ -103,7 +103,7 @@ namespace BattlEyeManager.Web.Services
             }
         }
 
-        private void AddChatMessage(Guid serverId, ChatMessage message)
+        private void AddChatMessage(int serverId, ChatMessage message)
         {
             _chat.AddOrUpdate(serverId, guid =>
             {
@@ -128,7 +128,7 @@ namespace BattlEyeManager.Web.Services
             _playerState.AddOrUpdate(e.Server.Id, guid => e.Data, (guid, players) => e.Data);
         }
 
-        public IEnumerable<Player> GetPlayers(Guid serverId)
+        public IEnumerable<Player> GetPlayers(int serverId)
         {
             if (_playerState.TryGetValue(serverId, out IEnumerable<Player> res))
             {
@@ -137,7 +137,7 @@ namespace BattlEyeManager.Web.Services
             return Enumerable.Empty<Player>();
         }
 
-        public IEnumerable<ChatMessage> GetChat(Guid serverId)
+        public IEnumerable<ChatMessage> GetChat(int serverId)
         {
             if (_chat.TryGetValue(serverId, out ConcurrentQueue<ChatMessage> res))
             {
@@ -151,12 +151,12 @@ namespace BattlEyeManager.Web.Services
             return _aggregator.GetConnectedServers();
         }
 
-        public void RefreshPlayers(Guid serverId)
+        public void RefreshPlayers(int serverId)
         {
             _aggregator.Send(serverId, BattlEyeCommand.Players);
         }
 
-        public void PostChat(Guid serverId, string chatMessage)
+        public void PostChat(int serverId, string chatMessage)
         {
             _aggregator.Send(serverId, BattlEyeCommand.Say, $" -1 tim: {chatMessage}");
         }
