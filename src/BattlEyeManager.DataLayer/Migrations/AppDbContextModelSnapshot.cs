@@ -20,6 +20,30 @@ namespace BattlEyeManager.DataLayer.Migrations
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("EndtDate");
+
+                    b.Property<string>("IP");
+
+                    b.Property<int>("Num");
+
+                    b.Property<int>("Port");
+
+                    b.Property<int>("ServerId");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
@@ -104,6 +128,44 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.BadNickname", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BadNicknames");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.BanReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BanReasons");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.BanTime", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("TimeInMinutes");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BanTimes");
+                });
+
             modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ChatMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -120,6 +182,101 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.HasIndex("ServerId");
 
                     b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ImportantWord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImportantWords");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.KickReason", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KickReasons");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Player", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comment");
+
+                    b.Property<string>("GUID");
+
+                    b.Property<string>("IP");
+
+                    b.Property<DateTime>("LastSeen");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("SteamId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
+
+                    b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.PlayerNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Author");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("PlayerId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayerNotes");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.PlayerSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("EndtDate");
+
+                    b.Property<string>("IP");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PlayerId");
+
+                    b.Property<int>("ServerId");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("PlayerSessions");
                 });
 
             modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Server", b =>
@@ -144,6 +301,38 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Servers");
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ServerBan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("GuidIp");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int>("Minutes");
+
+                    b.Property<int>("MinutesLeft");
+
+                    b.Property<int>("Num");
+
+                    b.Property<int?>("PlayerId");
+
+                    b.Property<string>("Reason");
+
+                    b.Property<int>("ServerId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("ServerBans");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -230,10 +419,51 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.Admin", b =>
+                {
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Server", "Server")
+                        .WithMany("Admins")
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ChatMessage", b =>
                 {
                     b.HasOne("BattlEyeManager.DataLayer.Models.Server", "Server")
                         .WithMany("ChatMessages")
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.PlayerNote", b =>
+                {
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Player", "Player")
+                        .WithMany("Notes")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.PlayerSession", b =>
+                {
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Player", "Player")
+                        .WithMany("PlayerSessions")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Server", "Server")
+                        .WithMany("PlayerSessions")
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BattlEyeManager.DataLayer.Models.ServerBan", b =>
+                {
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Player", "Player")
+                        .WithMany("ServerBans")
+                        .HasForeignKey("PlayerId");
+
+                    b.HasOne("BattlEyeManager.DataLayer.Models.Server", "Server")
+                        .WithMany("ServerBans")
                         .HasForeignKey("ServerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

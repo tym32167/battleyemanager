@@ -83,7 +83,7 @@ namespace BattlEyeManager.Web
             ServerStateService service
             )
         {
-            //store.Database.Migrate();
+            store.Database.Migrate();
 
 
             if (env.IsDevelopment())
