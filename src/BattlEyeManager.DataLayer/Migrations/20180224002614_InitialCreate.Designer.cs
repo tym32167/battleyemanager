@@ -11,7 +11,7 @@ using System;
 namespace BattlEyeManager.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180223214208_InitialCreate")]
+    [Migration("20180224002614_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,7 +259,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime?>("EndtDate");
+                    b.Property<DateTime?>("EndDate");
 
                     b.Property<string>("IP");
 

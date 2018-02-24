@@ -99,8 +99,6 @@ namespace BattlEyeManager.Web
             app.UseStaticFiles();
             app.UseAuthentication();
 
-
-
             CheckAdminUser(userManager, roleManager).Wait();
             RunActiveServers(beServerAggregator, store, service).Wait();
 

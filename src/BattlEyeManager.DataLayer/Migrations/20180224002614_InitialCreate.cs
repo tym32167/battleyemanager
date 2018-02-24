@@ -332,7 +332,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EndtDate = table.Column<DateTime>(nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: true),
                     IP = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     PlayerId = table.Column<int>(nullable: false),
