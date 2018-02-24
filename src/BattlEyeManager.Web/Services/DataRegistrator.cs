@@ -155,9 +155,10 @@ namespace BattlEyeManager.Web.Services
                             var threeDaysAgo = DateTime.UtcNow.AddDays(-3);
 
                             var sessionsToClose =
-                                ctx.PlayerSessions
-                                    .Where(x => x.EndDate == null && leavingPlayersIds.Contains(x.Player.GUID) && x.StartDate > threeDaysAgo)
-                                    .ToArray();
+                                await ctx.PlayerSessions
+                                    .Where(x => x.EndDate == null && leavingPlayersIds.Contains(x.Player.GUID) &&
+                                                x.StartDate > threeDaysAgo)
+                                    .ToListAsync();
 
                             foreach (var session in sessionsToClose)
                             {
@@ -201,7 +202,7 @@ namespace BattlEyeManager.Web.Services
 
                         var leavedHosts = leaved.Select(x => x.IP).ToArray();
 
-                        foreach (var adm in ctx.Admins.Where(a => a.EndDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToArray())
+                        foreach (var adm in await ctx.Admins.Where(a => a.EndDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToListAsync())
                         {
                             if (leaved.Any(a => a.IP == adm.IP && a.Port == adm.Port && a.Num == adm.Num))
                             {
