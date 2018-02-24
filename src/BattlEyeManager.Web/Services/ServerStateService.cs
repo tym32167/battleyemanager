@@ -59,7 +59,8 @@ namespace BattlEyeManager.Web.Services
                 var leaved = players.Where(r => !ret.Any(p => p.Num == r.Num && p.GuidIp == r.GuidIp && p.Reason == r.Reason)).ToArray();
 
 #pragma warning disable 4014
-                _dataRegistrator.BansOnlineChangeRegister(e.Data.ToArray(), e.Server);
+                if (joined.Any() || leaved.Any())
+                    _dataRegistrator.BansOnlineChangeRegister(e.Data.ToArray(), e.Server);
 #pragma warning restore 4014
                 return ret;
             });
@@ -83,7 +84,8 @@ namespace BattlEyeManager.Web.Services
                 var leaved = players.Where(r => !ret.Any(p => p.Num == r.Num && p.IP == r.IP && p.Port == r.Port)).ToArray();
 
 #pragma warning disable 4014
-                _dataRegistrator.AdminsOnlineChangeRegister(joined, leaved, e.Server);
+                if (joined.Any() || leaved.Any())
+                    _dataRegistrator.AdminsOnlineChangeRegister(joined, leaved, e.Server);
 #pragma warning restore 4014
                 return ret;
             });
@@ -176,7 +178,8 @@ namespace BattlEyeManager.Web.Services
                 var leaved = players.Where(r => ret.All(p => p.Guid != r.Guid)).ToArray();
 
 #pragma warning disable 4014
-                _dataRegistrator.UsersOnlineChangeRegister(joined, leaved, e.Server);
+                if (joined.Any() || leaved.Any())
+                    _dataRegistrator.UsersOnlineChangeRegister(joined, leaved, e.Server);
 #pragma warning restore 4014
 
                 return ret;
