@@ -70,6 +70,8 @@ namespace BattlEyeManager.Web
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
             services.AddSingleton<ServerStateService, ServerStateService>();
             services.AddSingleton<DataRegistrator, DataRegistrator>();
+
+            services.AddSingleton<BELogic, BELogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +81,8 @@ namespace BattlEyeManager.Web
             IBeServerAggregator beServerAggregator,
             AppDbContext store,
             ServerStateService service,
-            DataRegistrator dataRegistrator
+            DataRegistrator dataRegistrator,
+            BELogic beLogic
             )
         {
             store.Database.Migrate();
@@ -107,6 +110,7 @@ namespace BattlEyeManager.Web
             });
 
             dataRegistrator.Init().Wait();
+            beLogic.Init();
             CheckAdminUser(userManager, roleManager).Wait();
             RunActiveServers(beServerAggregator, store, service).Wait();
         }

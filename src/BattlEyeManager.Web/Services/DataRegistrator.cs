@@ -36,6 +36,11 @@ namespace BattlEyeManager.Web.Services
                         session.EndDate = session.StartDate;
                     }
 
+                    foreach (var session in ctx.Admins.Where(x => x.EndtDate == null).ToArray())
+                    {
+                        session.EndtDate = session.StartDate;
+                    }
+
                     await ctx.SaveChangesAsync();
                 }
             }
@@ -61,12 +66,11 @@ namespace BattlEyeManager.Web.Services
             }
         }
 
-        private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
-
+        private static readonly SemaphoreSlim SemaphoreSlimPlayers = new SemaphoreSlim(1, 1);
 
         public async Task UsersOnlineChangeRegister(BE.Models.Player[] joined, BE.Models.Player[] leaved, ServerInfo server)
         {
-            await SemaphoreSlim.WaitAsync();
+            await SemaphoreSlimPlayers.WaitAsync();
 
             joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
             leaved = leaved.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
@@ -167,7 +171,51 @@ namespace BattlEyeManager.Web.Services
             }
             finally
             {
-                SemaphoreSlim.Release();
+                SemaphoreSlimPlayers.Release();
+            }
+        }
+
+
+        private static readonly SemaphoreSlim SemaphoreSlimAdmins = new SemaphoreSlim(1, 1);
+
+        public async Task AdminsOnlineChangeRegister(BE.Models.Admin[] joined, BE.Models.Admin[] leaved, ServerInfo server)
+        {
+            await SemaphoreSlimAdmins.WaitAsync();
+
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    {
+                        await ctx.Admins.AddRangeAsync(
+                            joined.Select(x => new Admin
+                            {
+                                IP = x.IP,
+                                Num = x.Num,
+                                Port = x.Port,
+                                ServerId = server.Id,
+                                StartDate = DateTime.UtcNow
+                            })
+                        );
+
+                        var leavedHosts = leaved.Select(x => x.IP).ToArray();
+
+                        foreach (var adm in ctx.Admins.Where(a => a.EndtDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToArray())
+                        {
+                            if (leaved.Any(a => a.IP == adm.IP && a.Port == adm.Port && a.Num == adm.Num))
+                            {
+                                adm.EndtDate = DateTime.UtcNow;
+                            }
+                        }
+
+                        await ctx.SaveChangesAsync();
+                    }
+                }
+            }
+            finally
+            {
+                SemaphoreSlimAdmins.Release();
             }
         }
     }

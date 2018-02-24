@@ -4,11 +4,9 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web.Services
@@ -20,10 +18,9 @@ namespace BattlEyeManager.Web.Services
         private readonly DataRegistrator _dataRegistrator;
 
         private readonly ConcurrentDictionary<int, IEnumerable<Player>> _playerState = new ConcurrentDictionary<int, IEnumerable<Player>>();
-
         private readonly ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>> _chat = new ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>>();
 
-        private Timer _timer;
+        private readonly ConcurrentDictionary<int, IEnumerable<Admin>> _adminState = new ConcurrentDictionary<int, IEnumerable<Admin>>();
 
         public ServerStateService(IBeServerAggregator aggregator, IServiceScopeFactory scopeFactory, DataRegistrator dataRegistrator)
         {
@@ -32,7 +29,6 @@ namespace BattlEyeManager.Web.Services
             _dataRegistrator = dataRegistrator;
         }
 
-
         public async Task InitAsync()
         {
             _aggregator.PlayerHandler += _aggregator_PlayerHandler;
@@ -40,7 +36,31 @@ namespace BattlEyeManager.Web.Services
             _aggregator.DisconnectHandler += _aggregator_DisconnectHandler;
             _aggregator.ConnectingHandler += _aggregator_ConnectingHandler;
 
-            _timer = new Timer(PlayersUpdate, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+            _aggregator.AdminHandler += _aggregator_AdminHandler;
+        }
+
+        private void _aggregator_AdminHandler(object sender, BEServerEventArgs<IEnumerable<Admin>> e)
+        {
+            _adminState.AddOrUpdate(e.Server.Id, guid =>
+            {
+                var ret = e.Data;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                _dataRegistrator.AdminsOnlineChangeRegister(e.Data.ToArray(), new Admin[0], e.Server);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+                return ret;
+            }, (guid, players) =>
+            {
+                var ret = e.Data;
+
+                var joined = ret.Where(r => !players.Any(p => p.Num == r.Num && p.IP == r.IP && p.Port == r.Port)).ToArray();
+                var leaved = players.Where(r => !ret.Any(p => p.Num == r.Num && p.IP == r.IP && p.Port == r.Port)).ToArray();
+
+#pragma warning disable 4014
+                _dataRegistrator.AdminsOnlineChangeRegister(joined, leaved, e.Server);
+#pragma warning restore 4014
+                return ret;
+            });
         }
 
         private void _aggregator_ConnectingHandler(object sender, BEServerEventArgs<ServerInfo> e)
@@ -54,16 +74,15 @@ namespace BattlEyeManager.Web.Services
             {
                 using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
                 {
-                    var history = await ctx.ChatMessages.Where(c=>c.ServerId == server.Id)
+                    var history = await ctx.ChatMessages.Where(c => c.ServerId == server.Id)
                         .OrderByDescending(x => x.Date)
                         .Take(100).OrderBy(x => x.Date).ToListAsync();
 
                     foreach (var chat in history)
                     {
-                        AddChatMessage(chat.ServerId, new ChatMessage() { Message = chat.Text, Date = chat.Date });
+                        AddChatMessage(chat.ServerId, new ChatMessage { Message = chat.Text, Date = chat.Date });
                     }
                 }
-
             }
         }
 
@@ -86,16 +105,6 @@ namespace BattlEyeManager.Web.Services
                 queue.Clear();
                 return queue;
             });
-        }
-
-        private void PlayersUpdate(object state)
-        {
-            var servers = _aggregator.GetConnectedServers().ToArray();
-
-            foreach (var server in servers)
-            {
-                _aggregator.Send(server.Id, BattlEyeCommand.Players);
-            }
         }
 
         private async void _aggregator_ChatMessageHandler(object sender, BEServerEventArgs<ChatMessage> e)
