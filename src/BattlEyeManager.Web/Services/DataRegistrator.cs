@@ -36,9 +36,9 @@ namespace BattlEyeManager.Web.Services
                         session.EndDate = session.StartDate;
                     }
 
-                    foreach (var session in ctx.Admins.Where(x => x.EndtDate == null).ToArray())
+                    foreach (var session in ctx.Admins.Where(x => x.EndDate == null).ToArray())
                     {
-                        session.EndtDate = session.StartDate;
+                        session.EndDate = session.StartDate;
                     }
 
                     await ctx.SaveChangesAsync();
@@ -201,11 +201,11 @@ namespace BattlEyeManager.Web.Services
 
                         var leavedHosts = leaved.Select(x => x.IP).ToArray();
 
-                        foreach (var adm in ctx.Admins.Where(a => a.EndtDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToArray())
+                        foreach (var adm in ctx.Admins.Where(a => a.EndDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToArray())
                         {
                             if (leaved.Any(a => a.IP == adm.IP && a.Port == adm.Port && a.Num == adm.Num))
                             {
-                                adm.EndtDate = DateTime.UtcNow;
+                                adm.EndDate = DateTime.UtcNow;
                             }
                         }
 
@@ -216,6 +216,53 @@ namespace BattlEyeManager.Web.Services
             finally
             {
                 SemaphoreSlimAdmins.Release();
+            }
+        }
+
+        private static readonly SemaphoreSlim SemaphoreSlimBans = new SemaphoreSlim(1, 1);
+
+        public async Task BansOnlineChangeRegister(BE.Models.Ban[] all, ServerInfo server)
+        {
+            await SemaphoreSlimBans.WaitAsync();
+
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    {
+                        var dbBans = await ctx.ServerBans.Where(x => x.IsActive && x.ServerId == server.Id)
+                            .ToListAsync();
+
+
+                        foreach (var serverBan in dbBans.Where(b => !all.Any(r => r.GuidIp == b.GuidIp && r.Reason == b.Reason && r.Num == b.Num)))
+                        {
+                            serverBan.IsActive = false;
+                            serverBan.CloseDate = DateTime.UtcNow;
+                        }
+
+
+                        var toAdd = all.Where(b => !dbBans.Any(r => r.GuidIp == b.GuidIp && r.Reason == b.Reason && r.Num == b.Num))
+                            .Select(b => new ServerBan
+                            {
+                                Date = DateTime.UtcNow,
+                                GuidIp = b.GuidIp,
+                                IsActive = true,
+                                Minutes = b.Minutesleft,
+                                MinutesLeft = b.Minutesleft,
+                                Num = b.Num,
+                                Reason = b.Reason,
+                                ServerId = server.Id
+                            });
+
+                        await ctx.ServerBans.AddRangeAsync(toAdd);
+                        await ctx.SaveChangesAsync();
+                    }
+                }
+            }
+            finally
+            {
+                SemaphoreSlimBans.Release();
             }
         }
     }

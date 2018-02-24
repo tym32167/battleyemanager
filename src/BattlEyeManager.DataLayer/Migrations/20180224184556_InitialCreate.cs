@@ -287,7 +287,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EndtDate = table.Column<DateTime>(nullable: true),
+                    EndDate = table.Column<DateTime>(nullable: true),
                     IP = table.Column<string>(nullable: true),
                     Num = table.Column<int>(nullable: false),
                     Port = table.Column<int>(nullable: false),
@@ -362,6 +362,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CloseDate = table.Column<DateTime>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     GuidIp = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),

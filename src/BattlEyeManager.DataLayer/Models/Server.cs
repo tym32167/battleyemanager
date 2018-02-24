@@ -83,6 +83,7 @@ namespace BattlEyeManager.DataLayer.Models
         public int MinutesLeft { get; set; }
         public string Reason { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? CloseDate { get; set; }
         public bool IsActive { get; set; }
     }
 
@@ -109,7 +110,7 @@ namespace BattlEyeManager.DataLayer.Models
         public Server Server { get; set; }
 
         public DateTime StartDate { get; set; }
-        public DateTime? EndtDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class KickReason

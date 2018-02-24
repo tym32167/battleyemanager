@@ -25,7 +25,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime?>("EndtDate");
+                    b.Property<DateTime?>("EndDate");
 
                     b.Property<string>("IP");
 
@@ -307,6 +307,8 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("CloseDate");
 
                     b.Property<DateTime>("Date");
 
