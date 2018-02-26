@@ -361,7 +361,7 @@ namespace BattlEyeManager.BE.BeNet
                         OnDisconnect(loginCredentials, BattlEyeDisconnectionType.ConnectionLost);
                     }
                 }
-            }).Start();
+            }){IsBackground = true}.Start();
         }
 
         private void ReceiveCallback(IAsyncResult ar)
