@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.BE.BeNet
 {
@@ -298,7 +298,7 @@ namespace BattlEyeManager.BE.BeNet
 
             socket.BeginReceive(state.Buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReceiveCallback), state);
 
-            new Thread(delegate ()
+            new Task(async () =>
             {
                 while (socket.Connected && keepRunning)
                 {
@@ -343,7 +343,7 @@ namespace BattlEyeManager.BE.BeNet
                         }
                     }
 
-                    Thread.Sleep(250);
+                    await Task.Delay(250);
                 }
 
                 if (!socket.Connected)
@@ -361,7 +361,7 @@ namespace BattlEyeManager.BE.BeNet
                         OnDisconnect(loginCredentials, BattlEyeDisconnectionType.ConnectionLost);
                     }
                 }
-            }){IsBackground = true}.Start();
+            }, TaskCreationOptions.LongRunning).Start();
         }
 
         private void ReceiveCallback(IAsyncResult ar)
