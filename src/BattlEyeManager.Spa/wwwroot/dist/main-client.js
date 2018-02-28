@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "520b2dd7e1000d0fd096"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "19e736478f034cb92060"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -2204,7 +2204,7 @@ module.exports = "<div class='main-nav'>\r\n    <div class='navbar navbar-invers
 /* 28 */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Weather forecast</h1>\r\n\r\n<p>This component demonstrates fetching data from the server.</p>\r\n\r\n<p *ngIf=\"!forecasts\"><em>Loading...</em></p>\r\n\r\n<table class='table' *ngIf=\"servers\">\r\n    <thead>\r\n        <tr>\r\n            <th>Id</th>\r\n            <th>Name</th>\r\n            <th>Port</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n        <tr *ngFor=\"let server of servers\">\r\n            <td>{{ server.id }}</td>\r\n            <td>{{ server.name }}</td>\r\n            <td>{{ server.port }}</td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n";
+module.exports = "<h1>Servers</h1>\r\n\r\n<p>List of registered servers.</p>\r\n\r\n<p *ngIf=\"!servers\"><em>Loading...</em></p>\r\n\r\n<table class='table' *ngIf=\"servers\">\r\n    <thead>\r\n        <tr>\r\n            <th>Id</th>\r\n            <th>Name</th>\r\n            <th>Port</th>\r\n        </tr>\r\n    </thead>\r\n    <tbody>\r\n        <tr *ngFor=\"let server of servers\">\r\n            <td>{{ server.id }}</td>\r\n            <td>{{ server.name }}</td>\r\n            <td>{{ server.port }}</td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n";
 
 /***/ }),
 /* 29 */
