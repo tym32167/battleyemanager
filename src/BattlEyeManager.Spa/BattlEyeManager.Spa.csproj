@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BattleNET\BattleNET\BattleNET.csproj" />
     <ProjectReference Include="..\BattlEyeManager.BE\BattlEyeManager.BE.csproj" />
     <ProjectReference Include="..\BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj" />
   </ItemGroup>

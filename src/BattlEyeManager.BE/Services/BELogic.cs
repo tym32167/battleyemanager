@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.BE.BeNet;
+﻿using BattleNET;
 using System;
 
 namespace BattlEyeManager.BE.Services
@@ -25,12 +25,12 @@ namespace BattlEyeManager.BE.Services
             _serverAggregator.Send(e.Server.Id, BattlEyeCommand.Players);
             _serverAggregator.Send(e.Server.Id, BattlEyeCommand.Bans);
             _serverAggregator.Send(e.Server.Id, BattlEyeCommand.Missions);
-            _serverAggregator.Send(e.Server.Id, BattlEyeCommand.admins);
+            _serverAggregator.Send(e.Server.Id, BattlEyeCommand.Admins);
         }
 
         private void _serverAggregator_RConAdminLog(object sender, BEServerEventArgs<Models.LogMessage> e)
         {
-            _serverAggregator.Send(e.Server.Id, BattlEyeCommand.admins);
+            _serverAggregator.Send(e.Server.Id, BattlEyeCommand.Admins);
         }
 
         private void _serverAggregator_BanLog(object sender, BEServerEventArgs<Models.LogMessage> e)

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Text;
 
 namespace BattlEyeManager.Spa
 {
@@ -28,6 +29,8 @@ namespace BattlEyeManager.Spa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             services.AddDbContext<AppDbContext>(options =>
                options.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root;"));
 

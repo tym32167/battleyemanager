@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.BE.BeNet;
+﻿using BattleNET;
 
 namespace BattlEyeManager.BE.Abstract
 {

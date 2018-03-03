@@ -1,7 +1,7 @@
 using BattlEyeManager.BE.Core;
 using BattlEyeManager.BE.Logging;
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.BeNet;
+using BattleNET;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;

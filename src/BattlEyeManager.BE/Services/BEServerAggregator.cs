@@ -1,5 +1,5 @@
 ﻿using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.BeNet;
+using BattleNET;
 using BattlEyeManager.BE.Core;
 using BattlEyeManager.BE.Logging;
 using BattlEyeManager.BE.Messaging;

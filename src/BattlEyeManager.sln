@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Web", "BattlEyeManager.Web\BattlEyeManager.Web.csproj", "{D0505D1F-3CFC-40FE-BE3F-A636275841AF}"
 EndProject
@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.BE", "Battl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.DataLayer", "BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj", "{FD53DBFF-9ECC-44E6-86D2-A982CE1E5EF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.Spa", "BattlEyeManager.Spa\BattlEyeManager.Spa.csproj", "{94A8FACC-F751-4581-824C-A1FD3161083F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Spa", "BattlEyeManager.Spa\BattlEyeManager.Spa.csproj", "{94A8FACC-F751-4581-824C-A1FD3161083F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{6C9122B4-5437-4613-A4D4-8DFF0A0E7782}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleNET", "..\BattleNET\BattleNET\BattleNET.csproj", "{518CEBDE-B8A6-48CB-B719-5729A325DACB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{94A8FACC-F751-4581-824C-A1FD3161083F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94A8FACC-F751-4581-824C-A1FD3161083F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94A8FACC-F751-4581-824C-A1FD3161083F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{518CEBDE-B8A6-48CB-B719-5729A325DACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{518CEBDE-B8A6-48CB-B719-5729A325DACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{518CEBDE-B8A6-48CB-B719-5729A325DACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{518CEBDE-B8A6-48CB-B719-5729A325DACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{518CEBDE-B8A6-48CB-B719-5729A325DACB} = {6C9122B4-5437-4613-A4D4-8DFF0A0E7782}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86732B31-DEAA-4666-8AD7-7B647C56E626}

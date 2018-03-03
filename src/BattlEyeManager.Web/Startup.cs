@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Web
@@ -23,6 +24,8 @@ namespace BattlEyeManager.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root;"));

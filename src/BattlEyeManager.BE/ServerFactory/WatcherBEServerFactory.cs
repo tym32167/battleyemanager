@@ -1,5 +1,5 @@
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.BeNet;
+using BattleNET;
 using BattlEyeManager.BE.ServerDecorators;
 
 namespace BattlEyeManager.BE.ServerFactory

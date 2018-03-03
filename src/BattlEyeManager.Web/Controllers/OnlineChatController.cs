@@ -1,6 +1,5 @@
 ﻿using BattlEyeManager.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Diagnostics;
 
 namespace BattlEyeManager.Web.Controllers

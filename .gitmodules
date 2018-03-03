@@ -1,0 +1,3 @@
+[submodule "BattleNET"]
+	path = BattleNET
+	url = https://github.com/tym32167/BattleNET.git

@@ -1,5 +1,4 @@
-﻿using BattlEyeManager.BE.BeNet;
-using BattlEyeManager.BE.Models;
+﻿using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BattleNET;
 
 namespace BattlEyeManager.Web.Services
 {

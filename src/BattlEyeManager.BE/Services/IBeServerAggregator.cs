@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.BE.BeNet;
+﻿using BattleNET;
 using BattlEyeManager.BE.Models;
 using System;
 using System.Collections.Generic;

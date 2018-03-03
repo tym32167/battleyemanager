@@ -1,13 +1,13 @@
 ﻿using BattlEyeManager.BE.Core;
 using BattlEyeManager.BE.Logging;
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.BeNet;
 using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using BattleNET;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -84,7 +84,7 @@ namespace BattlEyeManager.BE
                     _battlEyeServer.SendCommand(BattlEyeCommand.Bans);
                     break;
                 case CommandType.Admins:
-                    _battlEyeServer.SendCommand(BattlEyeCommand.admins);
+                    _battlEyeServer.SendCommand(BattlEyeCommand.Admins);
                     break;
 
                 case CommandType.Say:
@@ -157,7 +157,7 @@ namespace BattlEyeManager.BE
                     break;
 
                 case CommandType.LoadEvents:
-                    _battlEyeServer.SendCommand(BattlEyeCommand.loadEvents);
+                    _battlEyeServer.SendCommand(BattlEyeCommand.LoadEvents);
                     break;
 
                 case CommandType.LoadScripts:

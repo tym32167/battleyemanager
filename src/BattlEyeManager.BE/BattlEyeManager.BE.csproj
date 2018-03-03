@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
+    <ProjectReference Include="..\..\BattleNET\BattleNET\BattleNET.csproj" />
   </ItemGroup>
 
 </Project>
