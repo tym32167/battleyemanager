@@ -100,6 +100,27 @@ public string GetClass(ChatMessage message)
         });
 
     </script>
+
+    <script type="text/javascript" src="lib/signalr/signalr.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            var connection = new signalR.HubConnection('/fallback');
+
+            connection.on('send', (serverId, message) => {
+                console.log(serverId);
+                console.log(message);
+
+                window.location = window.location;
+            });
+
+            connection.start();
+        });
+
+    </script>
 }
 
 

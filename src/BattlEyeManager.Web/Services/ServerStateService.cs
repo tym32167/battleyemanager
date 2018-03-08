@@ -1,13 +1,15 @@
-﻿using BattlEyeManager.BE.Models;
+﻿using BattleNET;
+using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.Web.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BattleNET;
 
 namespace BattlEyeManager.Web.Services
 {
@@ -139,6 +141,13 @@ namespace BattlEyeManager.Web.Services
         {
             AddChatMessage(e.Server.Id, e.Data);
             await _dataRegistrator.RegisterChatMessage(e);
+
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
+                await ctx.Clients.All.SendAsync("send", e.Server.Id, e.Data);
+            }
         }
 
         private void AddChatMessage(int serverId, ChatMessage message)
