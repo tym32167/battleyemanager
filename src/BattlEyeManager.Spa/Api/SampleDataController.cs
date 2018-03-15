@@ -1,13 +1,14 @@
+using BattlEyeManager.Spa.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
-namespace BattlEyeManager.Spa.Controllers
+namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
-    public class SampleDataController : Controller
+    public class SampleDataController : BaseController
     {
         private static string[] Summaries = new[]
         {
@@ -16,6 +17,19 @@ namespace BattlEyeManager.Spa.Controllers
 
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
+        {
+            var rng = new Random();
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
+                TemperatureC = rng.Next(-20, 55),
+                Summary = Summaries[rng.Next(Summaries.Length)]
+            });
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public IEnumerable<WeatherForecast> WeatherForecasts2()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
