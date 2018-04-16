@@ -141,28 +141,10 @@ namespace BattlEyeManager.Spa
                     name: "api",
                     template: "api/{controller=Home}/{action=Index}/{id?}");                
 
-                //routes.MapSpaFallbackRoute(
-                //    name: "spa-fallback",
-                //    defaults: new { controller = "Home", action = "Index" });
-
-                //routes.MapRoute(
-                //    "NotFound",
-                //    "{*url}",
-                //    new { controller = "Home", action = "Index" }
-                //);
-            });
-
-
-            // here you can see we make sure it doesn't start with /api, if it does, it'll 404 within .NET if it can't be found
-            app.MapWhen(x => !x.Request.Path.Value.StartsWith("/api"), builder =>
-            {
-                builder.UseMvc(routes =>
-                {
-                    routes.MapSpaFallbackRoute(
-                        name: "spa-fallback",
-                        defaults: new { controller = "Home", action = "Index" });
-                });
-            });
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });                
+            });            
         }
     }
 }
