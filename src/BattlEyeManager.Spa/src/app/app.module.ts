@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +17,7 @@ import { HttpModule } from '@angular/http';
 
 import { AuthInterceptor } from './auth-interceptor.service';
 import { TestComponent } from './test/test.component';
+import { AuthErrorHandler } from './auth-error-handler.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TestComponent } from './test/test.component';
   providers: [
     AuthService,
     AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: AuthErrorHandler }
   ],
   bootstrap: [AppComponent]
 })
