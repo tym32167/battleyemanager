@@ -19,6 +19,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  logout() {
+    localStorage.removeItem(TOKEN_NAME);
+  }
+
   getToken(): string {
     return localStorage.getItem(TOKEN_NAME);
   }
@@ -28,7 +32,9 @@ export class AuthService {
   }
 
   isTokenExpired(token?: string): boolean {
-    return true;
+    if (!token) { token = this.getToken(); }
+    if (!token) { return true; }
+    return false;
   }
 
   login(username: string, password: string) {
@@ -39,9 +45,7 @@ export class AuthService {
   }
 
   private setSession(authResult: LoginResponse) {
-    console.log(authResult);
-    console.log(authResult.access_token);
-    console.log(authResult.username);
+    this.setToken(authResult.access_token);
   }
 }
 
