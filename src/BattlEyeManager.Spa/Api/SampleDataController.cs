@@ -54,5 +54,12 @@ namespace BattlEyeManager.Spa.Api
                 }
             }
         }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public string Test()
+        {
+            return "Hello, World!";
+        }
     }
 }
