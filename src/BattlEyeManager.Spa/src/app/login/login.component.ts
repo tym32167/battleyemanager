@@ -24,10 +24,10 @@ export class LoginComponent {
 
   login() {
     const val = this.form.value;
+    const self = this;
     if (val.email && val.password) {
       this.authService.login(val.email, val.password)
-        .then(() => this.router.navigate(['/']));
+        .then(() => self.router.navigate(['/']));
     }
   }
-
 }
