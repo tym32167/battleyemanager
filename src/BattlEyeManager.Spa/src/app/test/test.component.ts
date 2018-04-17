@@ -8,9 +8,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TestComponent implements OnInit {
 
-  constructor(http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
   }
 
+  load() {
+    this.http.get('/api/SampleData/WeatherForecasts')
+      .subscribe(result => console.log(result));
+  }
 }
