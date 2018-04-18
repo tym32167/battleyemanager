@@ -14,7 +14,7 @@ export class TestComponent implements OnInit {
   }
 
   load() {
-    this.http.get('/api/SampleData/WeatherForecasts')
+    this.http.get('/api/SampleData/WeatherForecastsAdmin')
       .subscribe(result => console.log(result));
   }
 }
