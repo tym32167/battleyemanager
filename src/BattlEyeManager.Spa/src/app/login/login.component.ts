@@ -29,5 +29,6 @@ export class LoginComponent {
       this.authService.login(val.email, val.password)
         .then(() => self.router.navigate(['/']));
     }
+    return false;
   }
 }
