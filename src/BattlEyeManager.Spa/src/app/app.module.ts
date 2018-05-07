@@ -20,7 +20,8 @@ import { HttpModule } from '@angular/http';
 import { AuthInterceptor } from './auth-interceptor.service';
 import { TestComponent } from './test/test.component';
 import { AuthErrorHandler } from './auth-error-handler.service';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from './user/user-list.component';
+import { UserEditComponent } from './user/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UserListComponent } from './user-list/user-list.component';
     ErrorComponent,
     LoginComponent,
     TestComponent,
-    UserListComponent
+    UserListComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

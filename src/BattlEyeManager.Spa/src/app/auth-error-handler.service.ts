@@ -13,7 +13,7 @@ export class AuthErrorHandler implements ErrorHandler {
       this.authService.logout();
 
       this.ngZone.run(() => {
-        router.navigate(['/login']);
+        router.navigateByUrl('/login');
       });
 
       return;

@@ -1,0 +1,31 @@
+<app-navigation></app-navigation>
+
+<div class="m-1">
+
+  <div class="col-12">    
+    <a class="btn btn-primary" routerLink="/users/edit">Add new</a>
+  </div>
+
+  <div class="col-12">
+
+    <table class="table table-sm table-bordered table-stripped p-1 mt-1">
+      <thead>
+        <th>User name</th>
+        <th>Email</th>
+        <th>Last name</th>
+        <th>First name</th>
+        <th colspan="2" class="table-fit"></th>        
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.userName}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.lastName}}</td>
+          <td>{{user.firstName}}</td>
+          <td><button class="btn btn-success">Edit</button></td>
+          <td><button class="btn btn-danger">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

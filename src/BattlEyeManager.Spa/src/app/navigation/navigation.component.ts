@@ -13,7 +13,7 @@ export class NavigationComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigateByUrl('/login');
     return false;
   }
 

@@ -8,15 +8,15 @@ import { LoginComponent } from '../app/login/login.component';
 import { TestComponent } from '../app/test/test.component';
 import { AuthGuard } from './auth.guard';
 
-import { UserListComponent } from '../app/user-list/user-list.component';
-
-
+import { UserListComponent } from '../app/user/user-list.component';
+import { UserEditComponent } from './user/user-edit.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'test', component: TestComponent, canActivate: [AuthGuard]},
 
   { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
+  { path: 'users/edit', component: UserEditComponent, canActivate: [AuthGuard] },
 
 
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
