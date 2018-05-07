@@ -12,4 +12,5 @@ export class User implements IUser {
     email: string;
     lastName: string;
     firstName: string;
+    password: string;
 }

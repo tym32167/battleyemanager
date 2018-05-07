@@ -22,6 +22,7 @@ export class UserEditComponent implements OnInit {
   submit(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
+      console.log(this.user);
     } else {
 
      }
