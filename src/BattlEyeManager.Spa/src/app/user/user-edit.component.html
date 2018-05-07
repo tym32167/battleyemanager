@@ -1,5 +1,15 @@
 <app-navigation></app-navigation>
 
-<p>
-  user-edit works!
-</p>
+<form class="m-1" #form="ngForm" novalidate (ngSubmit)="submit(form)">
+  <div class="form-group row">
+    <label for="userName" class="col-sm-1 col-form-label">User name</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" #userName="ngModel" name="userName" [(ngModel)]="user.userName" required>
+      <span *ngIf="userName.invalid && submitted" class="text-danger">Please enter user name</span>
+    </div>
+  </div>
+
+  <div class="text-xs-center">
+    <button class="btn btn-primary" type="submit">Save</button>
+  </div>
+</form>

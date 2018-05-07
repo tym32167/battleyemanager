@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { IUser, User } from './user';
 
 @Component({
   selector: 'app-user-edit',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserEditComponent implements OnInit {
 
-  constructor() { }
+  public user: IUser;
+  public submitted = false;
+
+  constructor() {
+    this.user = new User();
+  }
 
   ngOnInit() {
   }
 
+  submit(form: NgForm) {
+    this.submitted = true;
+    if (form.valid) {
+    } else {
+
+     }
+  }
 }
