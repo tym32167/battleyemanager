@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import {AuthService} from '../auth.service';
+import { IUser, User } from '../user/user';
 
 @Component({
   selector: 'app-login',
@@ -11,24 +12,21 @@ import {AuthService} from '../auth.service';
 })
 export class LoginComponent {
 
-  form: FormGroup;
+  public submitted = false;
+  public user: User;
 
-  constructor(private fb: FormBuilder,
+  constructor(
     private authService: AuthService,
     private router: Router) {
-      this.form = this.fb.group({
-        email: ['', Validators.required],
-        password: ['', Validators.required]
-      });
+      this.user = new User();
     }
 
-  login() {
-    const val = this.form.value;
+  submit(form: NgForm) {
+    this.submitted = true;
     const self = this;
-    if (val.email && val.password) {
-      this.authService.login(val.email, val.password)
+    if (form.valid) {
+      this.authService.login(this.user.email, this.user.password)
         .then(() => self.router.navigateByUrl('/'));
     }
-    return false;
   }
 }

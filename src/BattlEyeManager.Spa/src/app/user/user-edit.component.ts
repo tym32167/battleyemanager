@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IUser, User } from './user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
@@ -12,7 +13,7 @@ export class UserEditComponent implements OnInit {
   public user: IUser;
   public submitted = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.user = new User();
   }
 
@@ -23,6 +24,7 @@ export class UserEditComponent implements OnInit {
     this.submitted = true;
     if (form.valid) {
       console.log(this.user);
+      this.router.navigateByUrl('/users');
     } else {
 
      }
