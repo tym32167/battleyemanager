@@ -138,7 +138,7 @@ namespace BattlEyeManager.Spa
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "api",
+                    name: "default",
                     template: "api/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapSpaFallbackRoute(

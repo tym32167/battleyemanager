@@ -4,13 +4,12 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
     [Authorize(Roles = "Administrator")]
+    [Route("api/[controller]")]
     public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,7 +19,8 @@ namespace BattlEyeManager.Spa.Api
             _userManager = userManager;
         }
 
-        public ApplicationUserModel[] Index()
+        [HttpGet]
+        public ApplicationUserModel[] Get()
         {
             return _userManager.Users.Select(x => new ApplicationUserModel()
             {
@@ -32,101 +32,19 @@ namespace BattlEyeManager.Spa.Api
             }).ToArray();
         }
 
-
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(string username)
+        [HttpGet("{id}")]
+        public ApplicationUserModel Get(string id)
         {
-            var user = await _userManager.FindByNameAsync(username);
-
-            return View(user);
-        }
-
-        // POST: User/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ApplicationUser user)
-        {
-            if (ModelState.IsValid)
+            return _userManager.Users
+            .Where(x => x.Id == id)
+            .Select(x => new ApplicationUserModel()
             {
-
-                var dbuser = await _userManager.FindByNameAsync(user.UserName);
-
-                if (dbuser.Email != user.Email)
-                {
-                    var res = await _userManager.SetEmailAsync(dbuser, user.Email);
-
-                    if (!res.Succeeded)
-                    {
-                        foreach (var identityError in res.Errors)
-                        {
-                            ModelState.AddModelError(String.Empty, identityError.Description);
-                        }
-                    }
-                }
-
-                dbuser = await _userManager.FindByNameAsync(user.UserName);
-
-                if (!string.IsNullOrEmpty(user.Password))
-                {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(dbuser);
-                    var res = await _userManager.ResetPasswordAsync(dbuser, token, user.Password);
-
-                    if (!res.Succeeded)
-                    {
-                        foreach (var identityError in res.Errors)
-                        {
-                            ModelState.AddModelError(String.Empty, identityError.Description);
-                        }
-                    }
-                }
-
-                return RedirectToAction("Index", "User");
-            }
-
-            return View();
-        }
-
-        // GET: User/Delete/5
-        public async Task<IActionResult> Delete(string username)
-        {
-            var usr = await _userManager.FindByNameAsync(username);
-            if (usr != null)
-                await _userManager.DeleteAsync(usr);
-
-            return RedirectToAction("Index", "User");
-        }
-
-
-        [HttpGet]
-        public IActionResult Create(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ApplicationUser user)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _userManager.CreateAsync(user, user.Password);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "User");
-                }
-                else
-                {
-                    foreach (var identityError in result.Errors)
-                    {
-                        ModelState.AddModelError(String.Empty, identityError.Description);
-                    }
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(user);
+                Id = x.Id,
+                UserName = x.UserName,
+                Email = x.Email,
+                LastName = x.LastName,
+                FirstName = x.FirstName,
+            }).FirstOrDefault();
         }
     }
 }

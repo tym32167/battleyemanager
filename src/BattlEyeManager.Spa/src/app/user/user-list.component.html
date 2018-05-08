@@ -22,7 +22,7 @@
           <td>{{user.email}}</td>
           <td>{{user.lastName}}</td>
           <td>{{user.firstName}}</td>
-          <td><button class="btn btn-success">Edit</button></td>
+          <td><a class="btn btn-success" [routerLink]="['/users', user.id]">Edit</a></td>
           <td><button class="btn btn-danger">Delete</button></td>
         </tr>
       </tbody>

@@ -17,7 +17,13 @@ export class UserService {
 
   getUsers(): Observable<IUser[]> {
     return this._http.get<IUser[]>(this.userServiceUrl)
-      .do(data => console.log('All: ' + JSON.stringify(data)))
+      .do(data => console.log('getUsers: ' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUser(userid): Observable<IUser> {
+    return this._http.get<IUser>(this.userServiceUrl + '/' + userid)
+      .do(data => console.log('getUser: ' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 

@@ -27,6 +27,20 @@ namespace BattlEyeManager.Spa.Api
             });
         }
 
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public WeatherForecast Get(int id)
+        {
+            var rng = new Random();
+            return Enumerable.Range(1, 5)
+                .Select(index => new WeatherForecast
+                {
+                    DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
+                    TemperatureC = rng.Next(-20, 55),
+                    Summary = Summaries[rng.Next(Summaries.Length)]
+                }).FirstOrDefault();
+        }
+
         [HttpGet("[action]")]
         [Authorize(Roles = "Administrator")]
         public IEnumerable<WeatherForecast> WeatherForecastsAdmin()
