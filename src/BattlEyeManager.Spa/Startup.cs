@@ -139,7 +139,7 @@ namespace BattlEyeManager.Spa
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "api/{controller=Home}/{action=Index}/{id?}");
+                    template: "api/{controller}/{action}/{id?}");
 
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",

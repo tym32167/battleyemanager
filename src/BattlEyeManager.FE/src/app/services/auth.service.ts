@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CONFIG } from '../CONFIG';
 
 export const TOKEN_NAME = 'jwt_token';
 
@@ -14,10 +15,12 @@ const httpOptions = {
 @Injectable()
 export class AuthService {
 
-  private url = 'api/account';
+  private url;
   private headers = new Headers({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: CONFIG) {
+    this.url = config.baseUrl + 'api/account';
+  }
 
   logout() {
     localStorage.removeItem(TOKEN_NAME);

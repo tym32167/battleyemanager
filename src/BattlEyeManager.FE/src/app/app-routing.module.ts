@@ -6,7 +6,7 @@ import { ErrorComponent } from '../app/error/error.component';
 import { LoginComponent } from '../app/login/login.component';
 
 import { TestComponent } from '../app/test/test.component';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './services/auth.guard';
 
 import { UserListComponent } from '../app/user/user-list.component';
 import { UserEditComponent } from './user/user-edit.component';
@@ -16,8 +16,8 @@ const routes: Routes = [
   { path: 'test', component: TestComponent, canActivate: [AuthGuard]},
 
   { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
+  { path: 'users/create', component: UserEditComponent, canActivate: [AuthGuard] },
   { path: 'users/:id', component: UserEditComponent, canActivate: [AuthGuard] },
-
 
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
   { path: '**', component: ErrorComponent, canActivate: [AuthGuard]}

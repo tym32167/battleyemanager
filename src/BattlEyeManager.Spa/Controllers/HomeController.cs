@@ -13,7 +13,10 @@ namespace BattlEyeManager.Spa.Controllers
         }
         public IActionResult Index()
         {
-            return new PhysicalFileResult(Path.Combine(env.WebRootPath, "index.html"), "text/html");
+            var fname = Path.Combine(env.WebRootPath, "index.html");
+            if (System.IO.File.Exists(fname))
+                return new PhysicalFileResult(fname, "text/html");
+            return NotFound();
         }
     }
 }

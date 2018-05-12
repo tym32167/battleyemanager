@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "./wwwroot",
+      "outDir": "../BattlEyeManager.Spa/wwwroot",
       "assets": [
         "assets",
         "favicon.ico"

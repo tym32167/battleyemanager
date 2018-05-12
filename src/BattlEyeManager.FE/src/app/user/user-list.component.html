@@ -1,12 +1,12 @@
 <app-navigation></app-navigation>
 
-<div class="m-1">
+<div class="m-1 col-xl-7">
 
-  <div class="col-12">    
-    <a class="btn btn-primary" routerLink="/users/edit">Add new</a>
+  <div>
+    <a class="btn btn-primary" routerLink="/users/create">Add new</a>
   </div>
 
-  <div class="col-12">
+  <div>
 
     <table class="table table-sm table-bordered table-stripped p-1 mt-1">
       <thead>
@@ -14,7 +14,7 @@
         <th>Email</th>
         <th>Last name</th>
         <th>First name</th>
-        <th colspan="2" class="table-fit"></th>        
+        <th colspan="2" class="table-fit"></th>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
@@ -22,8 +22,14 @@
           <td>{{user.email}}</td>
           <td>{{user.lastName}}</td>
           <td>{{user.firstName}}</td>
-          <td><a class="btn btn-success" [routerLink]="['/users', user.id]">Edit</a></td>
-          <td><button class="btn btn-danger">Delete</button></td>
+          <td>
+            <a class="btn btn-sm btn-success" [routerLink]="['/users', user.id]">Edit</a>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user)">
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

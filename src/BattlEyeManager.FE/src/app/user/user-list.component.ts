@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../user.service';
-import { IUser } from './user';
+import { User } from './user';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-list',
@@ -14,13 +14,23 @@ export class UserListComponent implements OnInit {
           private router: Router ) {  }
 
   errorMessage: string;
-  users: IUser[] = [];
+  users: User[] = [];
 
   ngOnInit() {
-    this.userService.getUsers()
+    this.refreshUsers();
+  }
+
+  private refreshUsers() {
+    this.userService.getAll()
       .subscribe(users => {
         this.users = users;
       },
-      error => this.errorMessage = <any>error);
+        error => this.errorMessage = <any>error);
+  }
+
+  deleteUser(user: User) {
+    if (confirm('Do you want to delele user ' + user.userName + '?')) {
+      this.userService.delete(user.id).subscribe(result => this.refreshUsers());
+    }
   }
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IUser, User } from './user';
+import { User } from './user';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -11,9 +11,10 @@ import { UserService } from '../user.service';
 })
 export class UserEditComponent implements OnInit {
 
-  public user: IUser;
+  public user: User = new User();
   public submitted = false;
   errorMessage: string;
+  public editMode = false;
 
   constructor(private router: Router,
     private _route: ActivatedRoute,
@@ -23,19 +24,21 @@ export class UserEditComponent implements OnInit {
   ngOnInit() {
     const userid = this._route.snapshot.paramMap.get('id');
     if (userid) {
-      this.user = new User();
-      this.userService.getUser(userid)
+      this.editMode = true;
+      console.log(userid);
+      this.userService.get(userid)
       .subscribe(u => this.user = u, error => this.errorMessage = <any>error);
-    } else {
-      this.user = new User();
     }
   }
 
   submit(form: NgForm) {
     this.submitted = true;
     if (form.valid) {
-      console.log(this.user);
-      this.router.navigateByUrl('/users');
+      if (this.editMode) {
+        this.userService.update(this.user).subscribe(u => this.router.navigateByUrl('/users'), error => this.errorMessage = <any>error);
+      } else {
+        this.userService.add(this.user).subscribe(u => this.router.navigateByUrl('/users'), error => this.errorMessage = <any>error);
+      }
     } else {
 
      }

@@ -11,17 +11,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService } from './auth.service';
-import { UserService } from './user.service';
+import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
 
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './services/auth.guard';
 import { HttpModule } from '@angular/http';
 
-import { AuthInterceptor } from './auth-interceptor.service';
+import { AuthInterceptor } from './services/auth-interceptor.service';
 import { TestComponent } from './test/test.component';
-import { AuthErrorHandler } from './auth-error-handler.service';
+import { AuthErrorHandler } from './services/auth-error-handler.service';
 import { UserListComponent } from './user/user-list.component';
 import { UserEditComponent } from './user/user-edit.component';
+import { CONFIG } from './CONFIG';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { UserEditComponent } from './user/user-edit.component';
     AuthService,
     AuthGuard,
     UserService,
+    CONFIG,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: ErrorHandler, useClass: AuthErrorHandler }
   ],
