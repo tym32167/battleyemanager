@@ -19,7 +19,7 @@ namespace BattlEyeManager.Spa
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://localhost:58175", "http://192.168.0.178:58175")
+                .UseUrls("http://localhost:58175"/*, "http://192.168.0.178:58175"*/)
                 .UseStartup<Startup>()
                 .Build();
     }
