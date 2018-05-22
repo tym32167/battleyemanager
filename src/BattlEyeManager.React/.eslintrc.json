@@ -21,5 +21,12 @@
         "valid-typeof": "warn",
         "no-extra-semi": "error"
     },
-    "extends": "react-app"
+    "plugins": [
+        "react"
+    ],
+    "extends": [
+        "react-app",
+        "standard-jsx",
+        "eslint:recommended", "plugin:react/recommended"
+    ]
 }
