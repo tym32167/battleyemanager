@@ -1,10 +1,14 @@
 import React from 'react';
 import { MainMenu } from "./mainmenu";
+import {Container, Row} from 'reactstrap'
 
 export const PageTemplate = ({children}) =>
 <div>
     <MainMenu />
-    <div className="container">
+    <Container>
+        <Row>
         {children}
-    </div>
+        </Row>
+    </Container>
+    
 </div>
