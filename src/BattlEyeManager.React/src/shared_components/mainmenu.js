@@ -64,6 +64,9 @@ export class MainMenu extends React.Component {
               <NavItem>
                 <NavLink href="#">Sign out</NavLink>
               </NavItem>
+              <NavItem>
+              <NavLink tag={Link} to="/login">Sign in</NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
