@@ -3,5 +3,5 @@ import { PageTemplate } from '../shared_components/pagetemplate'
 
 export const Test = ()=>
 <PageTemplate>
-    <div>TEST!</div>
+    <div>TEST!</div>       
 </PageTemplate>

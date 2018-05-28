@@ -10,5 +10,9 @@
 			"path": "BattlEyeManager.FE"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"emmet.includeLanguages": {
+			"javascript": "javascriptreact"
+		}
+	}
 }

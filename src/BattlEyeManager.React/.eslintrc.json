@@ -26,7 +26,6 @@
     ],
     "extends": [
         "react-app",
-        "standard-jsx",
         "eslint:recommended", "plugin:react/recommended"
     ]
 }
