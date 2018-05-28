@@ -6,8 +6,10 @@
         "node": true
     },
     "parserOptions": {
+        "ecmaVersion": 7,
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "experimentalObjectRestSpread":true
         },
         "sourceType": "module"
     },
@@ -19,8 +21,10 @@
         "no-unused-vars": "warn",
         "constructor-super": "warn",
         "valid-typeof": "warn",
-        "no-extra-semi": "error"
+        "no-extra-semi": "error",
+        "no-console":"warn"
     },
+    "parser": "babel-eslint",  
     "plugins": [
         "react"
     ],
