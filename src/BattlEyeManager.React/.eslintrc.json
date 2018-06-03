@@ -22,7 +22,8 @@
         "constructor-super": "warn",
         "valid-typeof": "warn",
         "no-extra-semi": "error",
-        "no-console":"warn"
+        "no-console":"warn",
+        "react/prop-types": "warn"
     },
     "parser": "babel-eslint",  
     "plugins": [
