@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './login.css'
-import { login } from '../../actions/auth'
+import { userActions } from '../../actions/auth';
+import { connect } from 'react-redux';
 
 
-export class Login extends Component {
+class Login extends Component {
 
   constructor(props) {
     super(props);
@@ -27,9 +28,9 @@ export class Login extends Component {
 
     this.setState({ submitted: true });
     const { username, password } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
     if (username && password) {
-      dispatch(login(username, password));
+      dispatch(userActions.login(username, password, history));
     }
   }
 
@@ -58,3 +59,14 @@ export class Login extends Component {
       </div>);
   }
 }
+
+
+function mapStateToProps(state) {
+  //const { loggingIn } = state.authentication;
+  return {
+    state
+  };
+}
+
+const connectedLogin = connect(mapStateToProps)(Login);
+export { connectedLogin as Login }; 

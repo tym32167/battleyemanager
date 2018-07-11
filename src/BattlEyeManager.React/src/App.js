@@ -7,14 +7,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Test } from './pages/test';
 import { Login } from './pages/login/login';
 
-
-
 const App = () => <div className="App">
   <Router>
     <div>
-      <PrivateRoute authed={false} exact path="/" component={Home} />
-      <PrivateRoute authed={false} exact path="/users" component={Users} />      
-      <PrivateRoute authed={false} exact path="/test" component={Test} />
+      <PrivateRoute exact path="/" component={Home} />
+      <PrivateRoute exact path="/users" component={Users} />      
+      <PrivateRoute exact path="/test" component={Test} />
       <Route exact path="/login" component={Login} />
     </div>
   </Router>
@@ -22,14 +20,10 @@ const App = () => <div className="App">
 
 export default App;
 
-
-function PrivateRoute({ component: Component, authed, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={(props) => authed === true
-        ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />}
-    />
-  )
-}
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+      localStorage.getItem('user')
+          ? <Component {...props} />
+          : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+  )} />
+)

@@ -1,15 +1,25 @@
-import { AUTH_LOGOUT, AUTH_LOGIN } from '../actions/auth'
+import { authConstants } from '../constants';
 
-export function logon(state = {}, action)
-{
-  switch(action.type)
-  {
-    case AUTH_LOGIN:
-      return Object.assign({}, state, {user: action.user, token: action.token});
-    case AUTH_LOGOUT:      
-      var {user, token, newstate} = state;
-      return newstate;
-    default: 
-      return state;
+let user = JSON.parse(localStorage.getItem('user'));
+const initialState = user ? { loggedIn: true, user } : {};
+
+export function authentication(state = initialState, action) {
+  switch (action.type) {
+    case authConstants.LOGIN_REQUEST:
+      return {
+        loggingIn: true,
+        user: action.user
+      };
+    case authConstants.LOGIN_SUCCESS:
+      return {
+        loggedIn: true,
+        user: action.user
+      };
+    case authConstants.LOGIN_FAILURE:
+      return {};
+    case authConstants.LOGOUT:
+      return {};
+    default:
+      return state
   }
 }

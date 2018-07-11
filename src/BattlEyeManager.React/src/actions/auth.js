@@ -1,16 +1,34 @@
-export const AUTH_LOGIN = 'AUTH_LOGIN';
-export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+import { authConstants } from '../constants';
+import { userService } from '../services';
 
-export function login(user, token) {
-  return {
-    type: AUTH_LOGIN,
-    user,
-    token
-  }
+export const userActions = {
+    login,
+    logout
+};
+
+function login(username, password, history) {
+    return dispatch => {
+        dispatch(request({ username }));
+
+        userService.login(username, password)
+            .then(
+                user => { 
+                    dispatch(success(user));
+                    history.push('/');
+                },
+                error => {
+                    dispatch(failure(error));
+                    //dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(user) { return { type: authConstants.LOGIN_REQUEST, user } }
+    function success(user) { return { type: authConstants.LOGIN_SUCCESS, user } }
+    function failure(error) { return { type: authConstants.LOGIN_FAILURE, error } }
 }
 
-export function logout() {
-  return {
-    type: AUTH_LOGOUT
-  }
+function logout() {
+    userService.logout();
+    return { type: authConstants.LOGOUT };
 }

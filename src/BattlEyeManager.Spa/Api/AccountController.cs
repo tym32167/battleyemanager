@@ -51,7 +51,7 @@ namespace BattlEyeManager.Spa.Api
 
             var response = new
             {
-                access_token = encodedJwt,
+                token = encodedJwt,
                 username = identity.Name
             };
 

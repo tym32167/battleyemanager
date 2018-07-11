@@ -1,9 +1,9 @@
-import {logon} from './auth';
+import {authentication} from './auth';
 import {combineReducers} from 'redux';
 
 
 const appReducer = combineReducers({
-  auth: logon
+  auth: authentication
 });
 
 export default appReducer;
