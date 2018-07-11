@@ -1,6 +1,6 @@
 import { Home } from './pages/home'
 import { Users } from './pages/users'
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
