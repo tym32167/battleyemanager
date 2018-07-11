@@ -28,7 +28,8 @@ function login(username, password, history) {
     function failure(error) { return { type: authConstants.LOGIN_FAILURE, error } }
 }
 
-function logout() {
+function logout(history) {
     userService.logout();
+    history.push('/');
     return { type: authConstants.LOGOUT };
 }
