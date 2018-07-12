@@ -1,7 +1,9 @@
 import React from 'react';
-import { PageTemplate } from '../shared_components/pagetemplate'
+import { PageTemplate } from '../shared_components/pagetemplate';
+import {UserList} from './userList/userList';
+
 
 export const Users = ()=>
 <PageTemplate>
-    <div>Users!</div>
+    <UserList />
 </PageTemplate>
