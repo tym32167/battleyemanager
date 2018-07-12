@@ -1,13 +1,15 @@
 import React from 'react';
 import { MainMenu } from "./mainmenu";
-import { Container, Row } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 export const PageTemplate = ({ children }) =>
-    <div>        
+    <div>
         <MainMenu />
         <Container>
             <Row>
-                {children}
+                <Col xl="7" m="1">
+                    {children}
+                </Col>
             </Row>
         </Container>
     </div>

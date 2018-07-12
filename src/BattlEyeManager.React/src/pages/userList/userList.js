@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { userService } from '../../services';
+import { Table } from 'reactstrap';
 
 
 export class UserList extends Component {
@@ -25,9 +26,28 @@ export class UserList extends Component {
 
     render() {
         const data = this.state.items || [];
-        return (<div>
-            {data.map((item, i) => (<div key={item.id}>{item.userName}</div>))}
-        </div>
+        return (
+            <Userstable items={data} />
         );
     }
 }
+
+const Userstable = ({ items }) => <Table size="sm">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {items.map((item, i) => <UserItem key={item.id} item={item} />)}
+    </tbody>
+</Table>;
+
+const UserItem = ({ item }) => (
+    <tr>
+        <td>{item.userName}</td>
+        <td>{item.email}</td>
+        <th></th>
+    </tr>)
