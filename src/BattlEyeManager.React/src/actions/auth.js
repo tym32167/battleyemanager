@@ -1,19 +1,19 @@
 import { authConstants } from '../constants';
-import { userService } from '../services';
+import { userService, history } from '../services';
 
 export const userActions = {
     login,
     logout
 };
 
-function login(username, password, history) {
+function login(username, password) {
     return dispatch => {
         dispatch(request({ username }));
 
         userService.login(username, password)
             .then(
                 user => { 
-                    dispatch(success(user));
+                    dispatch(success(user));                    
                     history.push('/');
                 },
                 error => {
@@ -28,7 +28,7 @@ function login(username, password, history) {
     function failure(error) { return { type: authConstants.LOGIN_FAILURE, error } }
 }
 
-function logout(history) {
+function logout() {
     userService.logout();
     history.push('/');
     return { type: authConstants.LOGOUT };

@@ -32,8 +32,8 @@ class MainMenu extends React.Component {
 
   logoutClick(e) {
     e.preventDefault();
-    const { dispatch, history } = this.props;
-    dispatch(userActions.logout(history));
+    const { dispatch } = this.props;
+    dispatch(userActions.logout());
   }
 
   toggle() {

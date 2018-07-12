@@ -3,7 +3,6 @@ import './login.css'
 import { userActions } from '../../actions';
 import { connect } from 'react-redux';
 
-
 class Login extends Component {
 
   constructor(props) {
@@ -28,9 +27,9 @@ class Login extends Component {
 
     this.setState({ submitted: true });
     const { username, password } = this.state;
-    const { dispatch, history } = this.props;
+    const { dispatch } = this.props;
     if (username && password) {
-      dispatch(userActions.login(username, password, history));
+      dispatch(userActions.login(username, password));
     }
   }
 
