@@ -11,7 +11,7 @@ const App = () => <div className="App">
   <Router>
     <div>
       <PrivateRoute exact path="/" component={Home} />
-      <PrivateRoute exact path="/users" component={Users} />      
+      <PrivateRoute exact path="/users" component={Users} />
       <PrivateRoute exact path="/test" component={Test} />
       <Route exact path="/login" component={Login} />
     </div>
@@ -22,8 +22,8 @@ export default App;
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-      localStorage.getItem('user')
-          ? <Component {...props} />
-          : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+    localStorage.getItem('user')
+      ? <Component {...props} />
+      : <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
   )} />
 )
