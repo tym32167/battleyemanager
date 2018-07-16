@@ -25,6 +25,16 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "type": "npm",
+            "script": "note_watch_dotnet_server",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "note_run_mysql",
+            "problemMatcher": []
         }
     ]
 }

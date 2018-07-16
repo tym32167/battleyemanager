@@ -8,16 +8,16 @@ import { Test } from './pages/test';
 import { Login } from './pages/login/login';
 import {history}  from './services/history';
 
-const App = () => <div className="App">
-  <Router history={history}>
-    <div>
-      <PrivateRoute exact path="/" component={Home} />
-      <PrivateRoute exact path="/users" component={Users} />
-      <PrivateRoute exact path="/test" component={Test} />
-      <Route exact path="/login" component={Login} />
-    </div>
-  </Router>
-</div>;
+    const App = () => <div className="App">
+      <Router history={history}>
+        <div>
+          <PrivateRoute exact path="/" component={Home} />
+          <PrivateRoute exact path="/users" component={Users} />
+          <PrivateRoute exact path="/test" component={Test} />
+          <Route exact path="/login" component={Login} />
+        </div>
+      </Router>
+    </div>;
 
 export default App;
 
