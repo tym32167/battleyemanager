@@ -3,7 +3,7 @@ import { userService } from '../../services';
 import { Table } from 'reactstrap';
 
 
-export class UserList extends Component {
+export class Users extends Component {
 
     constructor(props) {
         super(props);
