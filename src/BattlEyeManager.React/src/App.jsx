@@ -1,25 +1,34 @@
-import { Home } from './pages/home'
-import { Users } from './pages/users'
 import React from 'react';
 import { Router, Route, Redirect } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Test } from './pages/test';
-import { Login } from './pages/login/login';
+import { Test, UserList, Login, Home } from './pages';
 import {history}  from './services/history';
+import {PageTemplate} from './shared_components';
 
     const App = () => <div className="App">
       <Router history={history}>
         <div>
-          <PrivateRoute exact path="/" component={Home} />
-          <PrivateRoute exact path="/users" component={Users} />
-          <PrivateRoute exact path="/test" component={Test} />
+          <DefaultLayout exact path="/" component={Home} />
+          <DefaultLayout exact path="/users" component={UserList} />
+          <DefaultLayout exact path="/test" component={Test} />
+
           <Route exact path="/login" component={Login} />
         </div>
       </Router>
     </div>;
 
 export default App;
+
+const DefaultLayout = ({component: Component, ...rest}) => {
+  return (
+    <Route {...rest} render={matchProps => (
+      <PageTemplate>
+          <Component {...matchProps} />
+      </PageTemplate>
+    )} />
+  )
+};
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (

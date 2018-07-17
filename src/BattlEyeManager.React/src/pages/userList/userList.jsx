@@ -27,7 +27,12 @@ export class UserList extends Component {
     render() {
         const data = this.state.items || [];
         return (
-            <Userstable items={data} />
+            <React.Fragment>                
+                <div className="my-3 p-3 bg-white rounded box-shadow">
+                    <h1>Users</h1>
+                    <Userstable items={data} />
+                </div>
+            </React.Fragment>
         );
     }
 }
@@ -35,6 +40,8 @@ export class UserList extends Component {
 const Userstable = ({ items }) => <Table size="sm">
     <thead>
         <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
             <th>User Name</th>
             <th>Email</th>
             <th></th>
@@ -47,6 +54,8 @@ const Userstable = ({ items }) => <Table size="sm">
 
 const UserItem = ({ item }) => (
     <tr>
+        <td>{item.lastName}</td>
+        <td>{item.firstName}</td>
         <td>{item.userName}</td>
         <td>{item.email}</td>
         <th></th>
