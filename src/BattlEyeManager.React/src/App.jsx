@@ -11,7 +11,7 @@ const App = () => <div className="App">
   <Router history={history}>
     <div>
       <DefaultLayout exact path="/" component={Home} />
-      <DefaultLayout exact path="/users" component={Users} />
+      <DefaultLayout path="/users" component={Users} />
       <DefaultLayout exact path="/test" component={Test} />
       <Route exact path="/login" component={Login} />
     </div>
