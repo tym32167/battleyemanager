@@ -18,33 +18,31 @@ namespace BattlEyeManager.Spa.Api
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost("[action]")]
-        public async Task Auth([FromBody] TokenRequest tokenRequest)
+        public async Task<ActionResult> Auth([FromBody] TokenRequest tokenRequest)
         {
             var username = tokenRequest.UserName;
-            var password = tokenRequest.Password;
+            var password = tokenRequest.Password;            
 
-            var identity = await GetIdentity(username, password);
-            if (identity == null)
-            {
-                Response.StatusCode = 400;
-                await Response.WriteAsync("Invalid username or password.");
-                return;
+            var principal = await GetIdentity(username, password);
+            if (principal == null)
+            {   
+                return StatusCode(400, "Invalid username or password.");
             }
 
             var now = DateTime.UtcNow;
             // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
+            var jwt = new JwtSecurityToken(                    
                     notBefore: now,
-                    claims: identity.Claims,
+                    claims: principal.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -52,43 +50,24 @@ namespace BattlEyeManager.Spa.Api
             var response = new
             {
                 token = encodedJwt,
-                username = identity.Name
+                username = principal.Identity.Name
             };
 
-            // сериализация ответа
-            Response.ContentType = "application/json";
-            await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return Json(response);           
         }
 
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private async Task<ClaimsPrincipal> GetIdentity(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user != null)
             {
                 var check = await _userManager.CheckPasswordAsync(user, password);
-
                 if (check)
                 {
-                    var roles = await _userManager.GetRolesAsync(user);
-
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName)
-                    };
-
-                    foreach (var role in roles)
-                    {
-                        claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
-                    }
-
-                    var claimsIdentity =
-                        new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                            ClaimsIdentity.DefaultRoleClaimType);
-                    return claimsIdentity;
+                    var principal = await  _signInManager.CreateUserPrincipalAsync(user);
+                    return principal;                                        
                 }
-
             }
-
             return null;
         }
     }
