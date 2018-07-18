@@ -1,4 +1,5 @@
 import {authHeader} from './auth.header';
+import {authGuard} from './auth.header';
 
 export const userService = {
     getUsers,
@@ -26,6 +27,7 @@ function getUser(id){
 
 function handleResponse(response) {
     if (!response.ok) { 
+        authGuard(response);
         return Promise.reject(response.statusText);
     }
     return response.json();
