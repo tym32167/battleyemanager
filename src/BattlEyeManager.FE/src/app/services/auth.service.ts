@@ -48,11 +48,11 @@ export class AuthService {
   }
 
   private setSession(authResult: LoginResponse) {
-    this.setToken(authResult.access_token);
+    this.setToken(authResult.token);
   }
 }
 
 interface LoginResponse {
-  access_token: string;
+  token: string;
   username: string;
 }
