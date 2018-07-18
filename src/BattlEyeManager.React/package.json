@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.1",
+    "history": "^4.7.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
@@ -19,8 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "note_run_mysql":"D:\\Tools\\mariadb-10.2.13-winx64\\bin\\mysqld.exe",
-    "note_watch_dotnet_server":"dotnet watch run -p \"D:\\Code\\bitbucket\\battleyemanager\\src\\BattlEyeManager.Spa\\BattlEyeManager.Spa.csproj\""
+    "note_run_mysql": "D:\\Tools\\mariadb-10.2.13-winx64\\bin\\mysqld.exe",
+    "note_watch_dotnet_server": "dotnet watch run -p \"D:\\Code\\bitbucket\\battleyemanager\\src\\BattlEyeManager.Spa\\BattlEyeManager.Spa.csproj\""
   },
   "proxy": {
     "/api": {
