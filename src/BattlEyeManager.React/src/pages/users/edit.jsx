@@ -3,6 +3,7 @@ import { userService } from '../../services';
 import { Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
+
 export class Edit extends Component {
 
     constructor(props) {
@@ -28,7 +29,8 @@ export class Edit extends Component {
     render() {        
         return (
             <div className="my-3 p-3 bg-white rounded box-shadow">
-                <h2>Edit User</h2>                
+                <h2>Edit User</h2>    
+                <Link  to="/users">Back to list</Link>           
             </div>
         );
     }
