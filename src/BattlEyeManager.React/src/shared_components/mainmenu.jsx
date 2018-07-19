@@ -13,7 +13,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 
-import { Link } from 'react-router-dom';
+import { NavLink as Link } from 'react-router-dom';
 import { userActions } from '../actions';
 import { connect } from 'react-redux';
 
@@ -45,15 +45,15 @@ class MainMenu extends React.Component {
     return (      
         <div>
           <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/">BattlEye Manager</NavbarBrand>
+            <NavbarBrand tag={Link} to="/" >BattlEye Manager</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="mr-auto" navbar>
                 <NavItem>
-                  <NavLink tag={Link} to="/test">Test</NavLink>
+                  <NavLink tag={Link} to="/test" >Test</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} to="/users">Users</NavLink>
+                  <NavLink tag={Link} to="/users" >Users</NavLink>
                 </NavItem>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret>
@@ -84,7 +84,6 @@ class MainMenu extends React.Component {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   return {
