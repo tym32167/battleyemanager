@@ -35,7 +35,7 @@ class Login extends Component {
 
   render() {
 
-    const { username, password, submitted } = this.state;
+    const { username, password } = this.state;
 
     return (
       <div className="text-center body">
@@ -59,13 +59,5 @@ class Login extends Component {
   }
 }
 
-
-function mapStateToProps(state) {
-  //const { loggingIn } = state.authentication;
-  return {
-    state
-  };
-}
-
-const connectedLogin = connect(mapStateToProps)(Login);
+const connectedLogin = connect()(Login);
 export { connectedLogin as Login }; 

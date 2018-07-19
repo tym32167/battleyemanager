@@ -1,34 +1,16 @@
-import {authHeader} from './auth.header';
-import {authGuard} from './auth.header';
+import axios from 'axios';
 
 export const userService = {
     getUsers,
     getUser
 };
 
-
 function getUsers(){
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch('/api/user', requestOptions).then(handleResponse);
+    return axios.get('/api/user').then(response => response.data)
+        .catch(error => Promise.reject(error.message));
 }
 
 function getUser(id){
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch('/api/user/'+id, requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-    if (!response.ok) { 
-        authGuard(response);
-        return Promise.reject(response.statusText);
-    }
-    return response.json();
+    return axios.get('/api/user/'+id).then(response => response.data)
+    .catch(error => Promise.reject(error.message));
 }

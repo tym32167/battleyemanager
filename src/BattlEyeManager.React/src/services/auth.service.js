@@ -1,32 +1,23 @@
+import axios from 'axios';
+
 export const authService = {
     login,
     logout
 };
 
 function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    };
-
-    return fetch('/api/account/auth', requestOptions)
-        .then(response => {
-            if (!response.ok) { 
-                return Promise.reject(response.statusText);
-            }
-
-            return response.json();
-        })
-        .then(user => {
-            // login successful if there's a jwt token in the response
+    return axios.post('/api/account/auth', { username, password })
+        .then(response => {             
+            const user = response.data; 
             if (user && user.token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
             }
-
             return user;
-        });
+         })
+         .catch(error => {             
+             Promise.reject(error.message)
+            });   
 }
 
 function logout() {
