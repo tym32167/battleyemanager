@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa
 {
@@ -35,12 +36,10 @@ namespace BattlEyeManager.Spa
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             services.AddDbContext<AppDbContext>(options =>
-                    //options.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root;"));
                     options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
-            //.AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -68,7 +67,7 @@ namespace BattlEyeManager.Spa
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         // укзывает, будет ли валидироваться издатель при валидации токена
-                        ValidateIssuer = false,                       
+                        ValidateIssuer = false,
                         // будет ли валидироваться потребитель токена
                         ValidateAudience = false,
                         // будет ли валидироваться время существования
@@ -102,8 +101,14 @@ namespace BattlEyeManager.Spa
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app,
+            IHostingEnvironment env,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
+            AppDbContext store)
         {
+            store.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -128,6 +133,29 @@ namespace BattlEyeManager.Spa
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            CheckAdminUser(userManager, roleManager).Wait();
+        }
+
+        private async Task CheckAdminUser(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
+        {
+            const string adminRole = "Administrator";
+
+            if (!await roleManager.RoleExistsAsync(adminRole))
+            {
+                var role = new ApplicationRole { Name = adminRole };
+                await roleManager.CreateAsync(role);
+            }
+
+            var admin = await userManager.FindByNameAsync("admin");
+            if (admin == null)
+            {
+                var adminModel = new ApplicationUser { UserName = "admin", Password = "12qw!@QW", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
+                await userManager.CreateAsync(adminModel, adminModel.Password);
+                await userManager.AddToRoleAsync(adminModel, adminRole);
+            }
         }
     }
 }
