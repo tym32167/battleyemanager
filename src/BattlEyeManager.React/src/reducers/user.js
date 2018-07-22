@@ -29,6 +29,7 @@ export function userReducer(state = {}, action){
         case userConstants.GET_USER_BY_ID_REQUEST:
             return {
                 ...state,
+                user: undefined,
                 request: {...action.user}
             };
         case userConstants.GET_USER_BY_ID_SUCCESS:
