@@ -1,7 +1,7 @@
 import { authConstants } from '../constants';
 import { authService, history } from '../services';
 
-export const userActions = {
+export const authActions = {
     login,
     logout
 };
