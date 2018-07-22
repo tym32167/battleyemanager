@@ -56,7 +56,7 @@ EditUserForm = reduxForm({
 
 const mapStateToProps = ({user}, ownProps) => {
     return {
-        user: user.userEdit.user,
+        user: user.user,
         id:ownProps.match.params.id
     }
 }

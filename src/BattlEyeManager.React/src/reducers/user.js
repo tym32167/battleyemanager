@@ -1,7 +1,6 @@
 import { userConstants } from '../constants';
 
-export function userReducer(state = {users:[], userEdit:{}}, action) {
-    state.userEdit = userEditReducer(state.userEdit, action);
+export function usersReducer(state = {users:[], userEdit:{}}, action) {
     switch (action.type) {
         case userConstants.GET_USERS_REQUEST:
             return {
@@ -25,7 +24,7 @@ export function userReducer(state = {users:[], userEdit:{}}, action) {
     }
 }
 
-function userEditReducer(state = {}, action){
+export function userReducer(state = {}, action){
     switch (action.type) {
         case userConstants.GET_USER_BY_ID_REQUEST:
             return {

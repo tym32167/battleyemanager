@@ -49,9 +49,9 @@ const UserItem = ({user}) => (
     </tr>)
 
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = ({users}) => {
     return {
-        users: user.users || []
+        users: users.users || []
     }
 }
 
