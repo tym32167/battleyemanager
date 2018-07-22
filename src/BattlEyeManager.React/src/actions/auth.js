@@ -12,15 +12,14 @@ function login(username, password) {
 
         authService.login(username, password)
             .then(
-                user => { 
+                response => { 
+                    let user = response;
+                    localStorage.setItem('user', JSON.stringify(user));
                     dispatch(success(user));                    
                     history.push('/');
-                },
-                error => {
-                    dispatch(failure(error));
-                    //dispatch(alertActions.error(error));
                 }
-            );
+            )
+            .catch(error => dispatch(failure(error)));
     };
 
     function request(user) { return { type: authConstants.LOGIN_REQUEST, user } }
@@ -29,6 +28,8 @@ function login(username, password) {
 }
 
 function logout() {
+     // remove user from local storage to log user out
+    localStorage.removeItem('user');
     authService.logout();
     history.push('/');
     return { type: authConstants.LOGOUT };
