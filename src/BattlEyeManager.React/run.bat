@@ -7,3 +7,6 @@ global packages
 
 npm install -g eslint
 eslint --init
+
+
+"F:\Tools\Distr\mariadb-10.2.13-winx64\bin\mysqld.exe" "--defaults-file=F:\Tools\MariaDB\DBData\my.ini" "MariaDB"
