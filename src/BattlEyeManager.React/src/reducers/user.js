@@ -28,10 +28,12 @@ export function userReducer(state = {}, action){
     switch (action.type) {
         case userConstants.GET_USER_BY_ID_REQUEST:
             return {
+                ...state,
                 request: {...action.user}
             };
         case userConstants.GET_USER_BY_ID_SUCCESS:
             return {
+                ...state,
                 user: {...action.user}
             };
         case userConstants.GET_USER_BY_ID_FAILURE:
@@ -39,6 +41,22 @@ export function userReducer(state = {}, action){
                 ...state,
                 error: action.error
             };
+
+        case userConstants.UPDATE_USER_REQUEST:
+            return {
+                ...state,
+                updateRequest: {...action.user}
+            };
+        case userConstants.UPDATE_USER_SUCCESS:
+            return {
+                updateUser: {...action.user}
+            };
+        case userConstants.UPDATE_USER_FAILURE:
+            return {
+                ...state,
+                updateError: action.error
+            };
+
         default:
             return state
     }

@@ -1,10 +1,33 @@
 import { userConstants } from '../constants';
-import { userService } from '../services';
+import {history, userService} from '../services';
 
 export const userActions = {
     getUsers,
-    getUser
+    getUser,
+    updateUser
 };
+
+function updateUser(user) {
+    return dispatch => {
+        dispatch(request(user));
+        userService.updateUser(user)
+            .then(
+                user => {
+                    dispatch(success(user));
+                    history.push('/users');
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+    function request(users) { return { type: userConstants.UPDATE_USER_REQUEST, users } }
+    function success(users) { return { type: userConstants.UPDATE_USER_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.UPDATE_USER_FAILURE, error } }
+}
+
+
+
 
 function getUsers() {
     return dispatch => {

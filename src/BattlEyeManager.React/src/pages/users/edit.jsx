@@ -13,20 +13,15 @@ class Edit extends Component {
         this.props.onLoad(this.props.id);
     }
 
-    submit = values => {
-        // print the form values to the console
-        console.log(values)
-    }
-
     render() {
-        const {user} = this.props;
+        const {user, onSubmit} = this.props;
 
         return (
             <div className="my-3 p-3 bg-white rounded box-shadow .col-md-12">
                 <h2>Edit User</h2>
                 <Link to="/users">Back to list</Link>
 
-                {user && <EditUserForm onSubmit={this.submit} initialValues={user}/>}
+                {user && <EditUserForm onSubmit={onSubmit} initialValues={user}/>}
             </div>
         );
     }
@@ -36,7 +31,7 @@ const RenderField = ({
                          input,
                          label,
                          name,
-                        readOnly,
+                         readOnly,
                          type,
                          meta: {touched, error, warning}
                      }) => (
@@ -66,7 +61,7 @@ let EditUserForm = props => {
             <Field name="email" component={RenderField} type="email" className="form-control" label="Email"
                    validate={[requiredValidator]}/>
             <Field name="password" component={RenderField} type="password" className="form-control" label="Password"
-                   validate={[requiredValidator]}/>
+                   />
             <button type="submit">Save</button>
         </form>
     );
@@ -87,7 +82,8 @@ const mapStateToProps = ({user}, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: (id) => dispatch(userActions.getUser(id))
+        onLoad: (id) => dispatch(userActions.getUser(id)),
+        onSubmit: (user)=> dispatch(userActions.updateUser(user))
     }
 }
 
