@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Field, reduxForm } from 'redux-form'
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import {Field, reduxForm} from 'redux-form'
 import {connect} from "react-redux";
 import {userActions} from "../../actions";
+
+import {requiredValidator} from "../formValidators";
 
 
 class Edit extends Component {
@@ -14,36 +16,58 @@ class Edit extends Component {
     submit = values => {
         // print the form values to the console
         console.log(values)
-      }
+    }
 
     render() {
+        const {user} = this.props;
+
         return (
-            <div className="my-3 p-3 bg-white rounded box-shadow">
+            <div className="my-3 p-3 bg-white rounded box-shadow .col-md-12">
                 <h2>Edit User</h2>
                 <Link to="/users">Back to list</Link>
-                <EditUserForm onSubmit={this.submit} />
+
+                {user && <EditUserForm onSubmit={this.submit} initialValues={user}/>}
             </div>
         );
     }
 }
 
+const RenderField = ({
+                         input,
+                         label,
+                         name,
+                        readOnly,
+                         type,
+                         meta: {touched, error, warning}
+                     }) => (
+    <div className="form-group row">
+        <label htmlFor={name} className="col-sm-2 col-form-label">{label}</label>
+        <div className="col-sm-10">
+            <input {...input} placeholder={label} type={type} className="form-control" readOnly={readOnly}/>
+            {touched &&
+            ((error && <span>{error}</span>) ||
+                (warning && <span>{warning}</span>))}
+        </div>
+    </div>
+)
+
+
 let EditUserForm = props => {
-    const { handleSubmit } = props
+    const {handleSubmit} = props;
+
     return (
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="firstName">First Name</label>
-                <Field name="firstName" component="input" type="text" />
-            </div>
-            <div>
-                <label htmlFor="lastName">Last Name</label>
-                <Field name="lastName" component="input" type="text" />
-            </div>
-            <div>
-                <label htmlFor="email">Email</label>
-                <Field name="email" component="input" type="email" />
-            </div>
-            <button type="submit">Submit</button>
+            <Field name="lastName" component={RenderField} type="text" label="Last Name" readOnly={true}
+                   validate={[requiredValidator]}/>
+            <Field name="firstName" component={RenderField} type="text" label="First Name" readOnly={true}
+                   validate={[requiredValidator]}/>
+            <Field name="userName" component={RenderField} type="text" label="User Name" readOnly={true}
+                   validate={[requiredValidator]}/>
+            <Field name="email" component={RenderField} type="email" className="form-control" label="Email"
+                   validate={[requiredValidator]}/>
+            <Field name="password" component={RenderField} type="password" className="form-control" label="Password"
+                   validate={[requiredValidator]}/>
+            <button type="submit">Save</button>
         </form>
     );
 }
@@ -57,7 +81,7 @@ EditUserForm = reduxForm({
 const mapStateToProps = ({user}, ownProps) => {
     return {
         user: user.user,
-        id:ownProps.match.params.id
+        id: ownProps.match.params.id
     }
 }
 

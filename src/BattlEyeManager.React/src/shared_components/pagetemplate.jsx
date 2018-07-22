@@ -5,9 +5,9 @@ import { Container, Row, Col } from 'reactstrap';
 export const PageTemplate = ({ children }) =>
     <div>
         <MainMenu />
-        <Container>
+        <Container fluid={true}>
             <Row>
-                <Col xl="7" m="1">
+                <Col xl="12" m="1">
                     {children}
                 </Col>
             </Row>

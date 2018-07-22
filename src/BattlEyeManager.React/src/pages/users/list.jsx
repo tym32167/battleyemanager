@@ -15,10 +15,12 @@ class List extends Component {
         const {users} = this.props;
         const len = users.length;
 
+        console.log(users);
+
         return (
             <div className="my-3 p-3 bg-white rounded box-shadow">
                 <h2>Users ({len})</h2>
-                {<Userstable users={users}/>}
+                {users && <Userstable users={users}/>}
             </div>
         );
     }
