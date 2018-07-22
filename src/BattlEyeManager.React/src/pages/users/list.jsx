@@ -6,30 +6,25 @@ import {connect} from 'react-redux';
 
 class List extends Component {
 
-    constructor({users, onLoad}) {
-        super();
-        this.state = {
-            items: users,
-            onLoad
-        };
-    }
-
     componentDidMount() {
-        this.state.onLoad();
+        this.props.onLoad();
     }
 
     render() {
-        const data = this.state.items || [];
+
+        const {users} = this.props;
+        const len = users.length;
+
         return (
             <div className="my-3 p-3 bg-white rounded box-shadow">
-                <h2>Users</h2>
-                <Userstable items={data}/>
+                <h2>Users ({len})</h2>
+                {<Userstable users={users}/>}
             </div>
         );
     }
 }
 
-const Userstable = ({items}) => <Table size="sm">
+const Userstable = ({users}) => <Table size="sm">
     <thead>
     <tr>
         <th>Last Name</th>
@@ -40,24 +35,23 @@ const Userstable = ({items}) => <Table size="sm">
     </tr>
     </thead>
     <tbody>
-    {items.map((item, i) => <UserItem key={item.id} item={item}/>)}
+    {users.map((user, i) => <UserItem key={user.id} user={user}/>)}
     </tbody>
 </Table>;
 
-const UserItem = ({item}) => (
+const UserItem = ({user}) => (
     <tr>
-        <td>{item.lastName}</td>
-        <td>{item.firstName}</td>
-        <td>{item.userName}</td>
-        <td>{item.email}</td>
-        <th><Link to={'/users/' + item.id}>Edit</Link></th>
+        <td>{user.lastName}</td>
+        <td>{user.firstName}</td>
+        <td>{user.userName}</td>
+        <td>{user.email}</td>
+        <th><Link to={'/users/' + user.id}>Edit</Link></th>
     </tr>)
 
 
 const mapStateToProps = ({user}) => {
-    console.log(user);
     return {
-        users: user.users
+        users: user.users || []
     }
 }
 

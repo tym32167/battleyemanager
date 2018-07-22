@@ -1,6 +1,6 @@
 import { userConstants } from '../constants';
 
-export function userReducer(state = [], action) {
+export function userReducer(state = {users:[]}, action) {
     switch (action.type) {
         case userConstants.USERS_REQUEST:
             return {
