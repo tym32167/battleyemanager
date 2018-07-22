@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 
 import { NavLink as Link } from 'react-router-dom';
-import { userActions } from '../actions';
+import { authActions } from '../actions';
 import { connect } from 'react-redux';
 
 
@@ -33,7 +33,7 @@ class MainMenu extends React.Component {
   logoutClick(e) {
     e.preventDefault();
     const { dispatch } = this.props;
-    dispatch(userActions.logout());
+    dispatch(authActions.logout());
   }
 
   toggle() {

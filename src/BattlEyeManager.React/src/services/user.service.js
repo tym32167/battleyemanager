@@ -6,7 +6,8 @@ export const userService = {
 };
 
 function getUsers(){
-    return axios.get('/api/user').then(response => response.data)
+    return axios.get('/api/user')
+        .then(response => response.data)
         .catch(error => Promise.reject(error.message));
 }
 
