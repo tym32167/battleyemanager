@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
-import { userService } from '../../services';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form'
+import {connect} from "react-redux";
+import {userActions} from "../../actions";
 
 
-export class Edit extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: props.match.params.id
-        };
-        this.fetchData = this.fetchData.bind(this);
-    }
+class Edit extends Component {
 
     componentDidMount() {
-        this.fetchData();
-    }
-
-    fetchData() {
-        var id = this.state.id;
-        userService.getUser(id)
-            .then(data => {
-                this.setState({ user: data });
-            });
+        this.props.onLoad(this.props.id);
     }
 
     submit = values => {
@@ -67,3 +52,24 @@ EditUserForm = reduxForm({
     // a unique name for the form
     form: 'EditUserForm'
 })(EditUserForm)
+
+
+const mapStateToProps = ({user}, ownProps) => {
+    return {
+        user: user.userEdit.user,
+        id:ownProps.match.params.id
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLoad: (id) => dispatch(userActions.getUser(id))
+    }
+}
+
+const ConnectedEdit = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Edit);
+
+export {ConnectedEdit as Edit};
