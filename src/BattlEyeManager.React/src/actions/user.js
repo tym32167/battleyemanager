@@ -1,11 +1,9 @@
 import { userConstants } from '../constants';
-import { userService, history } from '../services';
+import { userService } from '../services';
 
 export const userActions = {
     getUsers
 };
-
-
 
 function getUsers() {
     return dispatch => {

@@ -1,27 +1,21 @@
-import React, { Component } from 'react';
-import { userService } from '../../services';
-import { Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Table} from 'reactstrap';
+import {Link} from 'react-router-dom';
+import {userActions} from "../../actions";
+import {connect} from 'react-redux';
 
-export class List extends Component {
+class List extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor({users, onLoad}) {
+        super();
         this.state = {
-            items: []
+            items: users,
+            onLoad
         };
-        this.fetchData = this.fetchData.bind(this);
     }
 
     componentDidMount() {
-        this.fetchData();
-    }
-
-    fetchData() {
-        userService.getUsers()
-            .then(data => {
-                this.setState({ items: data });
-            });
+        this.state.onLoad();
     }
 
     render() {
@@ -29,32 +23,53 @@ export class List extends Component {
         return (
             <div className="my-3 p-3 bg-white rounded box-shadow">
                 <h2>Users</h2>
-                <Userstable items={data} />
+                <Userstable items={data}/>
             </div>
         );
     }
 }
 
-const Userstable = ({ items }) => <Table size="sm">
+const Userstable = ({items}) => <Table size="sm">
     <thead>
-        <tr>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>User Name</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>User Name</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-        {items.map((item, i) => <UserItem key={item.id} item={item} />)}
+    {items.map((item, i) => <UserItem key={item.id} item={item}/>)}
     </tbody>
 </Table>;
 
-const UserItem = ({ item }) => (
+const UserItem = ({item}) => (
     <tr>
         <td>{item.lastName}</td>
         <td>{item.firstName}</td>
         <td>{item.userName}</td>
         <td>{item.email}</td>
-        <th> <Link to={'/users/' + item.id}>Edit</Link> </th>
+        <th><Link to={'/users/' + item.id}>Edit</Link></th>
     </tr>)
+
+
+const mapStateToProps = ({user}) => {
+    console.log(user);
+    return {
+        users: user.users
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLoad: () => dispatch(userActions.getUsers())
+    }
+}
+
+const ConnectedList = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(List);
+
+export {ConnectedList as List};
