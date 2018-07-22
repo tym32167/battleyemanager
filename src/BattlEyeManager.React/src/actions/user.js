@@ -19,9 +19,9 @@ function getUsers() {
                 }
             );
     };
-    function request(users) { return { type: userConstants.USERS_REQUEST, users } }
-    function success(users) { return { type: userConstants.USERS_SUCCESS, users } }
-    function failure(error) { return { type: userConstants.USERS_FAILURE, error } }
+    function request(users) { return { type: userConstants.GET_USERS_REQUEST, users } }
+    function success(users) { return { type: userConstants.GET_USERS_SUCCESS, users } }
+    function failure(error) { return { type: userConstants.GET_USERS_FAILURE, error } }
 }
 
 function getUser(id) {
@@ -37,7 +37,7 @@ function getUser(id) {
                 }
             );
     };
-    function request(user) { return { type: userConstants.USER_EDIT_REQUEST, user } }
-    function success(user) { return { type: userConstants.USER_EDIT_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.USER_EDIT_FAILURE, error } }
+    function request(user) { return { type: userConstants.GET_USER_BY_ID_REQUEST, user } }
+    function success(user) { return { type: userConstants.GET_USER_BY_ID_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.GET_USER_BY_ID_FAILURE, error } }
 }
