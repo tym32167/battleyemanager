@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Table} from 'reactstrap';
-import {Link} from 'react-router-dom';
-import {userActions} from "../../store/actions";
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { Table } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { userActions } from "../../store/actions";
+import { connect } from 'react-redux';
 
 class List extends Component {
 
@@ -12,36 +12,36 @@ class List extends Component {
 
     render() {
 
-        const {users} = this.props;
+        const { users } = this.props;
         const len = users.length;
 
         console.log(users);
 
         return (
-            <div className="my-3 p-3 bg-white rounded box-shadow">
+            <React.Fragment>
                 <h2>Users ({len})</h2>
-                {users && <Userstable users={users}/>}
-            </div>
+                {users && <Userstable users={users} />}
+            </React.Fragment>
         );
     }
 }
 
-const Userstable = ({users}) => <Table size="sm">
+const Userstable = ({ users }) => <Table size="sm">
     <thead>
-    <tr>
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>User Name</th>
-        <th>Email</th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>User Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-    {users.map((user, i) => <UserItem key={user.id} user={user}/>)}
+        {users.map((user, i) => <UserItem key={user.id} user={user} />)}
     </tbody>
 </Table>;
 
-const UserItem = ({user}) => (
+const UserItem = ({ user }) => (
     <tr>
         <td>{user.lastName}</td>
         <td>{user.firstName}</td>
@@ -51,7 +51,7 @@ const UserItem = ({user}) => (
     </tr>)
 
 
-const mapStateToProps = ({users}) => {
+const mapStateToProps = ({ users }) => {
     return {
         users: users.users || []
     }
@@ -68,4 +68,4 @@ const ConnectedList = connect(
     mapDispatchToProps
 )(List);
 
-export {ConnectedList as List};
+export { ConnectedList as List };

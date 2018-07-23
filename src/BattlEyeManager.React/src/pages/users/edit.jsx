@@ -13,10 +13,10 @@ class Edit extends Component {
         const { user, onSubmit } = this.props;
 
         return (
-            <div className="my-3 p-3 bg-white rounded box-shadow col-12 col-md-7 ">
+            <React.Fragment>
                 <h2>Edit User</h2>
                 {user && <EditUserForm onSubmit={onSubmit} initialValues={user} edit={true} />}
-            </div>
+            </React.Fragment>
         );
     }
 }
