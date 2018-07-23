@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './login.css'
-import {authActions} from '../../actions';
+import {authActions} from '../../store/actions';
 import {connect} from 'react-redux';
 
 class Login extends Component {

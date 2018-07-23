@@ -1,5 +1,5 @@
 import { userConstants } from '../constants';
-import {history, userService} from '../services';
+import {history, userService} from '../../services';
 
 export const userActions = {
     getUsers,

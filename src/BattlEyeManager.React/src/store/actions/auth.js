@@ -1,5 +1,5 @@
 import { authConstants } from '../constants';
-import { authService, history } from '../services';
+import { authService, history } from '../../services';
 
 export const authActions = {
     login,

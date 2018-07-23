@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {userActions} from "../../actions";
+import {userActions} from "../../store/actions";
 import {connect} from 'react-redux';
 
 class List extends Component {

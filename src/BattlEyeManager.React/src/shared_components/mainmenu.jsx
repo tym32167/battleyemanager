@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 
 import { NavLink as Link } from 'react-router-dom';
-import { authActions } from '../actions';
+import { authActions } from '../store/actions';
 import { connect } from 'react-redux';
 
 
