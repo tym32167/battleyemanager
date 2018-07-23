@@ -31,7 +31,9 @@ namespace BattlEyeManager.Spa.Api
                 Email = x.Email,
                 LastName = x.LastName,
                 FirstName = x.FirstName,
-            }).ToArray();
+            })
+            .OrderBy(x=>x.UserName)
+            .ToArray();
             return Ok(users);
         }
 

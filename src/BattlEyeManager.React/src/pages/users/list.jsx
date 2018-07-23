@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { userActions } from "../../store/actions";
 import { connect } from 'react-redux';
 
+import { Button } from "reactstrap";
+
 class List extends Component {
 
     componentDidMount() {
@@ -20,6 +22,7 @@ class List extends Component {
         return (
             <React.Fragment>
                 <h2>Users ({len})</h2>
+                <Button tag={Link} to="/users/create" color="primary">Create</Button>
                 {users && <Userstable users={users} />}
             </React.Fragment>
         );

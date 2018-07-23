@@ -4,8 +4,28 @@ import {history, userService} from '../../services';
 export const userActions = {
     getUsers,
     getUser,
-    updateUser
+    updateUser,
+    addUser
 };
+
+function addUser(user) {
+    return dispatch => {
+        dispatch(request(user));
+        userService.addUser(user)
+            .then(
+                user => {
+                    dispatch(success(user));
+                    history.push('/users');
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+    function request(user)  { return { type: userConstants.CREATE_USER_REQUEST, user } }
+    function success(user)  { return { type: userConstants.CREATE_USER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.CREATE_USER_FAILURE, error } }
+}
 
 function updateUser(user) {
     return dispatch => {
@@ -21,8 +41,8 @@ function updateUser(user) {
                 }
             );
     };
-    function request(users) { return { type: userConstants.UPDATE_USER_REQUEST, users } }
-    function success(users) { return { type: userConstants.UPDATE_USER_SUCCESS, users } }
+    function request(user) { return { type: userConstants.UPDATE_USER_REQUEST, user } }
+    function success(user) { return { type: userConstants.UPDATE_USER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.UPDATE_USER_FAILURE, error } }
 }
 

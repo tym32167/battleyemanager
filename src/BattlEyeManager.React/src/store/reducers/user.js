@@ -1,17 +1,21 @@
-import { userConstants } from '../constants';
+import {
+    userConstants
+} from '../constants';
 
-export function usersReducer(state = {users:[]}, action) {
+export function usersReducer(state = {
+    users: []
+}, action) {
     switch (action.type) {
         case userConstants.GET_USERS_REQUEST:
             return {
                 ...state,
-                error : '',
+                error: '',
                 users: [...action.users]
             };
         case userConstants.GET_USERS_SUCCESS:
             return {
                 ...state,
-                error : '',
+                error: '',
                 users: [...action.users]
             };
         case userConstants.GET_USERS_FAILURE:
@@ -24,18 +28,20 @@ export function usersReducer(state = {users:[]}, action) {
     }
 }
 
-export function userReducer(state = {}, action){
+export function userReducer(state = {}, action) {
     switch (action.type) {
         case userConstants.GET_USER_BY_ID_REQUEST:
             return {
                 ...state,
                 user: undefined,
-                request: {...action.user}
+                request: { ...action.user
+                }
             };
         case userConstants.GET_USER_BY_ID_SUCCESS:
             return {
                 ...state,
-                user: {...action.user}
+                user: { ...action.user
+                }
             };
         case userConstants.GET_USER_BY_ID_FAILURE:
             return {
@@ -46,16 +52,35 @@ export function userReducer(state = {}, action){
         case userConstants.UPDATE_USER_REQUEST:
             return {
                 ...state,
-                updateRequest: {...action.user}
+                updateRequest: { ...action.user
+                }
             };
         case userConstants.UPDATE_USER_SUCCESS:
             return {
-                updateUser: {...action.user}
+                updateUser: { ...action.user
+                }
             };
         case userConstants.UPDATE_USER_FAILURE:
             return {
                 ...state,
                 updateError: action.error
+            };
+
+        case userConstants.CREATE_USER_REQUEST:
+            return {
+                ...state,
+                createRequest: { ...action.user
+                }
+            };
+        case userConstants.CREATE_USER_SUCCESS:
+            return {
+                createUser: { ...action.user
+                }
+            };
+        case userConstants.CREATE_USER_FAILURE:
+            return {
+                ...state,
+                createError: action.error
             };
 
         default:

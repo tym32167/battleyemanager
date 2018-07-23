@@ -3,7 +3,8 @@ import axios from 'axios';
 export const userService = {
     getUsers,
     getUser,
-    updateUser
+    updateUser,
+    addUser
 };
 
 function getUsers() {
@@ -20,6 +21,12 @@ function getUser(id) {
 
 function updateUser(user) {
     return axios.post('/api/user/' + user.id, user)
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.message));
+}
+
+function addUser(user) {
+    return axios.put('/api/user/', user)
         .then(response => response.data)
         .catch(error => Promise.reject(error.message));
 }
