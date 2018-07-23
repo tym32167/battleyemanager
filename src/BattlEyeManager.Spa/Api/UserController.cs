@@ -94,13 +94,13 @@ namespace BattlEyeManager.Spa.Api
                 user = await _userManager.FindByIdAsync(id);
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var res = await _userManager.ResetPasswordAsync(user, token, user.Password);
+                var res = await _userManager.ResetPasswordAsync(user, token, model.Password);
 
                 if (!res.Succeeded)
                 {
                     foreach (var identityError in res.Errors)
                     {
-                        ModelState.AddModelError(String.Empty, identityError.Description);
+                        ModelState.AddModelError(string.Empty, identityError.Description);
                     }
                     return BadRequest(ModelState);
                 }

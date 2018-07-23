@@ -47,7 +47,7 @@ const UserItem = ({user}) => (
         <td>{user.firstName}</td>
         <td>{user.userName}</td>
         <td>{user.email}</td>
-        <th><Link to={'/users/' + user.id}>Edit</Link></th>
+        <th><Link to={'/users/' + user.id} className="btn-sm btn-success">Edit</Link></th>
     </tr>)
 
 
