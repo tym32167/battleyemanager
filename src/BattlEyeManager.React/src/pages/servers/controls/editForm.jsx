@@ -8,7 +8,7 @@ import { FormInputField } from '../../../controls';
 
 
 const EditForm = props => {
-    const { handleSubmit, edit } = props;
+    const { handleSubmit } = props;
 
     return (
         <Form onSubmit={handleSubmit} className="m-1">
