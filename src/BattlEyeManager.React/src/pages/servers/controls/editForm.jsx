@@ -23,7 +23,7 @@ const EditForm = props => {
             <Field name="steamPort" component={FormInputField} type="number" label="Steam Port"
                 validate={[requiredValidator]} />
             <Field name="active" component={FormInputField} type="checkbox" label="Active"
-                validate={[requiredValidator]} />
+                 />
 
             <Button color="primary" type="submit">Save</Button>
             {' '}

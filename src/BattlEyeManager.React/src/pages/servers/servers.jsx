@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import {List} from './list';
 import {Create} from './create';
+import { Edit } from './edit';
 
 export class Servers extends Component {
     render() {
@@ -11,6 +12,7 @@ export class Servers extends Component {
                     <Switch>
                     <Route exact path="/servers" component={List} />
                     <Route exact path="/servers/create" component={Create} />
+                    <Route exact path="/servers/:id" component={Edit} />
                     </Switch>
                 </div>
             </React.Fragment>
