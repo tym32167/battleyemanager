@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { serverActions } from "../../store/actions";
 import { connect } from 'react-redux';
 import { Button } from "reactstrap";
-import {Error} from '../../controls';
+import { Error } from '../../controls';
 
 class List extends Component {
 
@@ -14,7 +14,7 @@ class List extends Component {
 
     componentDidMount() {
         this.props.onLoad();
-    }    
+    }
 
     render() {
 
@@ -36,10 +36,10 @@ const Serverstable = ({ items }) =>
     <Table size="sm">
         <thead>
             <tr>
-                <th>Last Name</th>
-                <th>First Name</th>
-                <th>User Name</th>
-                <th>Email</th>
+                <th>Name</th>
+                <th>Host</th>
+                <th>Port</th>
+                <th>Active</th>
                 <th colSpan="2" className="table-fit"></th>
             </tr>
         </thead>
@@ -50,15 +50,17 @@ const Serverstable = ({ items }) =>
 
 const ServerItem = ({ item }) => (
     <tr>
-        <td>{item.lastName}</td>
-        <td>{item.firstName}</td>
-        <td>{item.userName}</td>
-        <td>{item.email}</td>
+        <td>{item.name}</td>
+        <td>{item.host}</td>
+        <td>{item.port}</td>
+        <td>
+            <input type="checkbox" disabled checked={item.active} />
+        </td>
         <td>
             <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm">Edit</Button>
         </td>
         <td>
-            
+
         </td>
     </tr>)
 
