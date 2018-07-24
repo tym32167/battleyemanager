@@ -1,5 +1,6 @@
 using AutoMapper;
 using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -63,6 +64,39 @@ namespace BattlEyeManager.Spa.Api
 
             Mapper.Map(model, item);
 
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
+        }
+
+
+        [HttpPut]
+        [ProducesResponseType(201, Type = typeof(ServerModel))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Put([FromBody] ServerModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var item = Mapper.Map<Server>(model);
+            _dbContext.Servers.Add(item);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(Get), new { id = item.Id }, Get(item.Id));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0) return NotFound();
+
+            var item = await _dbContext.Servers.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            _dbContext.Servers.Remove(item);
+            await _dbContext.SaveChangesAsync();
             return NoContent();
         }
     }
