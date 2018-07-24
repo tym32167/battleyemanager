@@ -10,7 +10,7 @@ class Create extends Component {
 
         return (
             <React.Fragment>
-                <h2>Create User</h2>
+                <h2>Create Server</h2>
                 <Error error={error} />      
                 <EditForm onSubmit={onSubmit} />                            
             </React.Fragment>
