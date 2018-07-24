@@ -10,6 +10,15 @@ class List extends Component {
 
     constructor(props) {
         super(props);
+
+        this.deleteCallback = this.deleteCallback.bind(this);
+    }
+
+    deleteCallback(item) {
+        if (window.confirm('Are you sure you want to delete server ' + item.name + '?')) {
+            const { deleteServer } = this.props;
+            deleteServer(item);
+        }
     }
 
     componentDidMount() {
@@ -26,13 +35,13 @@ class List extends Component {
                 <h2>Servers ({len})</h2>
                 <Error error={error} />
                 <Button tag={Link} to="/servers/create" color="primary">Create</Button>
-                {items && <Serverstable items={items} />}
+                {items && <Serverstable items={items} deleteCallback={this.deleteCallback} />}
             </React.Fragment>
         );
     }
 }
 
-const Serverstable = ({ items }) =>
+const Serverstable = ({ items, deleteCallback }) =>
     <Table size="sm">
         <thead>
             <tr>
@@ -44,11 +53,11 @@ const Serverstable = ({ items }) =>
             </tr>
         </thead>
         <tbody>
-            {items.map((item, i) => <ServerItem key={item.id} item={item} />)}
+            {items.map((item, i) => <ServerItem key={item.id} item={item} deleteCallback={deleteCallback}/>)}
         </tbody>
     </Table>;
 
-const ServerItem = ({ item }) => (
+const ServerItem = ({ item , deleteCallback}) => (
     <tr>
         <td>{item.name}</td>
         <td>{item.host}</td>
@@ -60,7 +69,7 @@ const ServerItem = ({ item }) => (
             <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm">Edit</Button>
         </td>
         <td>
-
+            <Button color="danger" size="sm" onClick={(e) => deleteCallback(item)}>Delete</Button>
         </td>
     </tr>)
 
@@ -74,7 +83,8 @@ const mapStateToProps = ({ servers }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: () => dispatch(serverActions.getAll())
+        onLoad: () => dispatch(serverActions.getAll()),
+        deleteServer: (item) => dispatch(serverActions.del(item))
     }
 }
 
