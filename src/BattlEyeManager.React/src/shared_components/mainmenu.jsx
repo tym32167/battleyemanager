@@ -42,45 +42,45 @@ class MainMenu extends React.Component {
     });
   }
   render() {
-    return (      
-        <div>
-          <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/" >BattlEye Manager</NavbarBrand>
-            <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav className="mr-auto" navbar>
-                <NavItem>
-                  <NavLink tag={Link} to="/test" >Test</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} to="/users" >Users</NavLink>
-                </NavItem>
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav caret>
-                    Servers
+    return (
+      <div>
+        <Navbar color="dark" dark expand="md">
+          <NavbarBrand tag={Link} to="/" >BattlEye Manager</NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+              <NavItem>
+                <NavLink tag={Link} to="/test" >Test</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} to="/users" >Users</NavLink>
+              </NavItem>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Servers
                 </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem>
-                      Server 1
+                <DropdownMenu right>
+                  <DropdownItem tag={Link} to="/servers">
+                    Server list
                   </DropdownItem>
-                    <DropdownItem>
-                      Server 2
+                  <DropdownItem divider />
+                  <DropdownItem>
+                    Server 1
                   </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>
-                      Add server
+                  <DropdownItem>
+                    Server 2
                   </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </Nav>
-              <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <NavLink href="#" onClick={this.logoutClick}>Sign out</NavLink>
-                </NavItem>                
-              </Nav>
-            </Collapse>
-          </Navbar>
-        </div>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </Nav>
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink href="#" onClick={this.logoutClick}>Sign out</NavLink>
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
     );
   }
 }

@@ -21,6 +21,10 @@ namespace BattlEyeManager.Spa.Api
             _userManager = userManager;
         }
 
+        protected UserController()
+        {
+        }
+
         [HttpGet]
         public IActionResult Get()
         {

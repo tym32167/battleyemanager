@@ -1,3 +1,4 @@
+using AutoMapper;
 using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.Net;
 using BattlEyeManager.BE.ServerFactory;
@@ -5,6 +6,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Auth;
+using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,8 +18,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BattlEyeManager.Spa
 {
@@ -102,11 +106,15 @@ namespace BattlEyeManager.Spa
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app,
-            IHostingEnvironment env,
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
-            AppDbContext store)
+            IBeServerAggregator beServerAggregator,
+            AppDbContext store,
+            ServerStateService service,
+            DataRegistrator dataRegistrator,
+            BELogic beLogic
+        )
         {
             store.Database.Migrate();
 
@@ -135,7 +143,11 @@ namespace BattlEyeManager.Spa
                     defaults: new { controller = "Home", action = "Index" });
             });
 
+            SetupMappings();
+            //dataRegistrator.Init().Wait();
+            //beLogic.Init();
             CheckAdminUser(userManager, roleManager).Wait();
+            //RunActiveServers(beServerAggregator, store, service).Wait();
         }
 
         private async Task CheckAdminUser(
@@ -157,6 +169,33 @@ namespace BattlEyeManager.Spa
                 await userManager.CreateAsync(adminModel, adminModel.Password);
                 await userManager.AddToRoleAsync(adminModel, adminRole);
             }
+        }
+
+        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, AppDbContext store, ServerStateService service)
+        {
+            await service.InitAsync();
+
+            var activeServers = await store.Servers.Where(s => s.Active).ToListAsync();
+            foreach (var server in activeServers)
+            {
+                beServerAggregator.AddServer(new ServerInfo
+                {
+                    Id = server.Id,
+                    Password = server.Password,
+                    Port = server.Port,
+                    Host = server.Host,
+                    Name = server.Name
+                });
+            }
+        }
+
+        private void SetupMappings()
+        {
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Server, ServerModel>();
+                config.CreateMap<ServerModel, Server>();
+            });
         }
     }
 }

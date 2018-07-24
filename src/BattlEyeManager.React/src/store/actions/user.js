@@ -12,7 +12,7 @@ export const userActions = {
 function deleteUser(user) {
     return dispatch => {
         dispatch(request(user));
-        userService.deleteUser(user.id)
+        userService.del(user.id)
             .then(
                 user => {
                     dispatch(success(user));
@@ -31,7 +31,7 @@ function deleteUser(user) {
 function addUser(user) {
     return dispatch => {
         dispatch(request(user));
-        userService.addUser(user)
+        userService.add(user)
             .then(
                 user => {
                     dispatch(success(user));
@@ -50,7 +50,7 @@ function addUser(user) {
 function updateUser(user) {
     return dispatch => {
         dispatch(request(user));
-        userService.updateUser(user)
+        userService.update(user)
             .then(
                 user => {
                     dispatch(success(user));
@@ -69,7 +69,7 @@ function updateUser(user) {
 function getUsers() {
     return dispatch => {
         dispatch(request([]));
-        userService.getUsers()
+        userService.getAll()
             .then(
                 users => {
                     dispatch(success(users));
@@ -87,7 +87,7 @@ function getUsers() {
 function getUser(id) {
     return dispatch => {
         dispatch(request({id}));
-        userService.getUser(id)
+        userService.get(id)
             .then(
                 user => {
                     dispatch(success(user));

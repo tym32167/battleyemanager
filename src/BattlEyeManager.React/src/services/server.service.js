@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-export const userService = {
+const baseUrl = '/api/server/'
+
+export const serverService = {
     getAll,
     get,
     update,
@@ -9,31 +11,31 @@ export const userService = {
 };
 
 function getAll() {
-    return axios.get('/api/user')
+    return axios.get(baseUrl)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
 function get(id) {
-    return axios.get('/api/user/' + id)
+    return axios.get(baseUrl + id)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function update(user) {
-    return axios.post('/api/user/' + user.id, user)
+function update(item) {
+    return axios.post(baseUrl + item.id, item)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function add(user) {
-    return axios.put('/api/user/', user)
+function add(item) {
+    return axios.put(baseUrl, item)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
 function del(id) {
-    return axios.delete('/api/user/' + id)
+    return axios.delete(baseUrl + id)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
