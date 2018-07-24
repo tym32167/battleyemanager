@@ -4,8 +4,10 @@ import {
 
 export function serversReducer(
     state = {
-        items: [],        
-    }, action) {    
+        items: [],
+    }, action) {
+
+    state = serverReducer(state, action);
 
     switch (action.type) {
         case serverConstants.GET_SERVERS_REQUEST:
@@ -18,9 +20,36 @@ export function serversReducer(
                 items: [...action.items]
             };
         case serverConstants.GET_SERVERS_FAILURE:
-            return {                
+            return {
                 error: action.error
             };
+        default:
+            return state
+    }
+}
+
+
+export function serverReducer(state = {}, action) {
+    switch (action.type) {
+
+
+        case serverConstants.CREATE_SERVER_REQUEST:
+            return {
+                ...state,
+                createRequest: { ...action.item
+                }
+            };
+        case serverConstants.CREATE_SERVER_SUCCESS:
+            return {
+                createItem: { ...action.item
+                }
+            };
+        case serverConstants.CREATE_SERVER_FAILURE:
+            return {
+                ...state,
+                error: action.error
+            };
+
         default:
             return state
     }
