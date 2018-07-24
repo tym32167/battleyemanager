@@ -5,8 +5,28 @@ export const userActions = {
     getUsers,
     getUser,
     updateUser,
-    addUser
+    addUser,
+    deleteUser
 };
+
+function deleteUser(user) {
+    return dispatch => {
+        dispatch(request(user));
+        userService.deleteUser(user.id)
+            .then(
+                user => {
+                    dispatch(success(user));
+                    dispatch(getUsers());
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+    function request(user)  { return { type: userConstants.DELETE_USER_REQUEST, user } }
+    function success(user)  { return { type: userConstants.DELETE_USER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.DELETE_USER_FAILURE, error } }
+}
 
 function addUser(user) {
     return dispatch => {
@@ -45,9 +65,6 @@ function updateUser(user) {
     function success(user) { return { type: userConstants.UPDATE_USER_SUCCESS, user } }
     function failure(error) { return { type: userConstants.UPDATE_USER_FAILURE, error } }
 }
-
-
-
 
 function getUsers() {
     return dispatch => {

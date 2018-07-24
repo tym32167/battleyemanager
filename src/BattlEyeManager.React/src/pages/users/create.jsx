@@ -2,22 +2,26 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { userActions } from "../../store/actions";
 import { EditUserForm } from './controls';
+import {Error} from '../../controls';
 
 class Create extends Component {    
     render() {
-        const { onSubmit } = this.props;
+        const { onSubmit, error } = this.props;
 
         return (
             <React.Fragment>
                 <h2>Create User</h2>
-                <EditUserForm onSubmit={onSubmit} />
+                <Error error={error} />
+                <EditUserForm onSubmit={onSubmit} />                
             </React.Fragment>
         );
     }
 }
 
-const mapStateToProps = () => {
-    return {}
+const mapStateToProps = ({users}) => {
+    return {
+        error:users.error
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {

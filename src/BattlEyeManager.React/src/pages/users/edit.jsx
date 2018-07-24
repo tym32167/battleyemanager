@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { userActions } from "../../store/actions";
 import { EditUserForm } from './controls';
+import {Error} from '../../controls';
 
 class Edit extends Component {
 
@@ -10,21 +11,23 @@ class Edit extends Component {
     }
 
     render() {
-        const { user, onSubmit } = this.props;
+        const { user, onSubmit, error } = this.props;
 
         return (
             <React.Fragment>
                 <h2>Edit User</h2>
-                {user && <EditUserForm onSubmit={onSubmit} initialValues={user} edit={true} />}
+                <Error error={error} />
+                {user && <EditUserForm onSubmit={onSubmit} initialValues={user} edit={true} />}                
             </React.Fragment>
         );
     }
 }
 
-const mapStateToProps = ({ user }, ownProps) => {
+const mapStateToProps = ({ users }, ownProps) => {
     return {
-        user: user.user,
-        id: ownProps.match.params.id
+        user: users.user,
+        id: ownProps.match.params.id,
+        error: users.error
     }
 }
 

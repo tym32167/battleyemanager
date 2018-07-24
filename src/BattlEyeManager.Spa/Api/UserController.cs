@@ -85,7 +85,7 @@ namespace BattlEyeManager.Spa.Api
                 {
                     foreach (var identityError in res.Errors)
                     {
-                        ModelState.AddModelError(String.Empty, identityError.Description);
+                        ModelState.AddModelError("errors", identityError.Description);
                     }
                     return BadRequest(ModelState);
                 }
@@ -102,7 +102,7 @@ namespace BattlEyeManager.Spa.Api
                 {
                     foreach (var identityError in res.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, identityError.Description);
+                        ModelState.AddModelError("errors", identityError.Description);
                     }
                     return BadRequest(ModelState);
                 }
@@ -140,7 +140,7 @@ namespace BattlEyeManager.Spa.Api
             {
                 foreach (var identityError in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, identityError.Description);
+                    ModelState.AddModelError("errors", identityError.Description);
                 }
                 return BadRequest(ModelState);
             }
@@ -159,7 +159,7 @@ namespace BattlEyeManager.Spa.Api
 
             if (await _userManager.IsInRoleAsync(usr, "Administrator"))
             {
-                return BadRequest();
+                return BadRequest(new {error = "It is not possible to delete Administrator"});
             }
 
             await _userManager.DeleteAsync(usr);
