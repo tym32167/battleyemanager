@@ -57,10 +57,7 @@ class MainMenu extends React.Component {
           <NavbarBrand tag={Link} to="/" >BattlEye Manager</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="mr-auto" navbar>
-              <NavItem>
-                <NavLink tag={Link} to="/test" >Test</NavLink>
-              </NavItem>
+            <Nav className="mr-auto" navbar>             
               <NavItem>
                 <NavLink tag={Link} to="/users" >Users</NavLink>
               </NavItem>

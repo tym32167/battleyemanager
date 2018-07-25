@@ -17,5 +17,5 @@ export const PageTemplate = ({ children }) =>
     </div>
 
 PageTemplate.propTypes = {
-    children: PropTypes.any
+    children: PropTypes.oneOfType([ PropTypes.element, PropTypes.func]).isRequired
 }
