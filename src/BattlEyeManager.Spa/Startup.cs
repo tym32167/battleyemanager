@@ -195,6 +195,7 @@ namespace BattlEyeManager.Spa
             {
                 config.CreateMap<Server, ServerModel>();
                 config.CreateMap<ServerModel, Server>();
+                config.CreateMap<Server, ServerInfo>();
             });
         }
     }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Core;
@@ -15,10 +16,12 @@ namespace BattlEyeManager.Spa.Api
     public class ServerController : BaseController
     {
         private readonly AppDbContext _dbContext;
+        private readonly IBeServerAggregator _beServerAggregator;
 
-        public ServerController(AppDbContext dbContext)
+        public ServerController(AppDbContext dbContext, IBeServerAggregator beServerAggregator)
         {
             _dbContext = dbContext;
+            _beServerAggregator = beServerAggregator;
         }
 
         [HttpGet]
@@ -27,7 +30,7 @@ namespace BattlEyeManager.Spa.Api
             var users = _dbContext.Servers
                 .OrderBy(x => x.Name)
                 .ToArray()
-                .Select(x => Mapper.Map<ServerModel>(x))
+                .Select(Mapper.Map<ServerModel>)
                 .ToArray();
             return Ok(users);
         }
@@ -46,7 +49,6 @@ namespace BattlEyeManager.Spa.Api
             var ret = Mapper.Map<ServerModel>(item);
             return Ok(ret);
         }
-
 
         [HttpPost("{id}")]
         public async Task<IActionResult> Post(int id, [FromBody] ServerModel model)
@@ -67,6 +69,12 @@ namespace BattlEyeManager.Spa.Api
             Mapper.Map(model, item);
 
             await _dbContext.SaveChangesAsync();
+
+            if (item.Active)
+                _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
+            else
+                _beServerAggregator.RemoveServer(model.Id);
+
             return NoContent();
         }
 
@@ -84,6 +92,10 @@ namespace BattlEyeManager.Spa.Api
             var item = Mapper.Map<Server>(model);
             _dbContext.Servers.Add(item);
             await _dbContext.SaveChangesAsync();
+
+            if (item.Active)
+                _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
+
             return CreatedAtAction(nameof(Get), new { id = item.Id }, Get(item.Id));
         }
 
@@ -97,6 +109,8 @@ namespace BattlEyeManager.Spa.Api
             {
                 return NotFound();
             }
+
+            _beServerAggregator.RemoveServer(id);
             _dbContext.Servers.Remove(item);
             await _dbContext.SaveChangesAsync();
             return NoContent();
