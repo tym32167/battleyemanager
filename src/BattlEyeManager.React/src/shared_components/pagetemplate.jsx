@@ -17,5 +17,5 @@ export const PageTemplate = ({ children }) =>
     </div>
 
 PageTemplate.propTypes = {
-    children: PropTypes.instanceOf(React.Component)
+    children: PropTypes.any
 }

@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 
 import { NavLink as Link } from 'react-router-dom';
-import { authActions } from '../store/actions';
+import { authActions, onlineServerActions } from '../store/actions';
 import { connect } from 'react-redux';
 
 
@@ -31,6 +31,11 @@ class MainMenu extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { loadServers } = this.props;
+    loadServers();
+  }
+
   logoutClick(e) {
     e.preventDefault();
     const { logout } = this.props;
@@ -43,6 +48,9 @@ class MainMenu extends React.Component {
     });
   }
   render() {
+
+    const {servers} = this.props;
+
     return (
       <div>
         <Navbar color="dark" dark expand="md">
@@ -65,12 +73,9 @@ class MainMenu extends React.Component {
                     Server list
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem>
-                    Server 1
-                  </DropdownItem>
-                  <DropdownItem>
-                    Server 2
-                  </DropdownItem>
+                  
+                  {servers && servers.map((server) => <OnlineServer key={server.id} server={server} /> )}
+
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
@@ -87,18 +92,32 @@ class MainMenu extends React.Component {
 }
 
 MainMenu.propTypes = {
-  logout : PropTypes.func
+  logout: PropTypes.func,
+  loadServers: PropTypes.func,
+  servers : PropTypes.array
+}
+
+const OnlineServer = ({ server }) =>
+  (
+    <DropdownItem>
+      {server.name}
+  </DropdownItem>
+  );
+
+OnlineServer.propTypes = {
+  server: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
   return {
-    state
+    servers: state.onlineServers.items
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {        
-      logout: () => dispatch(authActions.logout())
+  return {
+    logout: () => dispatch(authActions.logout()),
+    loadServers: () => dispatch(onlineServerActions.getAll())
   }
 }
 

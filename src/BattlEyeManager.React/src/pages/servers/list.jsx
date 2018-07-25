@@ -99,13 +99,13 @@ export { ConnectedList as List };
 List.propTypes = {
     deleteServer: PropTypes.func.isRequired,
     onLoad: PropTypes.func.isRequired,
-    items: PropTypes.object,
-    error: PropTypes.object
+    items: PropTypes.array,
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }
 
 Serverstable.propTypes = {
     deleteCallback: PropTypes.func.isRequired,
-    items: PropTypes.object
+    items: PropTypes.array
 }
 
 ServerItem.propTypes = {

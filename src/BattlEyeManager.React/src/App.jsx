@@ -31,12 +31,12 @@ const DefaultLayout = ({ component: Component, ...rest }) => {
         <PageTemplate>
           <Component {...matchProps} />
         </PageTemplate>
-        : 
+        :
         <Redirect to={{ pathname: '/login', state: { from: matchProps.location } }} />
     )} />
   )
 };
 
 DefaultLayout.propTypes = {
-  component : PropTypes.instanceOf(React.Component)
+  component: PropTypes.any
 }

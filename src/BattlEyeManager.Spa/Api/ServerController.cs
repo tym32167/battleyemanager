@@ -24,8 +24,10 @@ namespace BattlEyeManager.Spa.Api
         [HttpGet]
         public IActionResult Get()
         {
-            var users = _dbContext.Servers.Select(x => Mapper.Map<ServerModel>(x))
+            var users = _dbContext.Servers
                 .OrderBy(x => x.Name)
+                .ToArray()
+                .Select(x => Mapper.Map<ServerModel>(x))
                 .ToArray();
             return Ok(users);
         }
