@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { userActions } from "../../store/actions";
 import { EditUserForm } from './controls';
-import {Error} from '../../controls';
+import { Error } from '../../controls';
+import PropTypes from 'prop-types';
 
 class Edit extends Component {
 
@@ -17,10 +18,18 @@ class Edit extends Component {
             <React.Fragment>
                 <h2>Edit User</h2>
                 <Error error={error} />
-                {user && <EditUserForm onSubmit={onSubmit} initialValues={user} edit={true} />}                
+                {user && <EditUserForm onSubmit={onSubmit} initialValues={user} edit={true} />}
             </React.Fragment>
         );
     }
+}
+
+Edit.propTypes = {
+    onLoad : PropTypes.func.isRequired,
+    id:PropTypes.string.isRequired,
+    user: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+    error: PropTypes.object
 }
 
 const mapStateToProps = ({ users }, ownProps) => {

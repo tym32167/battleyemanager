@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './login.css'
 import {authActions} from '../../store/actions';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Login extends Component {
 
@@ -27,9 +28,9 @@ class Login extends Component {
 
         this.setState({submitted: true});
         const {username, password} = this.state;
-        const {dispatch} = this.props;
+        const {login} = this.props;
         if (username && password) {
-            dispatch(authActions.login(username, password));
+            login(username, password);
         }
     }
 
@@ -57,5 +58,15 @@ class Login extends Component {
     }
 }
 
-const connectedLogin = connect()(Login);
+Login.propTypes = {
+    login: PropTypes.func.isRequired
+}
+
+function mapDispatchToProps(dispatch){
+    return {
+        login : (username, password)=>dispatch(authActions.login(username, password))
+    }
+}
+
+const connectedLogin = connect(()=>{}, mapDispatchToProps)(Login);
 export {connectedLogin as Login};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Collapse,
   Navbar,
@@ -32,8 +33,8 @@ class MainMenu extends React.Component {
 
   logoutClick(e) {
     e.preventDefault();
-    const { dispatch } = this.props;
-    dispatch(authActions.logout());
+    const { logout } = this.props;
+    logout();
   }
 
   toggle() {
@@ -85,11 +86,21 @@ class MainMenu extends React.Component {
   }
 }
 
+MainMenu.propTypes = {
+  logout : PropTypes.func
+}
+
 function mapStateToProps(state) {
   return {
     state
   };
 }
 
-const connectedMainMenu = connect(mapStateToProps)(MainMenu);
+const mapDispatchToProps = (dispatch) => {
+  return {        
+      logout: () => dispatch(authActions.logout())
+  }
+}
+
+const connectedMainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenu);
 export { connectedMainMenu as MainMenu }; 

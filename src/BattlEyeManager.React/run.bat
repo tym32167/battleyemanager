@@ -8,4 +8,4 @@ npm install -g eslint
 eslint --init
 
 
-
+.\node_modules\.bin\eslint --ext .jsx,.js src/

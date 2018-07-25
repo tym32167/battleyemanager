@@ -5,6 +5,7 @@ import { userActions } from "../../store/actions";
 import { connect } from 'react-redux';
 import { Button } from "reactstrap";
 import {Error} from '../../controls';
+import PropTypes from 'prop-types';
 
 class List extends Component {
 
@@ -92,3 +93,21 @@ const ConnectedList = connect(
 )(List);
 
 export { ConnectedList as List };
+
+
+List.propTypes = {
+    deleteUser: PropTypes.func.isRequired,
+    onLoad: PropTypes.func.isRequired,
+    users: PropTypes.object,
+    error: PropTypes.object
+}
+
+Userstable.propTypes = {
+    deleteUser: PropTypes.func.isRequired,    
+    users: PropTypes.object
+}
+
+UserItem.propTypes = {
+    deleteUser: PropTypes.func.isRequired,
+    user: PropTypes.object
+}

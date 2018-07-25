@@ -5,6 +5,7 @@ import { serverActions } from "../../store/actions";
 import { connect } from 'react-redux';
 import { Button } from "reactstrap";
 import { Error } from '../../controls';
+import PropTypes from 'prop-types';
 
 class List extends Component {
 
@@ -53,11 +54,11 @@ const Serverstable = ({ items, deleteCallback }) =>
             </tr>
         </thead>
         <tbody>
-            {items.map((item, i) => <ServerItem key={item.id} item={item} deleteCallback={deleteCallback}/>)}
+            {items.map((item, i) => <ServerItem key={item.id} item={item} deleteCallback={deleteCallback} />)}
         </tbody>
     </Table>;
 
-const ServerItem = ({ item , deleteCallback}) => (
+const ServerItem = ({ item, deleteCallback }) => (
     <tr>
         <td>{item.name}</td>
         <td>{item.host}</td>
@@ -94,3 +95,20 @@ const ConnectedList = connect(
 )(List);
 
 export { ConnectedList as List };
+
+List.propTypes = {
+    deleteServer: PropTypes.func.isRequired,
+    onLoad: PropTypes.func.isRequired,
+    items: PropTypes.object,
+    error: PropTypes.object
+}
+
+Serverstable.propTypes = {
+    deleteCallback: PropTypes.func.isRequired,
+    items: PropTypes.object
+}
+
+ServerItem.propTypes = {
+    deleteCallback: PropTypes.func.isRequired,
+    item: PropTypes.object
+}

@@ -1,9 +1,10 @@
 import React from 'react';
 import { FormGroup, Label, Input, FormFeedback, FormText } from "reactstrap";
+import PropTypes from 'prop-types';
 
 export const FormInputField = (props) => {
-    if (props.type === 'checkbox') return (<FormCheckBox {...props}/>)
-    else return (<FormInput {...props}/>)
+    if (props.type === 'checkbox') return (<FormCheckBox {...props} />)
+    else return (<FormInput {...props} />)
 };
 
 const FormCheckBox = ({
@@ -14,7 +15,7 @@ const FormCheckBox = ({
     type,
     meta: { touched, error, warning }
 }) => (
-        <FormGroup check>            
+        <FormGroup check>
             <Input {...input} placeholder={label} type={type} readOnly={readOnly}
                 invalid={!!error}
                 valid={!error} />
@@ -44,3 +45,21 @@ const FormInput = ({
                 ((error && <FormFeedback>{error}</FormFeedback>) ||
                     (warning && <FormText>{warning}</FormText>))}
         </FormGroup>);
+
+const propTypes = {
+    input: PropTypes.object,
+    label: PropTypes.string,
+    name: PropTypes.string,
+    readOnly: PropTypes.bool,
+    type: PropTypes.string,
+    meta: PropTypes.shape(
+        {
+            touched: PropTypes.bool,
+            error: PropTypes.string,
+            warning: PropTypes.string
+        }
+    )
+}
+
+FormCheckBox.propTypes = propTypes;
+FormInput.propTypes = propTypes;

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { userActions } from "../../store/actions";
 import { EditUserForm } from './controls';
 import {Error} from '../../controls';
+import PropTypes from 'prop-types';
 
 class Create extends Component {    
     render() {
@@ -16,6 +17,11 @@ class Create extends Component {
             </React.Fragment>
         );
     }
+}
+
+Create.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    error: PropTypes.object
 }
 
 const mapStateToProps = ({users}) => {

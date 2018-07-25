@@ -6,6 +6,7 @@ import { Form, Button } from "reactstrap";
 import { requiredValidator } from "../../formValidators";
 import { FormInputField } from '../../../controls';
 
+import PropTypes from 'prop-types';
 
 const EditUserForm = props => {
     const { handleSubmit, edit } = props;
@@ -24,10 +25,15 @@ const EditUserForm = props => {
             />
 
             <Button color="primary" type="submit">Save</Button>
-            {' '}            
+            {' '}
             <Button tag={Link} to="/users" color="secondary">Cancel</Button>
         </Form>
     );
+}
+
+EditUserForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    edit: PropTypes.bool
 }
 
 const EditUserFormRedux = reduxForm({
@@ -35,4 +41,4 @@ const EditUserFormRedux = reduxForm({
     form: 'EditUserForm'
 })(EditUserForm)
 
-export {EditUserFormRedux as EditUserForm};
+export { EditUserFormRedux as EditUserForm };

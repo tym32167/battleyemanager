@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Test, Users, Login, Home, Servers } from './pages';
 import { history } from './services/history';
 import { PageTemplate } from './shared_components';
+import PropTypes from 'prop-types';
 
 
 const App = () => <div className="App">
@@ -35,3 +36,7 @@ const DefaultLayout = ({ component: Component, ...rest }) => {
     )} />
   )
 };
+
+DefaultLayout.propTypes = {
+  component : PropTypes.instanceOf(React.Component)
+}

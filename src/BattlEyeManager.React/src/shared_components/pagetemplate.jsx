@@ -1,6 +1,8 @@
 import React from 'react';
 import { MainMenu } from "./mainmenu";
 import { Container, Row, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
+
 
 export const PageTemplate = ({ children }) =>
     <div>
@@ -13,3 +15,7 @@ export const PageTemplate = ({ children }) =>
             </Row>
         </Container>
     </div>
+
+PageTemplate.propTypes = {
+    children: PropTypes.instanceOf(React.Component)
+}

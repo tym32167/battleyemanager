@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { serverActions } from "../../store/actions";
 import { EditForm } from './controls';
 import {Error} from '../../controls';
+import PropTypes from 'prop-types';
 
 class Edit extends Component {
 
@@ -21,6 +22,14 @@ class Edit extends Component {
             </React.Fragment>
         );
     }
+}
+
+Edit.propTypes = {
+    onLoad : PropTypes.func.isRequired,
+    id:PropTypes.string.isRequired,
+    item: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+    error: PropTypes.object
 }
 
 const mapStateToProps = ({ servers }, ownProps) => {

@@ -4,37 +4,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "npm",
-            "script": "start",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test",
-            "problemMatcher": [],
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "npm",
-            "script": "build",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "npm",
-            "script": "note_watch_dotnet_server",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "note_run_mysql",
-            "problemMatcher": []
+            "label": "Run eslint",
+            "type": "shell",
+            "command": ".\\node_modules\\.bin\\eslint --ext .jsx,.js src/",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         }
     ]
 }
