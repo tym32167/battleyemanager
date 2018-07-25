@@ -19,7 +19,7 @@ class List extends Component {
 
         return (
             <React.Fragment>
-                <h2>Servers ({len})</h2>
+                <h2>Online Servers ({len})</h2>
                 <Error error={error} />                
                 {items && <Serverstable items={items} />}
             </React.Fragment>

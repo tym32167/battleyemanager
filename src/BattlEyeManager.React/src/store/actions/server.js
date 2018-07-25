@@ -1,5 +1,6 @@
 import { serverConstants } from '../constants';
 import {serverService, history} from '../../services';
+import { onlineServerActions } from './onlineServer';
 
 export const serverActions = {
     getAll,
@@ -34,6 +35,7 @@ function add(item) {
             .then(
                 item => {
                     dispatch(success(item));
+                    dispatch(onlineServerActions.getAll());
                     history.push('/servers');
                 },
                 error => {
@@ -57,6 +59,7 @@ function del(item) {
                 item => {
                     dispatch(success(item));
                     dispatch(getAll());
+                    dispatch(onlineServerActions.getAll());
                 },
                 error => {
                     dispatch(failure(error));
@@ -75,6 +78,7 @@ function update(item) {
             .then(
                 item => {
                     dispatch(success(item));
+                    dispatch(onlineServerActions.getAll());
                     history.push('/servers');
                 },
                 error => {
