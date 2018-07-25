@@ -144,10 +144,10 @@ namespace BattlEyeManager.Spa
             });
 
             SetupMappings();
-            //dataRegistrator.Init().Wait();
-            //beLogic.Init();
+            dataRegistrator.Init().Wait();
+            beLogic.Init();
             CheckAdminUser(userManager, roleManager).Wait();
-            //RunActiveServers(beServerAggregator, store, service).Wait();
+            RunActiveServers(beServerAggregator, store, service).Wait();
         }
 
         private async Task CheckAdminUser(
@@ -196,6 +196,8 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<Server, ServerModel>();
                 config.CreateMap<ServerModel, Server>();
                 config.CreateMap<Server, ServerInfo>();
+                config.CreateMap<ServerModel, ServerInfo>();
+                config.CreateMap<Server, OnlineServerModel>();
             });
         }
     }

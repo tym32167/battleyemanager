@@ -3,6 +3,7 @@ using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,15 +20,17 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var users = _dbContext.Servers
+            var dbItems = await _dbContext.Servers
                 .Where(x => x.Active)
                 .OrderBy(x => x.Name)
-                .ToArray()
-                .Select(Mapper.Map<ServerModel>)
+                .ToArrayAsync();
+
+            var items = dbItems
+                .Select(Mapper.Map<OnlineServerModel>)
                 .ToArray();
-            return Ok(users);
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
@@ -41,7 +44,8 @@ namespace BattlEyeManager.Spa.Api
                 return NotFound();
             }
 
-            var ret = Mapper.Map<ServerModel>(item);
+            var ret = Mapper.Map<OnlineServerModel>(item);
+
             return Ok(ret);
         }
     }

@@ -6,6 +6,7 @@ using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,14 +26,16 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var users = _dbContext.Servers
+            var dbItems = await _dbContext.Servers
                 .OrderBy(x => x.Name)
-                .ToArray()
+                .ToArrayAsync();
+
+            var items = dbItems
                 .Select(Mapper.Map<ServerModel>)
                 .ToArray();
-            return Ok(users);
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
