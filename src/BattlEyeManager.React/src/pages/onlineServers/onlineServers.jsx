@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import { List } from './list';
+import {NotFound} from '../404';
 
 
 export class OnlineServers extends Component {
@@ -11,6 +12,7 @@ export class OnlineServers extends Component {
                     <Switch>
                         <Route exact path="/" component={List} />
                         <Route exact path="/online" component={List} />
+                        <Route component={NotFound}/>
                     </Switch>
                 </div>
             </React.Fragment>

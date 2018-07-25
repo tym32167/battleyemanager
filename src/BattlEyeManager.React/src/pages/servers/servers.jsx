@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import {List} from './list';
 import {Create} from './create';
 import { Edit } from './edit';
+import {NotFound} from '../404';
 
 export class Servers extends Component {
     render() {
@@ -13,6 +14,7 @@ export class Servers extends Component {
                     <Route exact path="/servers" component={List} />
                     <Route exact path="/servers/create" component={Create} />
                     <Route exact path="/servers/:id" component={Edit} />
+                    <Route component={NotFound}/>
                     </Switch>
                 </div>
             </React.Fragment>

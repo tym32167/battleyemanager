@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { List } from './list';
 import { Edit } from './edit';
 import { Create } from './create';
+import {NotFound} from '../404';
 
 
 export class Users extends Component {
@@ -14,6 +15,7 @@ export class Users extends Component {
                         <Route exact path="/users" component={List} />
                         <Route exact path="/users/create" component={Create} />
                         <Route exact path="/users/:id" component={Edit} />
+                        <Route component={NotFound}/>
                     </Switch>
                 </div>
             </React.Fragment>
