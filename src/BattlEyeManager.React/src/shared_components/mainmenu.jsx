@@ -96,9 +96,9 @@ MainMenu.propTypes = {
 
 const OnlineServer = ({ server }) =>
   (
-    <DropdownItem>
+    <DropdownItem  tag={Link} to={'/online/' + server.id + '/players'}>
       {server.name}
-  </DropdownItem>
+    </DropdownItem>
   );
 
 OnlineServer.propTypes = {
