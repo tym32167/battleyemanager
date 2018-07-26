@@ -32,7 +32,7 @@ const mapStateToProps = ({ servers }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmit: (item) => dispatch(serverActions.add(item))
+        onSubmit: (item) => dispatch(serverActions.addItem(item))
     }
 }
 

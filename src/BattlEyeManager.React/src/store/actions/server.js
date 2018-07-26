@@ -1,112 +1,41 @@
 import { serverConstants } from '../constants';
 import {serverService, history} from '../../services';
 import { onlineServerActions } from './onlineServer';
+import { commonActions } from './commonActions';
 
 export const serverActions = {
-    getAll,
-    add,
-    update, 
-    del, 
-    get
+    getItems,
+    getItem,
+    updateItem,
+    addItem,
+    deleteItem
 };
 
-function getAll() {
-    return dispatch => {
-        dispatch(request([]));
-        serverService.getAll()
-            .then(
-                items => {
-                    dispatch(success(items));
-                },
-                error => {
-                    dispatch(failure(error));
-                }
-            );
-    };
-    function request(items) { return { type: serverConstants.GET_SERVERS_REQUEST, items } }
-    function success(items) { return { type: serverConstants.GET_SERVERS_SUCCESS, items } }
-    function failure(error) { return { type: serverConstants.GET_SERVERS_FAILURE, error } }
+function getItems() {
+    return commonActions.getItems(serverConstants.SUBJECT, serverService); 
 }
 
-function add(item) {
-    return dispatch => {
-        dispatch(request(item));
-        serverService.add(item)
-            .then(
-                item => {
-                    dispatch(success(item));
-                    dispatch(onlineServerActions.getAll());
-                    history.push('/servers');
-                },
-                error => {
-                    dispatch(failure(error));
-                }
-            );
-    };
-    function request(item)  { return { type: serverConstants.CREATE_SERVER_REQUEST, item } }
-    function success(item)  { return { type: serverConstants.CREATE_SERVER_SUCCESS, item } }
-    function failure(error) { return { type: serverConstants.CREATE_SERVER_FAILURE, error } }
+function addItem(item) {
+    return commonActions.addItem(item, serverConstants.SUBJECT, serverService, (item, dispatch)=>{
+        dispatch(onlineServerActions.getItems());
+        history.push('/servers');
+    });    
 }
 
-
-
-
-function del(item) {
-    return dispatch => {
-        dispatch(request(item));
-        serverService.del(item.id)
-            .then(
-                item => {
-                    dispatch(success(item));
-                    dispatch(getAll());
-                    dispatch(onlineServerActions.getAll());
-                },
-                error => {
-                    dispatch(failure(error));
-                }
-            );
-    };
-    function request(item)  { return { type: serverConstants.DELETE_SERVER_REQUEST, item } }
-    function success(item)  { return { type: serverConstants.DELETE_SERVER_SUCCESS, item } }
-    function failure(error) { return { type: serverConstants.DELETE_SERVER_FAILURE, error } }
+function deleteItem(item) {
+    return commonActions.deleteItem(item, serverConstants.SUBJECT, serverService, (item, dispatch)=>{
+        dispatch(getItems());
+        dispatch(onlineServerActions.getItems());
+    });
 }
 
-function update(item) {
-    return dispatch => {
-        dispatch(request(item));
-        serverService.update(item)
-            .then(
-                item => {
-                    dispatch(success(item));
-                    dispatch(onlineServerActions.getAll());
-                    history.push('/servers');
-                },
-                error => {
-                    dispatch(failure(error));
-                }
-            );
-    };
-    function request(item) { return { type: serverConstants.UPDATE_SERVER_REQUEST, item } }
-    function success(item) { return { type: serverConstants.UPDATE_SERVER_SUCCESS, item } }
-    function failure(error) { return { type: serverConstants.UPDATE_SERVER_FAILURE, error } }
+function updateItem(item) {
+    return commonActions.updateItem(item, serverConstants.SUBJECT, serverService, (item, dispatch)=>{
+        dispatch(onlineServerActions.getItems());
+        history.push('/servers');
+    }); 
 }
 
-
-
-function get(id) {
-    return dispatch => {
-        dispatch(request({id}));
-        serverService.get(id)
-            .then(
-                item => {
-                    dispatch(success(item));
-                },
-                error => {
-                    dispatch(failure(error));
-                }
-            );
-    };
-    function request(item) { return { type: serverConstants.GET_SERVER_BY_ID_REQUEST, item } }
-    function success(item) { return { type: serverConstants.GET_SERVER_BY_ID_SUCCESS, item } }
-    function failure(error) { return { type: serverConstants.GET_SERVER_BY_ID_FAILURE, error } }
+function getItem(id) {
+    return commonActions.getItem(id, serverConstants.SUBJECT, serverService); 
 }

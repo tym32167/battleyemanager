@@ -79,7 +79,7 @@ const mapStateToProps = ({ onlinePlayers }, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: (serverId) => dispatch(onlinePlayerActions.getAll(serverId))
+        onLoad: (serverId) => dispatch(onlinePlayerActions.getItems(serverId))
     }
 }
 

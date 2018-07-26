@@ -32,7 +32,7 @@ const mapStateToProps = ({users}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {        
-        onSubmit: (user) => dispatch(userActions.addUser(user))
+        onSubmit: (user) => dispatch(userActions.addItem(user))
     }
 }
 

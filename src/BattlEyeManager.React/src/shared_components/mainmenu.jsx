@@ -114,7 +114,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(authActions.logout()),
-    loadServers: () => dispatch(onlineServerActions.getAll())
+    loadServers: () => dispatch(onlineServerActions.getItems())
   }
 }
 

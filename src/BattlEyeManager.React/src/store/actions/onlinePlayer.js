@@ -1,11 +1,11 @@
-import { onlinePlayerConstants } from '../constants';
+import { onlinePlayerConstants, commonConstants } from '../constants';
 import {onlinePlayersService} from '../../services';
 
 export const onlinePlayerActions = {
-    getAll
+    getItems
 };
 
-function getAll(serverId) {
+function getItems(serverId) {
     return dispatch => {
         dispatch(request(serverId, []));
         onlinePlayersService.getAll(serverId)
@@ -18,8 +18,14 @@ function getAll(serverId) {
                 }
             );
     };
-    function request(serverId, items) { return { serverId:serverId, type: onlinePlayerConstants.GET_ONLINE_PLAYERS_REQUEST, items } }
-    function success(serverId, items) { return { serverId:serverId, type: onlinePlayerConstants.GET_ONLINE_PLAYERS_SUCCESS, items } }
-    function failure(serverId, error) { return { serverId:serverId, type: onlinePlayerConstants.GET_ONLINE_PLAYERS_FAILURE, error } }
+    function request(serverId, items) { return { serverId:serverId, 
+        type: commonConstants.combine(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST), 
+        items } }
+    function success(serverId, items) { return { serverId:serverId, 
+        type: commonConstants.combine(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_SUCCESS), 
+        items } }
+    function failure(serverId, error) { return { serverId:serverId, 
+        type: commonConstants.combine(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_FAILURE), 
+        error } }
 }
 

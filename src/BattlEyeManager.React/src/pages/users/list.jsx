@@ -75,15 +75,15 @@ const UserItem = ({ user, deleteUser }) => (
 
 const mapStateToProps = ({ users }) => {
     return {
-        users: users.users || [],
+        users: users.items || [],
         error: users.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: () => dispatch(userActions.getUsers()),
-        deleteUser: (user) => dispatch(userActions.deleteUser(user))
+        onLoad: () => dispatch(userActions.getItems()),
+        deleteUser: (user) => dispatch(userActions.deleteItem(user))
     }
 }
 
@@ -98,13 +98,13 @@ export { ConnectedList as List };
 List.propTypes = {
     deleteUser: PropTypes.func.isRequired,
     onLoad: PropTypes.func.isRequired,
-    users: PropTypes.object,
-    error: PropTypes.object
+    users: PropTypes.array,
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }
 
 Userstable.propTypes = {
     deleteUser: PropTypes.func.isRequired,    
-    users: PropTypes.object
+    users: PropTypes.array
 }
 
 UserItem.propTypes = {

@@ -84,8 +84,8 @@ const mapStateToProps = ({ servers }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: () => dispatch(serverActions.getAll()),
-        deleteServer: (item) => dispatch(serverActions.del(item))
+        onLoad: () => dispatch(serverActions.getItems()),
+        deleteServer: (item) => dispatch(serverActions.deleteItem(item))
     }
 }
 

@@ -34,7 +34,7 @@ Edit.propTypes = {
 
 const mapStateToProps = ({ users }, ownProps) => {
     return {
-        user: users.user,
+        user: users.item,
         id: ownProps.match.params.id,
         error: users.error
     }
@@ -42,8 +42,8 @@ const mapStateToProps = ({ users }, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: (id) => dispatch(userActions.getUser(id)),
-        onSubmit: (user) => dispatch(userActions.updateUser(user))
+        onLoad: (id) => dispatch(userActions.getItem(id)),
+        onSubmit: (user) => dispatch(userActions.updateItem(user))
     }
 }
 

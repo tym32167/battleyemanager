@@ -1,12 +1,16 @@
 import {
-    onlinePlayerConstants,
+    itemReducer
+} from "./itemReducer";
+import {
     commonConstants
 } from "../constants";
 
-export function onlinePlayersReducer(
-    state = {}, action) {
+export function itemsReducer(
+    state = {
+        items: [],
+    }, action, subject) {
 
-    const subject = onlinePlayerConstants.SUBJECT;
+    state = itemReducer(state, action, subject);
 
     switch (action.type) {
         case commonConstants.combine(subject,
@@ -14,25 +18,19 @@ export function onlinePlayersReducer(
             commonConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                [action.serverId]: undefined
+                error: ''
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
-                ...state,
-                [action.serverId]: {
-                    items: action.items
-                }
+                items: [...action.items]
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_FAILURE):
             return {
-                ...state,
-                [action.serverId]: {
-                    items: action.error
-                }
+                error: action.error
             };
         default:
             return state

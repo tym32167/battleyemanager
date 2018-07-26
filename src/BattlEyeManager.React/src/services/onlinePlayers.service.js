@@ -1,18 +1,7 @@
-import axios from 'axios';
+import { commonService } from './commonService';
 
 const baseUrl = '/api/onlineserver/'
 
 export const onlinePlayersService = {
-    getAll
+    getItems : (serverId) => commonService.getItems(baseUrl + serverId + '/players/'),
 };
-
-function getAll(serverId) {
-    return axios.get(baseUrl + serverId + '/players/')
-        .then(response => response.data)
-        .catch(error => Promise.reject(getError(error)));
-}
-
-function getError(error){
-    if (error.response && error.response.data) return error.response.data;
-    return error.message;
-}

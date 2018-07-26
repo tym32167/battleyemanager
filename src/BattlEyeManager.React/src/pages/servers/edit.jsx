@@ -42,8 +42,8 @@ const mapStateToProps = ({ servers }, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: (id) => dispatch(serverActions.get(id)),
-        onSubmit: (item) => dispatch(serverActions.update(item))
+        onLoad: (id) => dispatch(serverActions.getItem(id)),
+        onSubmit: (item) => dispatch(serverActions.updateItem(item))
     }
 }
 

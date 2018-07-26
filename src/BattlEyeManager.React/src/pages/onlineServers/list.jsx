@@ -66,7 +66,7 @@ const mapStateToProps = ({ onlineServers }) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: () => dispatch(onlineServerActions.getAll())
+        onLoad: () => dispatch(onlineServerActions.getItems())
     }
 }
 
