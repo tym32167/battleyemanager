@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { onlinePlayerActions } from "../../../store/actions";
+import { onlinePlayerActions, onlineServerActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error } from '../../../controls';
 import PropTypes from 'prop-types';
@@ -15,12 +15,13 @@ class List extends Component {
 
     render() {
 
-        const { items, error } = this.props;
+        const { items, error, server } = this.props;
         const len = items.length;
 
         return (
             <React.Fragment>
-                <h2>Online Players ({len})</h2>
+                <h2>{server && server.name}</h2>
+                <h3>Online Players ({len})</h3>
                 <Error error={error} />
                 {items && <ItemsTable items={items} />}
             </React.Fragment>
@@ -58,7 +59,7 @@ const Item = ({ item }) => (
     </tr>)
 
 
-const mapStateToProps = ({ onlinePlayers }, ownProps) => {
+const mapStateToProps = ({ onlinePlayers, onlineServers }, ownProps) => {
     const server = onlinePlayers[ownProps.match.params.serverId];
     let items = [];
     if (server &&
@@ -73,13 +74,17 @@ const mapStateToProps = ({ onlinePlayers }, ownProps) => {
     return {
         serverId: ownProps.match.params.serverId,
         items: items,
+        server: onlineServers.item,
         error: error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoad: (serverId) => dispatch(onlinePlayerActions.getItems(serverId))
+        onLoad: (serverId) => {
+            dispatch(onlinePlayerActions.getItems(serverId));
+            dispatch(onlineServerActions.getItem(serverId));
+        }
     }
 }
 
