@@ -8,7 +8,7 @@ export const onlinePlayerActions = {
 function getItems(serverId) {
     return dispatch => {
         dispatch(request(serverId, []));
-        onlinePlayersService.getAll(serverId)
+        onlinePlayersService.getItems(serverId)
             .then(
                 items => {
                     dispatch(success(serverId, items));
