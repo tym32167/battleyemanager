@@ -18,6 +18,7 @@ export function itemReducer(state = {}, action, subject) {
             commonConstants.CREATE_ITEM,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
+                ... state,
                 createItem: { ...action.item  }
             };
         case commonConstants.combine(subject,
@@ -32,12 +33,14 @@ export function itemReducer(state = {}, action, subject) {
             commonConstants.GET_ITEM,
             commonConstants.ASYNC_REQUEST):
             return {
+                ... state,
                 request: { ...action.item  }
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEM,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
+                ... state,
                 item: { ...action.item    }
             };
         case commonConstants.combine(subject,
@@ -58,6 +61,7 @@ export function itemReducer(state = {}, action, subject) {
             commonConstants.UPDATE_ITEM,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
+                ... state,
                 updateUser: { ...action.item   }
             };
         case commonConstants.combine(subject,

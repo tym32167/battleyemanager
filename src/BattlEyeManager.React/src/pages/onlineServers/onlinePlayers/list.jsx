@@ -15,13 +15,13 @@ class List extends Component {
 
     render() {
 
-        const { items, error, server } = this.props;
+        const { items, error, server, serverId } = this.props;
         const len = items.length;
 
         return (
             <React.Fragment>
                 <h2>{server && server.name}</h2>
-                <h3>Online Players ({len})</h3>
+                <h3>Players ({len}) {' '} <Link to={'/online/' + serverId + '/chat'}>Chat</Link></h3>                
                 <Error error={error} />
                 {items && <ItemsTable items={items} />}
             </React.Fragment>

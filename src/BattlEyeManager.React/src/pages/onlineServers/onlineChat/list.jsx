@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { onlineChatActions, onlineServerActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error } from '../../../controls';
@@ -14,13 +15,13 @@ class List extends Component {
 
     render() {
 
-        const { items, error, server } = this.props;
+        const { items, error, server, serverId } = this.props;
         const len = items.length;
 
         return (
             <React.Fragment>
                 <h2>{server && server.name}</h2>
-                <h3>Online Players ({len})</h3>
+                <h3><Link to={'/online/' + serverId + '/players'}>Players</Link> {' '} Chat ({len})</h3>
                 <Error error={error} />
                 {items && <ItemsTable items={items} />}
             </React.Fragment>
