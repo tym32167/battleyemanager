@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Table, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { onlinePlayerActions, onlineServerActions } from "../../../store/actions";
+import { Table } from 'reactstrap';
+import { onlineChatActions, onlineServerActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error } from '../../../controls';
 import PropTypes from 'prop-types';
@@ -32,13 +31,8 @@ class List extends Component {
 const ItemsTable = ({ items }) =>
     <Table size="sm">
         <thead>
-            <tr>
-                <th>Num</th>
-                <th>Name</th>
-                <th>IP</th>
-                <th>Port</th>
-                <th>Ping</th>
-                <th></th>
+            <tr>                
+                <th>Message</th>
             </tr>
         </thead>
         <tbody>
@@ -47,20 +41,13 @@ const ItemsTable = ({ items }) =>
     </Table>;
 
 const Item = ({ item }) => (
-    <tr>
-        <td>{item.num}</td>
-        <td>{item.name}</td>
-        <td>{item.ip}</td>
-        <td>{item.port}</td>
-        <td>{item.ping}</td>        
-        <td>
-            <Button color="success" to={'/online/' + item.id + '/players'} tag={Link} size="sm">Players</Button>
-        </td>
+    <tr>        
+        <td>{item.message}</td>
     </tr>)
 
 
-const mapStateToProps = ({ onlinePlayers, onlineServers }, ownProps) => {
-    const server = onlinePlayers[ownProps.match.params.serverId];
+const mapStateToProps = ({ onlineChat, onlineServers }, ownProps) => {
+    const server = onlineChat[ownProps.match.params.serverId];
     let items = [];
     if (server &&
         server.items)
@@ -82,7 +69,7 @@ const mapStateToProps = ({ onlinePlayers, onlineServers }, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onLoad: (serverId) => {
-            dispatch(onlinePlayerActions.getItems(serverId));
+            dispatch(onlineChatActions.getItems(serverId));
             dispatch(onlineServerActions.getItem(serverId));
         }
     }

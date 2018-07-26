@@ -3,7 +3,7 @@ import {authService} from './auth.service';
 import axios from 'axios';
 
 axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
+    // Do something before request is sent    
     const user = JSON.parse(localStorage.getItem('user'));
     if (user && user.token) {
         config.headers.common['Authorization'] = 'Bearer ' + user.token;        

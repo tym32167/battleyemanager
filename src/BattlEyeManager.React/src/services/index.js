@@ -5,3 +5,4 @@ export * from './user.service';
 export * from './server.service';
 export * from './onlineServer.service';
 export * from './onlinePlayers.service';
+export * from './onlineChat.service';

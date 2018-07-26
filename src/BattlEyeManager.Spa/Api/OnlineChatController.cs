@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace BattlEyeManager.Spa.Api
 {
-    [Route("api/[controller]")]
     public class OnlineChatController : BaseController
     {
         private readonly ServerStateService _serverStateService;
@@ -19,7 +18,7 @@ namespace BattlEyeManager.Spa.Api
         public IActionResult Get(int serverId)
         {
             var chatMessages = _serverStateService.GetChat(serverId)
-                .OrderByDescending(x => x.Date)
+                .OrderBy(x => x.Date)
                 .ToArray();
             return Ok(chatMessages);
         }
