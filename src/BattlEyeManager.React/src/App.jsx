@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Redirect, Switch } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Test, Users, Login, Servers, OnlineServers, NotFound } from './pages';
+import { Users, Login, Servers, OnlineServers, NotFound } from './pages';
 import { history } from './services/history';
 import { PageTemplate } from './shared_components';
 import PropTypes from 'prop-types';

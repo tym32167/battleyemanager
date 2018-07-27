@@ -1,0 +1,5 @@
+#chatBox{
+    line-height: 1em; 
+    max-height: 410px; 
+    overflow: auto;
+}

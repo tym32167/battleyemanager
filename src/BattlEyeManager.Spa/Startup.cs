@@ -94,7 +94,11 @@ namespace BattlEyeManager.Spa
 
             //--------------------------------------------------------------------------
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
 
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
