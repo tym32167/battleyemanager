@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "BattlEyeManager.React"
+		},
+		{
+			"path": "BattlEyeManager.Spa"
+		}
+	],
+	"settings": {
+		"emmet.includeLanguages": {
+			"javascript": "javascriptreact"
+		}
+	}
+}

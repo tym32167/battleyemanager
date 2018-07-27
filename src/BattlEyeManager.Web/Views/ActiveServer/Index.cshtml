@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BattlEyeManager.BE.Services.ServerInfo>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Active servers</h2>
+
+
+<table class="table table-sm table-striped table-bordered table-hover" style="max-width: 650px">
+    <thead>
+        <tr>
+            <th>
+                Server
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Host):@Html.DisplayFor(modelItem => item.Port)
+                </td>
+                <td>
+                    @Html.ActionLink("Players", "Index", "OnlinePlayer", new { serverId = item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink("Chat", "Index", "OnlineChat", new { serverId = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

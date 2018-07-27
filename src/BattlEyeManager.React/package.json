@@ -1,0 +1,43 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.1",
+    "core-js": "^2.5.7",
+    "history": "^4.7.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "reactstrap": "^6.0.1",
+    "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "note_run_mysql": "D:\\Tools\\mariadb-10.2.13-winx64\\bin\\mysqld.exe",
+    "note_watch_dotnet_server": "dotnet watch run -p \"D:\\Code\\bitbucket\\battleyemanager\\src\\BattlEyeManager.Spa\\BattlEyeManager.Spa.csproj\""
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:58175"
+    }
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.8.2"
+  },
+  "jest": {    
+    "setupTestFrameworkScriptFile": "<rootDir>/src/setupTests.js"
+   }
+}

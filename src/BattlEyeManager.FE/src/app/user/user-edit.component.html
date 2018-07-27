@@ -1,0 +1,50 @@
+<app-navigation></app-navigation>
+
+<form class="m-1" #form="ngForm" novalidate (ngSubmit)="submit(form)">
+
+  <div class="form-group row">
+    <label for="lastName" class="col-sm-1 col-form-label">Last name</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" #lastName="ngModel" name="lastName" [(ngModel)]="user.lastName" required [disabled]="editMode">
+      <span *ngIf="lastName.invalid && submitted" class="text-danger">Please enter user last name</span>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="firstName" class="col-sm-1 col-form-label">First name</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" #firstName="ngModel" name="firstName" [(ngModel)]="user.firstName" required [disabled]="editMode">
+      <span *ngIf="firstName.invalid && submitted" class="text-danger">Please enter user first name</span>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="userName" class="col-sm-1 col-form-label">Username</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" #userName="ngModel" name="userName" [(ngModel)]="user.userName" required [disabled]="editMode">
+      <span *ngIf="userName.invalid && submitted" class="text-danger">Please enter username</span>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="email" class="col-sm-1 col-form-label">Email</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" #email="ngModel" name="email" [(ngModel)]="user.email" required>
+      <span *ngIf="email.invalid && submitted" class="text-danger">Please enter user email</span>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="password" class="col-sm-1 col-form-label">Password</label>
+    <div class="col-sm-8">
+      <input autocomplete="new-password" type="password" class="form-control" #password="ngModel" name="password" [(ngModel)]="user.password">
+      <span *ngIf="password.invalid && submitted" class="text-danger">Please enter user password</span>
+    </div>
+  </div>
+
+  <div class="text-xs-center">
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-secondary" [routerLink]="['/users']">Cancel</a>
+  </div>
+</form>
