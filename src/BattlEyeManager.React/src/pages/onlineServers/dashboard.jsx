@@ -2,29 +2,36 @@ import React from 'react';
 
 import { List as PlayersList } from './onlinePlayers/list';
 import { List as ChatList } from './onlineChat/list';
+import { ServerHeader} from './onlineServerHeader';
 
 import './dashboard.css';
 
 export const DashBoard = (props) => (
-    <React.Fragment>       
+    <React.Fragment>
 
-        <div className="card-columns online-server-dashboard p-3">
+        <div className="container-fluid">
 
-            <div className="card w-100" >
-                <div className="card-body">
-                    <h3>Server name</h3>
-                </div>
-            </div>
+            <div className="row">
 
-            <div className="card">
-                <div className="card-body">
-                    <PlayersList {...props} />
+                <div className="col-12 " >
+                    <div className="p-3 m-3 bg-white rounded box-shadow">
+                        <ServerHeader {...props} />
+                    </div>
                 </div>
-            </div>
-            <div className="card">
-                <div className="card-body">
-                    <ChatList {...props} />
+
+                
+                <div className="col-sm-12 col-lg-5">
+                    <div className="p-3 m-3 bg-white rounded box-shadow">
+                        <ChatList {...props} />
+                    </div>
                 </div>
+
+                <div className="col-sm-12 col-lg-7">
+                    <div className="p-3 m-3 bg-white rounded box-shadow">
+                        <PlayersList {...props} />
+                    </div>
+                </div>
+
             </div>
         </div>
     </React.Fragment>

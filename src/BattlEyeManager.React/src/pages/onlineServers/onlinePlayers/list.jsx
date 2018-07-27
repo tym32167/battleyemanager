@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { onlinePlayerActions, onlineServerActions } from "../../../store/actions";
+import { onlinePlayerActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error } from '../../../controls';
 import PropTypes from 'prop-types';
