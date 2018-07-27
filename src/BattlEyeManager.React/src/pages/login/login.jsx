@@ -68,5 +68,5 @@ function mapDispatchToProps(dispatch){
     }
 }
 
-const connectedLogin = connect(()=>{}, mapDispatchToProps)(Login);
+const connectedLogin = connect(undefined, mapDispatchToProps)(Login);
 export {connectedLogin as Login};

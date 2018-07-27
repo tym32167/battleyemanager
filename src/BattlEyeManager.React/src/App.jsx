@@ -17,8 +17,7 @@ const App = () => <div className="App">
         <DefaultLayout exact path="/" component={OnlineServers} />
         <DefaultLayout path="/users" component={Users} />
         <DefaultLayout path="/servers" component={Servers} />
-        <DefaultLayout path="/online" component={OnlineServers} />
-        <DefaultLayout exact path="/test" component={Test} />
+        <DefaultLayout path="/online" component={OnlineServers} />        
         <Route exact path="/login" component={Login} />
 
         <Route component={NotFound}/>

@@ -30,16 +30,12 @@ class List extends Component {
 }
 
 const ItemsTable = ({ items }) =>
-    
-        
-            items.map((item, i) => <Item key={i} item={item} />)
-        
-    ;
+    items.map((item, i) => <Item key={i} item={item} />);
 
 const Item = ({ item }) => (
-    <span className="small">        
-        {item.message}  
-        <br/>     
+    <span className="small">
+        {item.message}
+        <br />
     </span>)
 
 
