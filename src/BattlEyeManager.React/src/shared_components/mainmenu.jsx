@@ -114,7 +114,8 @@ OnlineServer.propTypes = {
   server: PropTypes.object.isRequired
 }
 
-function mapStateToProps({ onlineServers: { items }, currentUser: { item :{isAdmin} } }) {
+function mapStateToProps({ onlineServers: { items }, currentUser: { item } }) {
+  const isAdmin = item && item.isAdmin;
   return {
     servers: items,
     isAdmin: isAdmin

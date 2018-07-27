@@ -26,7 +26,7 @@ namespace BattlEyeManager.Spa.Api
 
             if (usr == null)
             {
-                return NotFound();
+                return StatusCode(401);
             }
 
             var roles = await _userManager.GetRolesAsync(usr);
