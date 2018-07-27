@@ -21,15 +21,9 @@ namespace BattlEyeManager.DataLayer.Context
         {
             base.OnModelCreating(builder);
 
-
             builder.Entity<Player>()
                 .HasIndex(u => u.GUID)
                 .IsUnique();
-
-
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
         }
 
         public DbSet<Server> Servers { get; set; }
