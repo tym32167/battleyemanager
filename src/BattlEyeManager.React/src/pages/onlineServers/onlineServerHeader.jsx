@@ -11,7 +11,7 @@ ServerHeader.propTypes = {
 }
 
 const mapStateToProps = ({ onlineServers: { items } }, { match: { params: { serverId } } }) => {
-    const server = items && items.find(item => item.id == serverId);
+    const server = items && items.find(item => Number(item.id) === Number(serverId));
     return {
         title: server && server.name
     }

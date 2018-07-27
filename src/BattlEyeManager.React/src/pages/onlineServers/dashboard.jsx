@@ -8,17 +8,13 @@ import './dashboard.css';
 
 export const DashBoard = (props) => (
     <React.Fragment>
-
         <div className="container-fluid">
-
             <div className="row">
-
                 <div className="col-12 " >
                     <div className="p-3 m-3 bg-white rounded box-shadow">
                         <ServerHeader {...props} />
                     </div>
                 </div>
-
                 
                 <div className="col-sm-12 col-lg-5">
                     <div className="p-3 m-3 bg-white rounded box-shadow">
@@ -31,7 +27,6 @@ export const DashBoard = (props) => (
                         <PlayersList {...props} />
                     </div>
                 </div>
-
             </div>
         </div>
     </React.Fragment>
