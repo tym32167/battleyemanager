@@ -49,7 +49,7 @@ class MainMenu extends React.Component {
   }
   render() {
 
-    const {servers} = this.props;
+    const { servers } = this.props;
 
     return (
       <div>
@@ -57,22 +57,26 @@ class MainMenu extends React.Component {
           <NavbarBrand tag={Link} to="/" >BattlEye Manager</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="mr-auto" navbar>             
-              <NavItem>
-                <NavLink tag={Link} to="/users" >Users</NavLink>
-              </NavItem>
+            <Nav className="mr-auto" navbar>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Servers
                 </DropdownToggle>
+                <DropdownMenu right>                  
+                  {servers && servers.map((server) => <OnlineServer key={server.id} server={server} />)}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Admin
+                </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem tag={Link} to="/servers">
-                    Server list
+                  <DropdownItem tag={Link} to="/users">
+                    Users
                   </DropdownItem>
-                  <DropdownItem divider />
-                  
-                  {servers && servers.map((server) => <OnlineServer key={server.id} server={server} /> )}
-
+                  <DropdownItem tag={Link} to="/servers">
+                    Servers
+                  </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
@@ -91,12 +95,12 @@ class MainMenu extends React.Component {
 MainMenu.propTypes = {
   logout: PropTypes.func,
   loadServers: PropTypes.func,
-  servers : PropTypes.array
+  servers: PropTypes.array
 }
 
 const OnlineServer = ({ server }) =>
   (
-    <DropdownItem  tag={Link} to={'/online/' + server.id + '/players'}>
+    <DropdownItem tag={Link} to={'/online/' + server.id}>
       {server.name}
     </DropdownItem>
   );

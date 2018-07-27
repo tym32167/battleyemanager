@@ -52,7 +52,7 @@ const ServerItem = ({ item }) => (
             <input type="checkbox" disabled checked={item.active} />
         </td>  
         <td>
-            <Button color="success" to={'/online/' + item.id + '/players'} tag={Link} size="sm">Players</Button>
+            <Button color="success" to={'/online/' + item.id } tag={Link} size="sm">Dashboard</Button>
         </td>
     </tr>)
 

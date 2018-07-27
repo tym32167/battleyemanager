@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { onlineChatActions, onlineServerActions } from "../../../store/actions";
+import { onlineChatActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error, Chat } from '../../../controls';
 import PropTypes from 'prop-types';
@@ -13,13 +12,12 @@ class List extends Component {
     }
     render() {
 
-        const { items, error, server, serverId } = this.props;
+        const { items, error } = this.props;
         const len = items.length;
 
         return (
-            <React.Fragment>
-                <h3>{server && server.name}</h3>
-                <h4><Link to={'/online/' + serverId + '/players'}>Players</Link> {' '} Chat ({len})</h4>
+            <React.Fragment>                
+                <h4> Chat ({len})</h4>
                 <Error error={error} />
                 {items && <Chat items={items} />}
             </React.Fragment>
@@ -51,7 +49,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLoad: (serverId) => {
             dispatch(onlineChatActions.getItems(serverId));
-            dispatch(onlineServerActions.getItem(serverId));
         }
     }
 }
