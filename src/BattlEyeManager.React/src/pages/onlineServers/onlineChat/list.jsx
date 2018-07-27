@@ -25,7 +25,7 @@ class List extends Component {
     }
 }
 
-const mapStateToProps = ({ onlineChat, onlineServers }, ownProps) => {
+const mapStateToProps = ({ onlineChat }, ownProps) => {
     const server = onlineChat[ownProps.match.params.serverId];
     let items = [];
     if (server &&
@@ -40,7 +40,6 @@ const mapStateToProps = ({ onlineChat, onlineServers }, ownProps) => {
     return {
         serverId: ownProps.match.params.serverId,
         items: items,
-        server: onlineServers.item,
         error: error
     }
 }
@@ -63,7 +62,6 @@ export { ConnectedList as List };
 List.propTypes = {
     onLoad: PropTypes.func.isRequired,
     items: PropTypes.array,
-    server: PropTypes.object,
     serverId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }

@@ -24,6 +24,9 @@ const EditUserForm = props => {
             <Field name="password" component={FormInputField} type="password" className="form-control" label="Password"
             />
 
+            <Field name="isAdmin" component={FormInputField} type="checkbox" className="form-control" label="Is Admin"
+            />
+
             <Button color="primary" type="submit">Save</Button>
             {' '}
             <Button tag={Link} to="/users" color="secondary">Cancel</Button>

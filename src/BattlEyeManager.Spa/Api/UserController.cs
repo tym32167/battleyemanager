@@ -1,16 +1,17 @@
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     public class UserController : BaseController
     {
@@ -26,19 +27,32 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var users = _userManager.Users.Select(x => new ApplicationUserModel()
+            var users = new List<ApplicationUserModel>();
+
+            foreach (var user in _userManager.Users) users.Add(await ToModel(user));
+
+            var result = users
+                .OrderBy(x => x.UserName)
+                .ToArray();
+
+            return Ok(result);
+        }
+
+        private async Task<ApplicationUserModel> ToModel(ApplicationUser usr)
+        {
+            var ret = new ApplicationUserModel
             {
-                Id = x.Id,
-                UserName = x.UserName,
-                Email = x.Email,
-                LastName = x.LastName,
-                FirstName = x.FirstName,
-            })
-            .OrderBy(x=>x.UserName)
-            .ToArray();
-            return Ok(users);
+                Id = usr.Id,
+                UserName = usr.UserName,
+                Email = usr.Email,
+                LastName = usr.LastName,
+                FirstName = usr.FirstName,
+                IsAdmin = await _userManager.IsInRoleAsync(usr, RoleConstants.Administrator)
+            };
+
+            return ret;
         }
 
         [HttpGet("{id}")]
@@ -47,19 +61,9 @@ namespace BattlEyeManager.Spa.Api
             if (string.IsNullOrEmpty(id)) return NotFound();
 
             var usr = await _userManager.FindByIdAsync(id);
-            if (usr == null)
-            {
-                return NotFound();
-            }
+            if (usr == null) return NotFound();
 
-            var ret = new ApplicationUserModel()
-            {
-                Id = usr.Id,
-                UserName = usr.UserName,
-                Email = usr.Email,
-                LastName = usr.LastName,
-                FirstName = usr.FirstName,
-            };
+            var ret = await ToModel(usr);
 
             return Ok(ret);
         }
@@ -68,18 +72,12 @@ namespace BattlEyeManager.Spa.Api
         [HttpPost("{id}")]
         public async Task<IActionResult> Post(string id, [FromBody] ApplicationUserModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             if (string.IsNullOrEmpty(id)) return NotFound();
 
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             if (user.Email != model.Email)
             {
@@ -88,9 +86,7 @@ namespace BattlEyeManager.Spa.Api
                 if (!res.Succeeded)
                 {
                     foreach (var identityError in res.Errors)
-                    {
                         ModelState.AddModelError("errors", identityError.Description);
-                    }
                     return BadRequest(ModelState);
                 }
             }
@@ -105,12 +101,15 @@ namespace BattlEyeManager.Spa.Api
                 if (!res.Succeeded)
                 {
                     foreach (var identityError in res.Errors)
-                    {
                         ModelState.AddModelError("errors", identityError.Description);
-                    }
                     return BadRequest(ModelState);
                 }
             }
+
+            if (model.IsAdmin)
+                await _userManager.AddToRoleAsync(user, RoleConstants.Administrator);
+            else
+                await _userManager.RemoveFromRoleAsync(user, RoleConstants.Administrator);
 
             return NoContent();
         }
@@ -120,12 +119,9 @@ namespace BattlEyeManager.Spa.Api
         [ProducesResponseType(400)]
         public async Task<IActionResult> Put([FromBody] ApplicationUserModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = new ApplicationUser()
+            var user = new ApplicationUser
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
@@ -138,16 +134,13 @@ namespace BattlEyeManager.Spa.Api
             var result = await _userManager.CreateAsync(user, user.Password);
             if (result.Succeeded)
             {
+                if (model.IsAdmin) await _userManager.AddToRoleAsync(user, RoleConstants.Administrator);
+
                 return CreatedAtAction(nameof(Get), new { id = user.Id }, Get(user.Id));
             }
-            else
-            {
-                foreach (var identityError in result.Errors)
-                {
-                    ModelState.AddModelError("errors", identityError.Description);
-                }
-                return BadRequest(ModelState);
-            }
+
+            foreach (var identityError in result.Errors) ModelState.AddModelError("errors", identityError.Description);
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id}")]
@@ -156,15 +149,12 @@ namespace BattlEyeManager.Spa.Api
             if (string.IsNullOrEmpty(id)) return NotFound();
 
             var usr = await _userManager.FindByIdAsync(id);
-            if (usr == null)
-            {
-                return NotFound();
-            }
+            if (usr == null) return NotFound();
 
-            if (await _userManager.IsInRoleAsync(usr, "Administrator"))
-            {
-                return BadRequest(new {error = "It is not possible to delete Administrator"});
-            }
+            if (await _userManager.IsInRoleAsync(usr, RoleConstants.Administrator)
+                &&
+                (await _userManager.GetUsersInRoleAsync(RoleConstants.Administrator)).Count == 1)
+                return BadRequest(new { error = "It is not possible to delete last Administrator" });
 
             await _userManager.DeleteAsync(usr);
             return NoContent();

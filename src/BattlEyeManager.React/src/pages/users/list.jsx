@@ -3,8 +3,8 @@ import { Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { userActions } from "../../store/actions";
 import { connect } from 'react-redux';
-import { Button } from "reactstrap";
-import {Error} from '../../controls';
+import { Button, Input, FormGroup } from "reactstrap";
+import { Error } from '../../controls';
 import PropTypes from 'prop-types';
 
 class List extends Component {
@@ -50,6 +50,7 @@ const Userstable = ({ users, deleteUser }) =>
                 <th>First Name</th>
                 <th>User Name</th>
                 <th>Email</th>
+                <th>Is Admin</th>
                 <th colSpan="2" className="table-fit"></th>
             </tr>
         </thead>
@@ -64,6 +65,11 @@ const UserItem = ({ user, deleteUser }) => (
         <td>{user.firstName}</td>
         <td>{user.userName}</td>
         <td>{user.email}</td>
+        <td>
+            <FormGroup check>
+                <Input type="checkbox" checked={user.isAdmin} disabled />
+            </FormGroup>
+        </td>
         <td>
             <Button color="success" to={'/users/' + user.id} tag={Link} size="sm">Edit</Button>
         </td>
@@ -103,7 +109,7 @@ List.propTypes = {
 }
 
 Userstable.propTypes = {
-    deleteUser: PropTypes.func.isRequired,    
+    deleteUser: PropTypes.func.isRequired,
     users: PropTypes.array
 }
 
