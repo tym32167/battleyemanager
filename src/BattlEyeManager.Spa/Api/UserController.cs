@@ -4,13 +4,13 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Constants;
 
 namespace BattlEyeManager.Spa.Api
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     public class UserController : BaseController
     {
@@ -36,7 +36,7 @@ namespace BattlEyeManager.Spa.Api
                 LastName = x.LastName,
                 FirstName = x.FirstName,
             })
-            .OrderBy(x=>x.UserName)
+            .OrderBy(x => x.UserName)
             .ToArray();
             return Ok(users);
         }
@@ -163,7 +163,7 @@ namespace BattlEyeManager.Spa.Api
 
             if (await _userManager.IsInRoleAsync(usr, "Administrator"))
             {
-                return BadRequest(new {error = "It is not possible to delete Administrator"});
+                return BadRequest(new { error = "It is not possible to delete Administrator" });
             }
 
             await _userManager.DeleteAsync(usr);

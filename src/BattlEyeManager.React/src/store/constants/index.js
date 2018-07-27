@@ -5,3 +5,4 @@ export * from './onlineServer.constants';
 export * from './onlinePlayer.constants';
 export * from './onlineChat.constants';
 export * from './commonConstants';
+export * from './currentUser.constants';

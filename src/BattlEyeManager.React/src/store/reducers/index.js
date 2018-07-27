@@ -6,6 +6,7 @@ import {reducer as formReducer} from 'redux-form';
 import { onlineServersReducer } from './onlineServer';
 import { onlinePlayersReducer } from './onlinePlayer';
 import { onlineChatReducer } from './onlineChat';
+import { currentUsersReducer } from './currentUser';
 
 const appReducer = combineReducers({
     auth: authentication,    
@@ -14,7 +15,8 @@ const appReducer = combineReducers({
     onlineServers: onlineServersReducer,
     form: formReducer,
     onlinePlayers: onlinePlayersReducer,
-    onlineChat: onlineChatReducer
+    onlineChat: onlineChatReducer,
+    currentUser: currentUsersReducer
 });
 
 export default appReducer;

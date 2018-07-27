@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Constants;
 
 namespace BattlEyeManager.Spa.Api
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     public class ServerController : BaseController
     {

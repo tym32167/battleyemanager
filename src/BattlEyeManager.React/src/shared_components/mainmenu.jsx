@@ -15,9 +15,8 @@ import {
 } from 'reactstrap';
 
 import { NavLink as Link } from 'react-router-dom';
-import { authActions, onlineServerActions } from '../store/actions';
+import { authActions, onlineServerActions, currentUserActions } from '../store/actions';
 import { connect } from 'react-redux';
-
 
 class MainMenu extends React.Component {
   constructor(props) {
@@ -32,8 +31,8 @@ class MainMenu extends React.Component {
   }
 
   componentDidMount() {
-    const { loadServers } = this.props;
-    loadServers();
+    const { onLoad } = this.props;
+    onLoad();
   }
 
   logoutClick(e) {
@@ -49,7 +48,7 @@ class MainMenu extends React.Component {
   }
   render() {
 
-    const { servers } = this.props;
+    const { servers, isAdmin } = this.props;
 
     return (
       <div>
@@ -62,23 +61,11 @@ class MainMenu extends React.Component {
                 <DropdownToggle nav caret>
                   Servers
                 </DropdownToggle>
-                <DropdownMenu right>                  
+                <DropdownMenu right>
                   {servers && servers.map((server) => <OnlineServer key={server.id} server={server} />)}
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Admin
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem tag={Link} to="/users">
-                    Users
-                  </DropdownItem>
-                  <DropdownItem tag={Link} to="/servers">
-                    Servers
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+              ({isAdmin && <AdminMenu />})
             </Nav>
             <Nav className="ml-auto" navbar>
               <NavItem>
@@ -94,9 +81,27 @@ class MainMenu extends React.Component {
 
 MainMenu.propTypes = {
   logout: PropTypes.func,
-  loadServers: PropTypes.func,
-  servers: PropTypes.array
+  onLoad: PropTypes.func,
+  servers: PropTypes.array,
+  isAdmin: PropTypes.bool
 }
+
+const AdminMenu = () => (
+  <UncontrolledDropdown nav inNavbar>
+    <DropdownToggle nav caret>
+      Admin
+                </DropdownToggle>
+    <DropdownMenu right>
+      <DropdownItem tag={Link} to="/users">
+        Users
+                  </DropdownItem>
+      <DropdownItem tag={Link} to="/servers">
+        Servers
+                  </DropdownItem>
+    </DropdownMenu>
+  </UncontrolledDropdown>
+);
+
 
 const OnlineServer = ({ server }) =>
   (
@@ -109,16 +114,20 @@ OnlineServer.propTypes = {
   server: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ onlineServers: { items }, currentUser: { item :{isAdmin} } }) {
   return {
-    servers: state.onlineServers.items
+    servers: items,
+    isAdmin: isAdmin
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(authActions.logout()),
-    loadServers: () => dispatch(onlineServerActions.getItems())
+    onLoad: () => {
+      dispatch(onlineServerActions.getItems());
+      dispatch(currentUserActions.getItem());
+    }
   }
 }
 
