@@ -6,8 +6,11 @@ import { Test, Users, Login, Servers, OnlineServers, NotFound } from './pages';
 import { history } from './services/history';
 import { PageTemplate } from './shared_components';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
+import {store} from './store/store';
 
 const App = () => <div className="App">
+ <Provider store={store}>
   <Router history={history}>
     <div>
       <Switch>
@@ -22,6 +25,7 @@ const App = () => <div className="App">
       </Switch>
     </div>
   </Router>
+  </Provider>
 </div>;
 
 export default App;

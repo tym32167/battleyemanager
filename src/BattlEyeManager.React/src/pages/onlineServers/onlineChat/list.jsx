@@ -30,21 +30,17 @@ class List extends Component {
 }
 
 const ItemsTable = ({ items }) =>
-    <Table size="sm">
-        <thead>
-            <tr>                
-                <th>Message</th>
-            </tr>
-        </thead>
-        <tbody>
-            {items.map((item, i) => <Item key={i} item={item} />)}
-        </tbody>
-    </Table>;
+    
+        
+            items.map((item, i) => <Item key={i} item={item} />)
+        
+    ;
 
 const Item = ({ item }) => (
-    <tr>        
-        <td>{item.message}</td>
-    </tr>)
+    <span className="small">        
+        {item.message}  
+        <br/>     
+    </span>)
 
 
 const mapStateToProps = ({ onlineChat, onlineServers }, ownProps) => {
