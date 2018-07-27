@@ -15,12 +15,11 @@ class List extends Component {
 
     render() {
 
-        const { items, error, server } = this.props;
+        const { items, error } = this.props;
         const len = items.length;
 
         return (
-            <React.Fragment>
-                <h2>{server && server.name}</h2>
+            <React.Fragment>                
                 <h3>Players ({len})</h3>                
                 <Error error={error} />
                 {items && <ItemsTable items={items} />}
@@ -59,7 +58,7 @@ const Item = ({ item }) => (
     </tr>)
 
 
-const mapStateToProps = ({ onlinePlayers, onlineServers }, ownProps) => {
+const mapStateToProps = ({ onlinePlayers }, ownProps) => {
     const server = onlinePlayers[ownProps.match.params.serverId];
     let items = [];
     if (server &&
@@ -74,7 +73,6 @@ const mapStateToProps = ({ onlinePlayers, onlineServers }, ownProps) => {
     return {
         serverId: ownProps.match.params.serverId,
         items: items,
-        server: onlineServers.item,
         error: error
     }
 }
@@ -83,7 +81,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLoad: (serverId) => {
             dispatch(onlinePlayerActions.getItems(serverId));
-            dispatch(onlineServerActions.getItem(serverId));
         }
     }
 }
@@ -98,7 +95,6 @@ export { ConnectedList as List };
 List.propTypes = {
     onLoad: PropTypes.func.isRequired,
     items: PropTypes.array,
-    server: PropTypes.object,
     serverId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }

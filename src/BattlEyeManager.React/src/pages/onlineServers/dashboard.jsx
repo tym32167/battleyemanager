@@ -3,22 +3,19 @@ import React from 'react';
 import { List as PlayersList } from './onlinePlayers/list';
 import { List as ChatList } from './onlineChat/list';
 
-export const DashBoard = (props) => (
-    <React.Fragment>
-        {/* <div className="row">
-            <div className="my-3 p-3 bg-white rounded box-shadow  col-6 card">
-                <div className="card-bo">
-                    <PlayersList {...props} />
-                </div>
-            </div>
-            <div className="my-3 p-3 bg-white rounded box-shadow  col-6 card">
-                <div className="card-bo">
-                    <ChatList {...props} />
-                </div>
-            </div>
-        </div> */}
+import './dashboard.css';
 
-        <div className="card-group">
+export const DashBoard = (props) => (
+    <React.Fragment>       
+
+        <div className="card-columns online-server-dashboard p-3">
+
+            <div className="card w-100" >
+                <div className="card-body">
+                    <h3>Server name</h3>
+                </div>
+            </div>
+
             <div className="card">
                 <div className="card-body">
                     <PlayersList {...props} />
