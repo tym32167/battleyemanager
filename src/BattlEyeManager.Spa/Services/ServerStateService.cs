@@ -1,13 +1,15 @@
-﻿using BattlEyeManager.BE.Models;
+﻿using BattleNET;
+using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.Spa.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BattleNET;
 
 namespace BattlEyeManager.Spa.Services
 {
@@ -139,6 +141,12 @@ namespace BattlEyeManager.Spa.Services
         {
             AddChatMessage(e.Server.Id, e.Data);
             await _dataRegistrator.RegisterChatMessage(e);
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
+                await ctx.Clients.All.SendAsync("event", e.Server.Id, "chat");
+            }
         }
 
         private void AddChatMessage(int serverId, ChatMessage message)
@@ -159,7 +167,7 @@ namespace BattlEyeManager.Spa.Services
             });
         }
 
-        private void _aggregator_PlayerHandler(object sender, BEServerEventArgs<IEnumerable<Player>> e)
+        private async void _aggregator_PlayerHandler(object sender, BEServerEventArgs<IEnumerable<Player>> e)
         {
             _playerState.AddOrUpdate(e.Server.Id, guid =>
             {
@@ -184,6 +192,12 @@ namespace BattlEyeManager.Spa.Services
 
                 return ret;
             });
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
+                await ctx.Clients.All.SendAsync("event", e.Server.Id, "player");
+            }
         }
 
         public IEnumerable<Player> GetPlayers(int serverId)

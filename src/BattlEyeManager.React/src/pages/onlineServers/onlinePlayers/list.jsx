@@ -5,6 +5,7 @@ import { onlinePlayerActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error } from '../../../controls';
 import PropTypes from 'prop-types';
+import * as SignalR from '@aspnet/signalr';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -15,8 +16,38 @@ class List extends Component {
         this.refresh = this.refresh.bind(this);
     }
 
+    signalrStart() {
+        const { serverId } = this.props;
+
+        this.connection = new SignalR.HubConnectionBuilder()
+            .withUrl("/api/serverfallback")
+            .build();
+
+        this.connection.on('event', (id, message) => {
+            if (Number(id) === Number(serverId) && message === 'player') {
+                this.refresh();
+            }
+        });
+
+        this.connection.start()
+            .catch(error => Promise.reject(error));
+    }
+
+    signalrStop() {
+        const connection = this.connection;
+        if (connection && connection.stop) {
+            connection.stop()
+                .catch(error => Promise.reject(error));
+        }
+    }
+
+    componentWillUnmount() {
+        this.signalrStop();
+    }
+
     componentDidMount() {
         this.refresh();
+        this.signalrStart();
     }
 
     refresh() {
@@ -52,7 +83,7 @@ const ItemsTable = ({ items }) =>
             </tr>
         </thead>
         <tbody>
-            {items && items.msp && items.map((item, i) => <Item key={i} item={item} />)}
+            {items && items.map && items.map((item, i) => <Item key={i} item={item} />)}
         </tbody>
     </Table>;
 
