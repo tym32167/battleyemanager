@@ -56,14 +56,14 @@ class List extends Component {
 
     render() {
 
-        const { items, error, busy } = this.props;
+        const { items, error, busy, newMessage } = this.props;
         const len = items.length;
 
         return (
             <React.Fragment>
                 <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> Chat ({len}) {busy && <small>loading....</small>} </h4>
                 <Error error={error} />
-                {items && <Chat items={items} />}
+                {items && <Chat items={items} newMessage={newMessage} />}
             </React.Fragment>
         );
     }
@@ -90,10 +90,13 @@ const mapStateToProps = ({ onlineChat }, ownProps) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, {match:{params:{serverId}}}) => {
     return {
         onLoad: (serverId) => {
             dispatch(onlineChatActions.getItems(serverId));
+        },
+        newMessage: (value)=>{                       
+           dispatch(onlineChatActions.addItem(serverId, {audience:-1, message:value.message}));
         }
     }
 }

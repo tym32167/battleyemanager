@@ -228,9 +228,9 @@ namespace BattlEyeManager.Spa.Services
             _aggregator.Send(serverId, BattlEyeCommand.Players);
         }
 
-        public void PostChat(int serverId, string chatMessage)
+        public void PostChat(int serverId, string adminName, int audience, string chatMessage)
         {
-            _aggregator.Send(serverId, BattlEyeCommand.Say, $" -1 tim: {chatMessage}");
+            _aggregator.Send(serverId, BattlEyeCommand.Say, $" {audience} {adminName}: {chatMessage}");
         }
     }
 }

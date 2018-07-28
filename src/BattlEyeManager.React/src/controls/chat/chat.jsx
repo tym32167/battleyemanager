@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import './chat.css';
+import { InputMessage } from './inputMessage';
 
 export class Chat extends Component {
     constructor(props) {
@@ -13,26 +13,23 @@ export class Chat extends Component {
     componentDidUpdate() {
         var height = this.chatBox.current.scrollHeight;
         this.chatBox.current.scrollTop = height;
-    }
-
+    }    
+   
     render() {
-        const { items } = this.props;
+        const { items, newMessage } = this.props;
         return (
             <div>
 
                 <div id="chatBox" ref={this.chatBox} className="bg-white rounded box-shadow">
                     {items && items.map && items.map((item, i) => <ChatItem key={i} item={item} />)}
-                </div>
-                
-                <Form inline className="mt-1">
-                    <Input className="col-sm" placeholder="Chat Message"></Input>
-                    <Button color="primary">Send</Button>
-                </Form>
+                </div>  
 
+                <InputMessage onSubmit={newMessage} />
             </div>
         );
     }
 }
+
 
 function getClassname(messageType) {
     switch (messageType) {
@@ -65,7 +62,8 @@ const ChatItem = ({ item }) => (
 
 
 Chat.propTypes = {
-    items: PropTypes.array
+    items: PropTypes.array,
+    newMessage: PropTypes.func
 }
 
 ChatItem.propTypes = {
