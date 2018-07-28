@@ -14,7 +14,8 @@ export function onlineChatReducer(
             commonConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                busy: true
+                busy: true,
+                [action.serverId]: {}
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
@@ -33,7 +34,7 @@ export function onlineChatReducer(
                 ...state,
                 busy: false,
                 [action.serverId]: {
-                    items: action.error
+                    error: action.error
                 }
             };
         default:

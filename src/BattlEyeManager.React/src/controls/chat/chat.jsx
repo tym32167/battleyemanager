@@ -21,7 +21,7 @@ export class Chat extends Component {
             <div>
 
                 <div id="chatBox" ref={this.chatBox} className="bg-white rounded box-shadow">
-                    {items.map((item, i) => <ChatItem key={i} item={item} />)}
+                    {items && items.map && items.map((item, i) => <ChatItem key={i} item={item} />)}
                 </div>
                 
                 <Form inline className="mt-1">
