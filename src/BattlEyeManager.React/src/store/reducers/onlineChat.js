@@ -36,6 +36,7 @@ export function onlineChatReducer(
                     error: action.error
                 }
             };
+
         default:
             return state
     }

@@ -1,4 +1,5 @@
 ﻿using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -21,6 +22,18 @@ namespace BattlEyeManager.Spa.Api
                 .OrderBy(x => x.Date)
                 .ToArray();
             return Ok(chatMessages);
+        }
+
+        [HttpPut("api/onlineserver/{serverId}/chat")]
+        public IActionResult Put(int serverId, [FromBody] ChatModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _serverStateService.PostChat(serverId, User.Identity.Name, model.Audience, model.Message);
+            return Ok();
         }
     }
 }

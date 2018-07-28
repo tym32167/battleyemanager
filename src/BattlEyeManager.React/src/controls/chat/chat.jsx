@@ -8,11 +8,23 @@ export class Chat extends Component {
         super(props);
 
         this.chatBox = React.createRef();
+        this.inpBox = React.createRef();
+        this.sendNewMessageClick = this.sendNewMessageClick.bind(this);
     }
 
     componentDidUpdate() {
         var height = this.chatBox.current.scrollHeight;
         this.chatBox.current.scrollTop = height;
+    }
+
+    sendNewMessageClick(e){
+        e.preventDefault();        
+        const {value} = this.inpBox;
+        const { newMessage } = this.props;        
+
+        if (value && value !== '' && newMessage){
+            newMessage && newMessage(value);
+        }
     }
 
     render() {
@@ -24,8 +36,8 @@ export class Chat extends Component {
                     {items && items.map && items.map((item, i) => <ChatItem key={i} item={item} />)}
                 </div>
                 
-                <Form inline className="mt-1">
-                    <Input className="col-sm" placeholder="Chat Message"></Input>
+                <Form inline className="mt-1" onSubmit={this.sendNewMessageClick} >
+                    <Input innerRef={v=>this.inpBox=v} className="col-sm" placeholder="Chat Message"></Input>
                     <Button color="primary">Send</Button>
                 </Form>
 
@@ -65,7 +77,8 @@ const ChatItem = ({ item }) => (
 
 
 Chat.propTypes = {
-    items: PropTypes.array
+    items: PropTypes.array,
+    newMessage: PropTypes.func
 }
 
 ChatItem.propTypes = {

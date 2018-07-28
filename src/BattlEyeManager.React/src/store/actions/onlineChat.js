@@ -2,7 +2,8 @@ import { onlineChatConstants, commonConstants } from '../constants';
 import {onlineChatService} from '../../services';
 
 export const onlineChatActions = {
-    getItems
+    getItems,
+    addItem
 };
 
 function getItems(serverId) {
@@ -27,5 +28,19 @@ function getItems(serverId) {
     function failure(serverId, error) { return { serverId:serverId, 
         type: commonConstants.combine(onlineChatConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_FAILURE), 
         error } }
+}
+
+
+
+function addItem(serverId, item) {
+    return dispatch => {                
+        onlineChatService.addItem(serverId, item)
+            .then(
+                item => {                    
+                },
+                error => {                    
+                }
+            );
+    };    
 }
 
