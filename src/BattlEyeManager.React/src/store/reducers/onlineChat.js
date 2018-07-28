@@ -1,43 +1,14 @@
-import {
-    onlineChatConstants,
-    commonConstants
-} from "../constants";
+import {     onlineChatConstants } from "../constants";
+import {     itemsReducer } from "./itemsReducer";
 
 export function onlineChatReducer(
     state = {}, action) {
 
     const subject = onlineChatConstants.SUBJECT;
+    const nestedState = state[action.serverId];
 
-    switch (action.type) {
-        case commonConstants.combine(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST):
-            return {
-                ...state,
-                busy: true
-            };
-        case commonConstants.combine(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST_SUCCESS):
-            return {
-                ...state,
-                busy: false,
-                [action.serverId]: {
-                    items: action.items
-                }
-            };
-        case commonConstants.combine(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST_FAILURE):
-            return {
-                ...state,
-                busy: false,
-                [action.serverId]: {
-                    error: action.error
-                }
-            };
-
-        default:
-            return state
+    return {
+        ...state,
+        [action.serverId] : itemsReducer(nestedState, action, subject)
     }
 }

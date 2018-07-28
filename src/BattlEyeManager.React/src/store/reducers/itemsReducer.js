@@ -18,19 +18,22 @@ export function itemsReducer(
             commonConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                error: ''
+                error: '',
+                busy : true
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
-                items: [...action.items]
+                items: [...action.items],
+                busy : false
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_FAILURE):
             return {
-                error: action.error
+                error: action.error,
+                busy : false
             };
         default:
             return state
