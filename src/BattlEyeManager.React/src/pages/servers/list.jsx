@@ -43,7 +43,7 @@ class List extends Component {
 }
 
 const Serverstable = ({ items, deleteCallback }) =>
-    <Table size="sm">
+    <Table size="sm" responsive>
         <thead>
             <tr>
                 <th>Name</th>

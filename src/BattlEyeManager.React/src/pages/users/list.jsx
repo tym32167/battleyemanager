@@ -43,7 +43,7 @@ class List extends Component {
 }
 
 const Userstable = ({ users, deleteUser }) =>
-    <Table size="sm">
+    <Table size="sm" responsive>
         <thead>
             <tr>
                 <th>Last Name</th>

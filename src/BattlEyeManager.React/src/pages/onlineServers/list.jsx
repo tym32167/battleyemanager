@@ -28,7 +28,7 @@ class List extends Component {
 }
 
 const Serverstable = ({ items }) =>
-    <Table size="sm">
+    <Table size="sm" responsive>
         <thead>
             <tr>
                 <th>Name</th>
