@@ -116,7 +116,7 @@ const mapStateToProps = ({ onlinePlayers }, ownProps) => {
         serverId: ownProps.match.params.serverId,
         items: items,
         error: error,
-        busy: onlinePlayers.busy
+        busy: server && server.busy
     }
 }
 
