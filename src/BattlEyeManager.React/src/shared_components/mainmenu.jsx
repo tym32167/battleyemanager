@@ -65,7 +65,7 @@ class MainMenu extends React.Component {
                   {servers && servers.map((server) => <OnlineServer key={server.id} server={server} />)}
                 </DropdownMenu>
               </UncontrolledDropdown>
-              ({isAdmin && <AdminMenu />})
+              {isAdmin && <AdminMenu />}
             </Nav>
             <Nav className="ml-auto" navbar>
               <NavItem>
