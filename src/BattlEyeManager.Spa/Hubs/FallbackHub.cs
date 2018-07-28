@@ -5,9 +5,9 @@ namespace BattlEyeManager.Spa.Hubs
 {
     public class FallbackHub : Hub
     {
-        public Task Send(string message)
+        public Task Send(int serverId, string message)
         {
-            return Clients.All.SendAsync("send", message);
+            return Clients.All.SendAsync("event", serverId, message);
         }
     }
 }

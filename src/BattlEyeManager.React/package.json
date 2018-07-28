@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aspnet/signalr": "^1.0.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
     "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
     "@fortawesome/react-fontawesome": "0.1.0-11",
@@ -20,7 +21,8 @@
     "redux": "^4.0.0",
     "redux-form": "^7.4.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "tslib": "^1.9.3"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -3,21 +3,53 @@ import { onlineChatActions } from "../../../store/actions";
 import { connect } from 'react-redux';
 import { Error, Chat } from '../../../controls';
 import PropTypes from 'prop-types';
+import * as SignalR from '@aspnet/signalr';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class List extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.refresh = this.refresh.bind(this);
     }
 
-    componentDidMount() {
-        this.refresh();
+    signalrStart() {
+        const { serverId } = this.props;
+
+        this.connection = new SignalR.HubConnectionBuilder()
+            .withUrl("/api/serverfallback")
+            .build();
+
+        this.connection.on('event', (id, message) => {
+            if (Number(id) === Number(serverId) && message === 'chat') {
+                this.refresh();
+            }
+        });
+
+        this.connection.start()
+            .catch(error => Promise.reject(error));
     }
 
-    refresh(){
+    signalrStop() {
+        const connection = this.connection;
+        if (connection && connection.stop) {
+            connection.stop()
+                .catch(error => Promise.reject(error));
+        }
+    }
+
+    componentWillUnmount() {
+        this.signalrStop();
+    }
+
+    componentDidMount() {
+        this.refresh();
+        this.signalrStart();
+    }
+
+    refresh() {
         const { serverId } = this.props;
         this.props.onLoad(serverId);
     }
@@ -28,8 +60,8 @@ class List extends Component {
         const len = items.length;
 
         return (
-            <React.Fragment>                
-                <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> Chat ({len}) {busy && <small>loading....</small>} </h4>                                                
+            <React.Fragment>
+                <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> Chat ({len}) {busy && <small>loading....</small>} </h4>
                 <Error error={error} />
                 {items && <Chat items={items} />}
             </React.Fragment>
@@ -37,7 +69,7 @@ class List extends Component {
     }
 }
 
-const mapStateToProps = ({ onlineChat }, ownProps) => {    
+const mapStateToProps = ({ onlineChat }, ownProps) => {
 
     const server = onlineChat[ownProps.match.params.serverId];
     let items = [];
@@ -78,6 +110,6 @@ List.propTypes = {
     items: PropTypes.array,
     serverId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    busy : PropTypes.bool
+    busy: PropTypes.bool
 }
 

@@ -145,7 +145,7 @@ namespace BattlEyeManager.Spa.Services
             using (var scope = _scopeFactory.CreateScope())
             {
                 var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
-                await ctx.Clients.All.SendAsync("send", e.Server.Id, e.Data);
+                await ctx.Clients.All.SendAsync("event", e.Server.Id, "chat");
             }
         }
 
@@ -167,7 +167,7 @@ namespace BattlEyeManager.Spa.Services
             });
         }
 
-        private void _aggregator_PlayerHandler(object sender, BEServerEventArgs<IEnumerable<Player>> e)
+        private async void _aggregator_PlayerHandler(object sender, BEServerEventArgs<IEnumerable<Player>> e)
         {
             _playerState.AddOrUpdate(e.Server.Id, guid =>
             {
@@ -192,6 +192,12 @@ namespace BattlEyeManager.Spa.Services
 
                 return ret;
             });
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
+                await ctx.Clients.All.SendAsync("event", e.Server.Id, "player");
+            }
         }
 
         public IEnumerable<Player> GetPlayers(int serverId)
