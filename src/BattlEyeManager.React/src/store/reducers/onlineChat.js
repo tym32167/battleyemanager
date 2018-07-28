@@ -14,13 +14,14 @@ export function onlineChatReducer(
             commonConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                [action.serverId]: undefined
+                busy: true
             };
         case commonConstants.combine(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 ...state,
+                busy: false,
                 [action.serverId]: {
                     items: action.items
                 }
@@ -30,6 +31,7 @@ export function onlineChatReducer(
             commonConstants.ASYNC_REQUEST_FAILURE):
             return {
                 ...state,
+                busy: false,
                 [action.serverId]: {
                     items: action.error
                 }

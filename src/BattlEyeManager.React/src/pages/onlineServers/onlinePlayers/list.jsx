@@ -6,21 +6,32 @@ import { connect } from 'react-redux';
 import { Error } from '../../../controls';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 class List extends Component {
 
+    constructor(props) {
+        super(props);
+        this.refresh = this.refresh.bind(this);
+    }
+
     componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
         const { serverId } = this.props;
         this.props.onLoad(serverId);
     }
 
     render() {
 
-        const { items, error } = this.props;
+        const { items, error, busy } = this.props;
         const len = items.length;
 
         return (
             <React.Fragment>                
-                <h3>Players ({len})</h3>                
+                <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> Players ({len}) {busy && <small>loading....</small>}</h4>                
                 <Error error={error} />
                 {items && <ItemsTable items={items} />}
             </React.Fragment>
@@ -73,7 +84,8 @@ const mapStateToProps = ({ onlinePlayers }, ownProps) => {
     return {
         serverId: ownProps.match.params.serverId,
         items: items,
-        error: error
+        error: error,
+        busy: onlinePlayers.busy
     }
 }
 
@@ -96,7 +108,8 @@ List.propTypes = {
     onLoad: PropTypes.func.isRequired,
     items: PropTypes.array,
     serverId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    busy: PropTypes.bool
 }
 
 ItemsTable.propTypes = {

@@ -19,13 +19,16 @@ export class Chat extends Component {
         const { items } = this.props;
         return (
             <div>
-                <div id="chatBox" ref={this.chatBox} className="my-3 p-3 bg-white rounded box-shadow">
+
+                <div id="chatBox" ref={this.chatBox} className="bg-white rounded box-shadow">
                     {items.map((item, i) => <ChatItem key={i} item={item} />)}
                 </div>
-                <Form inline>
+                
+                <Form inline className="mt-1">
                     <Input className="col-sm" placeholder="Chat Message"></Input>
                     <Button color="primary">Send</Button>
                 </Form>
+
             </div>
         );
     }

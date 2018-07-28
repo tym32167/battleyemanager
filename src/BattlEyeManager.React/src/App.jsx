@@ -9,6 +9,12 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import {store} from './store/store';
 
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faSync);
+
 const App = () => <div className="App">
  <Provider store={store}>
   <Router history={history}>
