@@ -13,7 +13,7 @@ export class Chat extends Component {
     componentDidUpdate() {
         var height = this.chatBox.current.scrollHeight;
         this.chatBox.current.scrollTop = height;
-    }
+    }    
    
     render() {
         const { items, newMessage } = this.props;

@@ -95,9 +95,8 @@ const mapDispatchToProps = (dispatch, {match:{params:{serverId}}}) => {
         onLoad: (serverId) => {
             dispatch(onlineChatActions.getItems(serverId));
         },
-        newMessage: (value)=>{            
-            console.log(value);
-           // dispatch(onlineChatActions.addItem(serverId, {audience:-1, message:value}));
+        newMessage: (value)=>{                       
+           dispatch(onlineChatActions.addItem(serverId, {audience:-1, message:value.message}));
         }
     }
 }

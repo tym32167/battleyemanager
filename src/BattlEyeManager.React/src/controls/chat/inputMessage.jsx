@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form'
+import { Field, reset, reduxForm } from 'redux-form'
 import { Form, Button } from "reactstrap";
 import { requiredValidator } from '../../pages/formValidators';
 import PropTypes from 'prop-types';
@@ -17,9 +17,13 @@ InputMessage.propTypes = {
     handleSubmit: PropTypes.func
 }
 
+const afterSubmit = (result, dispatch) =>
+  dispatch(reset('ChatMessageForm'));
+
 const InputMessageRedux = reduxForm({
     // a unique name for the form
-    form: 'ChatMessageForm'
+    form: 'ChatMessageForm',
+    onSubmitSuccess: afterSubmit
 })(InputMessage)
 
 export { InputMessageRedux as InputMessage };
