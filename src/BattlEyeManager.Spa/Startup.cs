@@ -6,6 +6,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Auth;
+using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -107,6 +108,8 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<DataRegistrator, DataRegistrator>();
 
             services.AddSingleton<BELogic, BELogic>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,6 +133,11 @@ namespace BattlEyeManager.Spa
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<FallbackHub>("/fallback");
+            });
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

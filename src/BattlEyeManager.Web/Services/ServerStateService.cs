@@ -142,7 +142,6 @@ namespace BattlEyeManager.Web.Services
             AddChatMessage(e.Server.Id, e.Data);
             await _dataRegistrator.RegisterChatMessage(e);
 
-
             using (var scope = _scopeFactory.CreateScope())
             {
                 var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
