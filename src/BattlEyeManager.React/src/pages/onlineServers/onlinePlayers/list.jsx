@@ -52,7 +52,7 @@ const ItemsTable = ({ items }) =>
             </tr>
         </thead>
         <tbody>
-            {items && items.msp && items.map((item, i) => <Item key={i} item={item} />)}
+            {items && items.map && items.map((item, i) => <Item key={i} item={item} />)}
         </tbody>
     </Table>;
 
