@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 const ServerHeader = ({ title }) => (
-    <h3>{title}</h3>
+    <h4 className="p-0 m-0">{title}</h4>
 );
 
 ServerHeader.propTypes = {

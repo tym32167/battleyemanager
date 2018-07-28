@@ -40,7 +40,7 @@ class List extends Component {
 }
 
 const ItemsTable = ({ items }) =>
-    <Table size="sm">
+    <Table size="sm" responsive>
         <thead>
             <tr>
                 <th>Num</th>
