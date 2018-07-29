@@ -15,14 +15,20 @@ class List extends Component {
         this.refresh = this.refresh.bind(this);
     }
 
+    componentDidUpdate(prevProps) {
+        if (Number(prevProps.serverId) !== Number(this.props.serverId)) {
+            this.refresh();
+        }
+    }
+
     signalrStart() {
-        const { serverId } = this.props;
 
         this.connection = new SignalR.HubConnectionBuilder()
             .withUrl("/api/serverfallback")
             .build();
 
         this.connection.on('event', (id, message) => {
+            const { serverId } = this.props;
             if (Number(id) === Number(serverId) && message === 'chat') {
                 this.refresh();
             }
@@ -90,13 +96,13 @@ const mapStateToProps = ({ onlineChat }, ownProps) => {
     }
 }
 
-const mapDispatchToProps = (dispatch, {match:{params:{serverId}}}) => {
+const mapDispatchToProps = (dispatch, { match: { params: { serverId } } }) => {
     return {
         onLoad: (serverId) => {
             dispatch(onlineChatActions.getItems(serverId));
         },
-        newMessage: (value)=>{                       
-           dispatch(onlineChatActions.addItem(serverId, {audience:-1, message:value.message}));
+        newMessage: (value) => {
+            dispatch(onlineChatActions.addItem(serverId, { audience: -1, message: value.message }));
         }
     }
 }

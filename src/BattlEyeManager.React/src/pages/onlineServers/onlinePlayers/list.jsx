@@ -16,14 +16,20 @@ class List extends Component {
         this.refresh = this.refresh.bind(this);
     }
 
-    signalrStart() {
-        const { serverId } = this.props;
+    componentDidUpdate(prevProps) {
+        if (Number(prevProps.serverId) !== Number(this.props.serverId)) {
+            this.refresh();
+        }
+    }
+
+    signalrStart() {       
 
         this.connection = new SignalR.HubConnectionBuilder()
             .withUrl("/api/serverfallback")
             .build();
 
         this.connection.on('event', (id, message) => {
+            const { serverId } = this.props;
             if (Number(id) === Number(serverId) && message === 'player') {
                 this.refresh();
             }
