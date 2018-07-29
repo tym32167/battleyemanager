@@ -1,10 +1,11 @@
 ﻿using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using BattlEyeManager.Spa.Core;
 
 namespace BattlEyeManager.Spa.Api
 {
-    public class OnlinePlayerController : Controller
+    public class OnlinePlayerController : BaseController
     {
         private readonly ServerStateService _serverStateService;
 

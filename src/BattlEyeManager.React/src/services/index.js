@@ -7,3 +7,6 @@ export * from './onlineServer.service';
 export * from './onlinePlayers.service';
 export * from './onlineChat.service';
 export * from './currentUser.service';
+
+export * from './kickReasons.service';
+export * from './banReasons.service';

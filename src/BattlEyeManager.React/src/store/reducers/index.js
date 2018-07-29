@@ -7,6 +7,8 @@ import { onlineServersReducer } from './onlineServer';
 import { onlinePlayersReducer } from './onlinePlayer';
 import { onlineChatReducer } from './onlineChat';
 import { currentUsersReducer } from './currentUser';
+import { kickReasonsReducer } from './kickReason';
+import { banReasonsReducer } from './banReason';
 
 const appReducer = combineReducers({
     auth: authentication,    
@@ -16,7 +18,9 @@ const appReducer = combineReducers({
     form: formReducer,
     onlinePlayers: onlinePlayersReducer,
     onlineChat: onlineChatReducer,
-    currentUser: currentUsersReducer
+    currentUser: currentUsersReducer,
+    kickReasons: kickReasonsReducer,
+    banReasons: banReasonsReducer
 });
 
 export default appReducer;

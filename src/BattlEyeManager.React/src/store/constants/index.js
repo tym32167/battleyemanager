@@ -6,3 +6,5 @@ export * from './onlinePlayer.constants';
 export * from './onlineChat.constants';
 export * from './commonConstants';
 export * from './currentUser.constants';
+export * from './kickReason.constants';
+export * from './banReason.constants';

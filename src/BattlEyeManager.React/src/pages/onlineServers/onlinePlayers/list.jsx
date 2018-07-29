@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import * as SignalR from '@aspnet/signalr';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { KickPlayer } from './kickPlayer';
 
 class List extends Component {
 
@@ -100,10 +101,12 @@ const Item = ({ item }) => (
         <td>{item.ip}</td>
         <td>{item.port}</td>
         <td>{item.ping}</td>        
-        <td>
-            <Button color="success" to={'/online/' + item.id + '/players'} tag={Link} size="sm">Players</Button>
+        <td>            
+            <KickPlayer player={item}  />
         </td>
     </tr>)
+ 
+
 
 
 const mapStateToProps = ({ onlinePlayers }, ownProps) => {
