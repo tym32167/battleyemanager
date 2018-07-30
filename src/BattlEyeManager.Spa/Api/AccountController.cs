@@ -2,6 +2,7 @@
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,7 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public async Task<ActionResult> Auth([FromBody] TokenRequest tokenRequest)
         {
             var username = tokenRequest.UserName;
