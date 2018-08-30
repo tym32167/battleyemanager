@@ -1,1 +1,1 @@
-export const requiredValidator = value => (value || typeof value === 'number' ? undefined : 'Required')
+export const requiredValidator = value => (value && value !='' ? undefined : 'Required')

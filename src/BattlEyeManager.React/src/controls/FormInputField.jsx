@@ -20,7 +20,7 @@ const FormCheckBox = ({
                 invalid={!!error}
                 valid={!error} />
 
-            <Label for={name} check>{label}</Label>
+            {label && <Label for={name} check>{label}</Label>}
 
             {touched &&
                 ((error && <FormFeedback>{error}</FormFeedback>) ||
@@ -35,8 +35,8 @@ const FormInput = ({
     type,
     meta: { touched, error, warning }
 }) => (
-        <FormGroup>
-            <Label for={name}>{label}</Label>
+        <FormGroup>            
+            {label && <Label for={name} check>{label}</Label>}
             <Input {...input} placeholder={label} type={type} readOnly={readOnly}
                 invalid={!!error}
                 valid={!error} />
