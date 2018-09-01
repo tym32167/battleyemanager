@@ -1,11 +1,9 @@
-import { IUser } from '../models';
-import { commonService } from './commonService';
-import { IReadonlyService } from './models';
+import { IUser } from "../models";
+import { IReadonlyService } from "./core";
+import { ReadonlyCommonService } from "./core/readonlycommonservice";
+
 const baseUrl = '/api/currentuser/';
 
-export const currentUserService: IReadonlyService<IUser> = {
-    getItem: (id: string | number) => commonService.getItem<IUser>(baseUrl, id),
-    getItems: () => new Promise<IUser[]>(_ => []),
-};
+export const currentUserService: IReadonlyService<IUser> = new ReadonlyCommonService<IUser>(baseUrl);
 
 

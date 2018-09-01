@@ -1,12 +1,6 @@
-import { commonService } from './commonService';
+import { IServer } from "src/models";
+import { IService } from "./core";
+import { CommonService } from "./core/commonService";
 
 const baseUrl = '/api/server/'
-
-export const serverService = {
-    addItem: (item: any) => commonService.addItem(baseUrl, item),
-    deleteItem: (id: any) => commonService.deleteItem(baseUrl, id),
-    getItem: (id: any) => commonService.getItem(baseUrl, id),
-    getItems: () => commonService.getItems(baseUrl),
-    updateItem: (item: any) => commonService.updateItem(baseUrl, item),
-};
-
+export const serverService: IService<IServer> = new CommonService<IServer>(baseUrl);

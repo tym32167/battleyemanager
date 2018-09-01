@@ -1,16 +1,8 @@
+import { IOnlineServer } from '../../models';
 import { onlineServerService } from '../../services';
 import { onlineServerConstants } from '../constants';
 import { commonActions } from './commonActions';
+import { ReadonlyActionBase } from './core/readonlyactionsbase';
 
-export const onlineServerActions = {
-    getItem,
-    getItems,
-};
-
-function getItems() {
-    return commonActions.getItems(onlineServerConstants.SUBJECT, onlineServerService);
-}
-
-function getItem(id: any) {
-    return commonActions.getItem(id, onlineServerConstants.SUBJECT, onlineServerService);
-}
+export const onlineServerActions =
+    new ReadonlyActionBase<IOnlineServer>(commonActions, onlineServerConstants.SUBJECT, onlineServerService);

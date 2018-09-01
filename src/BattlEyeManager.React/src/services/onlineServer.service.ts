@@ -1,11 +1,8 @@
 import { IOnlineServer } from 'src/models';
-import { commonService } from './commonService';
-import { IReadonlyService } from './models';
+import { IReadonlyService } from './core';
+import { ReadonlyCommonService } from './core/readonlycommonservice';
 
 const baseUrl = '/api/onlineserver/'
-
-export const onlineServerService: IReadonlyService<IOnlineServer> = {
-    getItem: (id: number | string) => commonService.getItem(baseUrl, id),
-    getItems: () => commonService.getItems(baseUrl),
-};
+export const onlineServerService: IReadonlyService<IOnlineServer>
+    = new ReadonlyCommonService<IOnlineServer>(baseUrl);
 

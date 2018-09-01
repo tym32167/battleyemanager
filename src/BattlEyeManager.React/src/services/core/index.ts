@@ -1,3 +1,6 @@
+export * from './commonService';
+export * from './readonlycommonservice';
+
 export interface IService<T> extends IReadonlyService<T> {
     addItem: (item: T) => Promise<T>,
     deleteItem: (id: string | number) => Promise<any>,

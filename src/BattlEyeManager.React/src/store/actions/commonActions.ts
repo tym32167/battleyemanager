@@ -16,8 +16,7 @@ function failureAction(error: any, subject: string, action: commonConstants) {
     return { type: combineConstants(subject, action, commonConstants.ASYNC_REQUEST_FAILURE), error };
 }
 
-
-class CommonActions {
+export class CommonActions {
     public deleteItem<T extends IIdentity>(element: T, subject: string, service: IService<T>, callback: any) {
         return (dispatch: Dispatch<T>) => {
             dispatch(requestAction(element, subject, commonConstants.DELETE_ITEM));
