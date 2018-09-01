@@ -16,19 +16,19 @@
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts-ts": "2.17.0",
     "reactstrap": "^6.0.1",
-    "redux": "^4.0.0",
+    "redux": "^3.7.2",
     "redux-form": "^7.4.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "tslib": "^1.9.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
     "note_run_mysql": "D:\\Tools\\mariadb-10.2.13-winx64\\bin\\mysqld.exe",
     "note_watch_dotnet_server": "dotnet watch run -p \"D:\\Code\\bitbucket\\battleyemanager\\src\\BattlEyeManager.Spa\\BattlEyeManager.Spa.csproj\""
   },
@@ -38,8 +38,18 @@
     }
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
-    "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.8.2"
+    "@types/history": "^4.7.0",
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.9.4",
+    "@types/react": "^16.4.13",
+    "@types/react-dom": "^16.0.7",
+    "@types/react-redux": "^6.0.6",
+    "@types/react-router-dom": "^4.3.0",
+    "@types/reactstrap": "^6.0.2",
+    "@types/redux": "^3.6.0",
+    "@types/redux-form": "^7.4.7",
+    "@types/redux-logger": "^3.0.6",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
   }
 }
