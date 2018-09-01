@@ -2,6 +2,6 @@ import { kickReasonConstants } from '../constants';
 import { itemsReducer } from './itemsReducer';
 
 export function kickReasonsReducer(
-    state, action) {
+    state: any, action: any) {
     return itemsReducer(state, action, kickReasonConstants.SUBJECT);
 }
