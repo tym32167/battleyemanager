@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { IAuthUserInfo } from 'src/models';
 import { authService } from './auth.service';
 import { history } from './history';
 
 axios.interceptors.request.use((config) => {
   // Do something before request is sent    
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user: IAuthUserInfo = JSON.parse(localStorage.getItem('user') || '{}');
   if (user && user.token) {
     config.headers.common.Authorization = 'Bearer ' + user.token;
   }

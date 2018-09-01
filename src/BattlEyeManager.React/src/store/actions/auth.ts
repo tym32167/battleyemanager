@@ -1,3 +1,4 @@
+import { IAuthUserInfo } from 'src/models';
 import { authService, history } from '../../services';
 import { authConstants } from '../constants';
 
@@ -23,7 +24,7 @@ function login(username: string, password: string) {
     };
 
     function request(user: any) { return { type: authConstants.LOGIN_REQUEST, user } }
-    function success(user: any) { return { type: authConstants.LOGIN_SUCCESS, user } }
+    function success(user: IAuthUserInfo) { return { type: authConstants.LOGIN_SUCCESS, user } }
     function failure(error: any) { return { type: authConstants.LOGIN_FAILURE, error } }
 }
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IAuthUserInfo } from 'src/models';
 
 export const authService = {
     login,
@@ -6,7 +7,7 @@ export const authService = {
 };
 
 function login(username: string, password: string) {
-    return axios.post('/api/account/auth', { username, password })
+    return axios.post<IAuthUserInfo>('/api/account/auth', { username, password })
         .then(response => response.data)
         .catch(error => Promise.reject(error.message));
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IIdentity } from '../models/iidentity';
 
 export const commonService = {
     addItem,
@@ -8,31 +9,31 @@ export const commonService = {
     updateItem,
 };
 
-function getItems(baseUrl: string) {
-    return axios.get(baseUrl)
+function getItems<T>(baseUrl: string) {
+    return axios.get<T[]>(baseUrl)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function getItem(baseUrl: string, id: any) {
-    return axios.get(baseUrl + id)
+function getItem<T>(baseUrl: string, id: string | number) {
+    return axios.get<T>(baseUrl + id)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function updateItem(baseUrl: string, item: any) {
-    return axios.post(baseUrl + item.id, item)
+function updateItem<T extends IIdentity>(baseUrl: string, item: T) {
+    return axios.post<T>(baseUrl + item.id, item)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function addItem(baseUrl: string, item: any) {
-    return axios.put(baseUrl, item)
+function addItem<T>(baseUrl: string, item: T) {
+    return axios.put<T>(baseUrl, item)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));
 }
 
-function deleteItem(baseUrl: string, id: any) {
+function deleteItem(baseUrl: string, id: string | number) {
     return axios.delete(baseUrl + id)
         .then(response => response.data)
         .catch(error => Promise.reject(getError(error)));

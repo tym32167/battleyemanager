@@ -1,3 +1,5 @@
+import { IIdentity } from "src/models/iidentity";
+import { IReadonlyService, IService } from "../../services";
 import { combineConstants, commonConstants } from "../constants";
 
 export const commonActions = {
@@ -8,7 +10,7 @@ export const commonActions = {
     updateItem,
 };
 
-function deleteItem(element: any, subject: any, service: any, successAction: any) {
+function deleteItem<T extends IIdentity>(element: T, subject: string, service: IService<T>, successAction: any) {
     return (dispatch: any) => {
         dispatch(request(element));
         service.deleteItem(element.id)
@@ -27,12 +29,12 @@ function deleteItem(element: any, subject: any, service: any, successAction: any
     function failure(error: any) { return { type: combineConstants(subject, commonConstants.DELETE_ITEM, commonConstants.ASYNC_REQUEST_FAILURE), error } }
 }
 
-function addItem(element: any, subject: any, service: any, successAction: any) {
+function addItem<T extends IIdentity>(element: T, subject: string, service: IService<T>, successAction: any) {
     return (dispatch: any) => {
         dispatch(request(element));
         service.addItem(element)
             .then(
-                (item: any) => {
+                (item: T) => {
                     dispatch(success(item));
                     if (successAction) { successAction(item, dispatch); }
                 },
@@ -46,7 +48,7 @@ function addItem(element: any, subject: any, service: any, successAction: any) {
     function failure(error: any) { return { type: combineConstants(subject, commonConstants.CREATE_ITEM, commonConstants.ASYNC_REQUEST_FAILURE), error } }
 }
 
-function updateItem(element: any, subject: any, service: any, successAction: any) {
+function updateItem<T extends IIdentity>(element: T, subject: string, service: IService<T>, successAction: any) {
     return (dispatch: any) => {
         dispatch(request(element));
         service.updateItem(element)
@@ -65,7 +67,7 @@ function updateItem(element: any, subject: any, service: any, successAction: any
     function failure(error: any) { return { type: combineConstants(subject, commonConstants.UPDATE_ITEM, commonConstants.ASYNC_REQUEST_FAILURE), error } }
 }
 
-function getItems(subject: any, service: any) {
+function getItems<T>(subject: string, service: IReadonlyService<T>) {
     return (dispatch: any) => {
         dispatch(request([]));
         getPromise(service, (s: any) => s.getItems())
@@ -83,7 +85,7 @@ function getItems(subject: any, service: any) {
     function failure(error: any) { return { type: combineConstants(subject, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_FAILURE), error } }
 }
 
-function getItem(id: any, subject: any, service: any) {
+function getItem<T>(id: string | number, subject: string, service: IReadonlyService<T>) {
     return (dispatch: any) => {
         dispatch(request({ id }));
         service.getItem(id)

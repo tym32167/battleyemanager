@@ -7,3 +7,4 @@ export * from './onlineServer.service';
 export * from './onlinePlayers.service';
 export * from './onlineChat.service';
 export * from './currentUser.service';
+export * from './models';
