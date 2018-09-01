@@ -12,6 +12,10 @@ function successAction<T>(item: T, subject: string, action: commonConstants) {
     return { type: combineConstants(subject, action, commonConstants.ASYNC_REQUEST_SUCCESS), item };
 }
 
+function successActionMany<T>(items: T[], subject: string, action: commonConstants) {
+    return { type: combineConstants(subject, action, commonConstants.ASYNC_REQUEST_SUCCESS), items };
+}
+
 function failureAction(error: any, subject: string, action: commonConstants) {
     return { type: combineConstants(subject, action, commonConstants.ASYNC_REQUEST_FAILURE), error };
 }
@@ -23,7 +27,7 @@ export class CommonActions {
             service.deleteItem(element.id)
                 .then(
                     (item: T) => {
-                        dispatch(callback(item, subject, commonConstants.DELETE_ITEM));
+                        dispatch(successAction(item, subject, commonConstants.DELETE_ITEM));
                         if (callback) { callback(item, dispatch); }
                     },
                     (error: any) => {
@@ -39,7 +43,7 @@ export class CommonActions {
             service.addItem(element)
                 .then(
                     (item: T) => {
-                        dispatch(callback(item, subject, commonConstants.CREATE_ITEM));
+                        dispatch(successAction(item, subject, commonConstants.CREATE_ITEM));
                         if (callback) { callback(item, dispatch); }
                     },
                     (error: any) => {
@@ -55,7 +59,7 @@ export class CommonActions {
             service.updateItem(element)
                 .then(
                     (item: T) => {
-                        dispatch(callback(item, subject, commonConstants.UPDATE_ITEM));
+                        dispatch(successAction(item, subject, commonConstants.UPDATE_ITEM));
                         if (callback) { callback(item, dispatch); }
                     },
                     (error: any) => {
@@ -71,7 +75,7 @@ export class CommonActions {
             this.getPromise(service, (s: any) => s.getItems())
                 .then(
                     (items: T[]) => {
-                        dispatch(successAction(items, subject, commonConstants.GET_ITEMS));
+                        dispatch(successActionMany(items, subject, commonConstants.GET_ITEMS));
                     },
                     (error: any) => {
                         dispatch(failureAction(error, subject, commonConstants.GET_ITEMS));

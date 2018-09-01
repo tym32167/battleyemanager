@@ -2,7 +2,7 @@ import { combineConstants, commonConstants } from "../constants";
 import { itemReducer } from "./itemReducer";
 
 export function itemsReducer(
-    state:any = {
+    state: any = {
         items: [],
     }, action: any, subject: any) {
 
@@ -16,21 +16,21 @@ export function itemsReducer(
                 busy: true,
                 ...state,
                 error: '',
-                
+
             };
         case combineConstants(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 busy: false,
-                items: [...action.items],                
+                items: [...action.items],
             };
         case combineConstants(subject,
             commonConstants.GET_ITEMS,
             commonConstants.ASYNC_REQUEST_FAILURE):
             return {
                 busy: false,
-                error: action.error,                
+                error: action.error,
             };
         default:
             return state

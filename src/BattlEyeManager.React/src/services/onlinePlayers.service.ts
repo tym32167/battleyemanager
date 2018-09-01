@@ -6,5 +6,5 @@ const baseUrl = '/api/onlineserver/'
 const service = new ReadonlyCommonService<IOnlinePlayer>();
 
 export const onlinePlayersService = {
-    getItems: (serverId: any) => service.getItemsBy(baseUrl + serverId + '/players/'),
+    getItems: (serverId: string | number) => service.getItemsBy(baseUrl + serverId + '/players/'),
 };
