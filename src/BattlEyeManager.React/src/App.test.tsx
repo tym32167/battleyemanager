@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
   clear: jest.fn(),
-  removeItem: jest.fn()
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+  setItem: jest.fn(),    
 };
-global.localStorage = localStorageMock;
 
+const g:any = global
+g.localStorage = localStorageMock;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

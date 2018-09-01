@@ -10,6 +10,7 @@
 	"settings": {
 		"emmet.includeLanguages": {
 			"javascript": "javascriptreact"
-		}
+		},
+		"typescript.referencesCodeLens.enabled": true
 	}
 }
