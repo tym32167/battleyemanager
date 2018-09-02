@@ -14,7 +14,6 @@ export enum ResultConstants {
     ASYNC_REQUEST_FAILURE = 'ASYNC_REQUEST_FAILURE',
 };
 
-
 export const combineConstants = (subject: SubjectConstants, action: ActionConstants, result: ResultConstants) => {
     return subject + '_' + action + '_' + result;
 }
