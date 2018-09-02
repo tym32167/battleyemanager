@@ -1,5 +1,5 @@
 import { currentUserService } from '../../services';
-import { currentUserConstants } from "../constants";
+import { SubjectConstants } from '../constants';
 import { commonActions } from "./commonActions";
 
 export const currentUserActions = {
@@ -7,5 +7,5 @@ export const currentUserActions = {
 };
 
 function getItem() {
-    return commonActions.getItem('', currentUserConstants.SUBJECT, currentUserService);
+    return commonActions.getItem('', SubjectConstants.CURRENT_USER, currentUserService);
 }

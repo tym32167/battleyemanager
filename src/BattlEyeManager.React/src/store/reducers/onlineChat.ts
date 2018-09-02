@@ -1,10 +1,10 @@
-import { onlineChatConstants } from "../constants";
+import { SubjectConstants } from "../constants";
 import { itemsReducer } from "./itemsReducer";
 
 export function onlineChatReducer(
     state = {}, action: any) {
 
-    const subject = onlineChatConstants.SUBJECT;
+    const subject = SubjectConstants.ONLINE_CHAT;
     const nestedState = state[action.serverId];
 
     return {

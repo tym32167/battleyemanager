@@ -1,4 +1,5 @@
 import { IReadonlyService } from "../../../services";
+import { SubjectConstants } from "../../constants";
 import { CommonActions } from "../commonActions";
 
 
@@ -7,7 +8,7 @@ export class ReadonlyActionBase<T>
 {
     constructor(
         readonly commonActions: CommonActions,
-        readonly subject: string,
+        readonly subject: SubjectConstants,
         readonly service: IReadonlyService<T>
     ) { }
 
