@@ -1,6 +1,6 @@
-import { currentUserConstants } from "../constants";
+import { SubjectConstants } from "../constants";
 import { itemReducer } from "./itemReducer";
 
 export function currentUsersReducer(state = { item: {} }, action: any) {
-    return itemReducer(state, action, currentUserConstants.SUBJECT);
+    return itemReducer(state, action, SubjectConstants.CURRENT_USER);
 }

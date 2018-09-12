@@ -1,10 +1,10 @@
-import { onlinePlayerConstants } from "../constants";
+import { SubjectConstants } from "../constants";
 import { itemsReducer } from "./itemsReducer";
 
 export function onlinePlayersReducer(
     state = {}, action: any) {
 
-    const subject = onlinePlayerConstants.SUBJECT;
+    const subject = SubjectConstants.ONLINE_PLAYER;
     const nestedState = state[action.serverId];
 
     return {

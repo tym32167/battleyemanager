@@ -3,12 +3,22 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { Button, FormGroup, Input } from "reactstrap";
+import { Dispatch } from 'redux';
+import { IUser } from 'src/models';
 import { Error } from '../../controls';
 import { userActions } from "../../store/actions";
 
-class List extends Component<any> {
+interface IListProps {
+    users: IUser[],
+    error: any,
 
-    constructor(props: any) {
+    deleteUser: (user: IUser) => void,
+    onLoad: () => void
+}
+
+class List extends Component<IListProps> {
+
+    constructor(props: IListProps) {
         super(props);
 
         this.deleteCallback = this.deleteCallback.bind(this);
@@ -18,8 +28,8 @@ class List extends Component<any> {
         this.props.onLoad();
     }
 
-    public deleteCallback(user: any) {
-        if (window.confirm('Are you sure you want to delete user ' + user.username + '?')) {
+    public deleteCallback(user: IUser) {
+        if (window.confirm('Are you sure you want to delete user ' + user.userName + '?')) {
             const { deleteUser } = this.props;
             deleteUser(user);
         }
@@ -41,7 +51,12 @@ class List extends Component<any> {
     }
 }
 
-const Userstable = ({ users, deleteUser }: { users: any, deleteUser: any }) =>
+interface IUserstableProps {
+    users: IUser[],
+    deleteUser: (user: IUser) => void
+}
+
+const Userstable = ({ users, deleteUser }: IUserstableProps) =>
     <Table size="sm" responsive={true}>
         <thead>
             <tr>
@@ -58,7 +73,12 @@ const Userstable = ({ users, deleteUser }: { users: any, deleteUser: any }) =>
         </tbody>
     </Table>;
 
-const UserItem = ({ user, deleteUser }: { user: any, deleteUser: any }) => {
+interface IUserItemProps {
+    user: IUser,
+    deleteUser: (user: IUser) => void
+}
+
+const UserItem = ({ user, deleteUser }: IUserItemProps) => {
 
     const click = (e: any) => deleteUser(user);
 
@@ -90,9 +110,9 @@ const mapStateToProps = ({ users }: { users: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<void>) => {
     return {
-        deleteUser: (user: any) => dispatch(userActions.deleteItem(user)),
+        deleteUser: (user: IUser) => dispatch(userActions.deleteItem(user)),
         onLoad: () => dispatch(userActions.getItems()),
     }
 }
@@ -104,20 +124,3 @@ const ConnectedList = connect(
 
 export { ConnectedList as List };
 
-
-// List.propTypes = {
-//     deleteUser: PropTypes.func.isRequired,
-//     onLoad: PropTypes.func.isRequired,
-//     users: PropTypes.array,
-//     error: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
-// }
-
-// Userstable.propTypes = {
-//     deleteUser: PropTypes.func.isRequired,
-//     users: PropTypes.array
-// }
-
-// UserItem.propTypes = {
-//     deleteUser: PropTypes.func.isRequired,
-//     user: PropTypes.object
-// }

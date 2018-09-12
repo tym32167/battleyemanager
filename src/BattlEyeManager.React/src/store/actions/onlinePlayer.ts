@@ -1,5 +1,5 @@
 import { onlinePlayersService } from '../../services';
-import { combineConstants, commonConstants, onlinePlayerConstants } from '../constants';
+import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from '../constants';
 
 export const onlinePlayerActions = {
     getItems
@@ -24,21 +24,21 @@ function request(serverId: any, items: any) {
     return {
         items,
         serverId,
-        type: combineConstants(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST),
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.GET_ITEMS, ResultConstants.ASYNC_REQUEST),
     }
 }
 function success(serverId: any, items: any) {
     return {
         items,
         serverId,
-        type: combineConstants(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_SUCCESS),
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.GET_ITEMS, ResultConstants.ASYNC_REQUEST_SUCCESS),
     }
 }
 function failure(serverId: any, error: any) {
     return {
         error,
         serverId,
-        type: combineConstants(onlinePlayerConstants.SUBJECT, commonConstants.GET_ITEMS, commonConstants.ASYNC_REQUEST_FAILURE),
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.GET_ITEMS, ResultConstants.ASYNC_REQUEST_FAILURE),
     }
 }
 

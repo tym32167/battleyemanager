@@ -1,6 +1,7 @@
 import { IService } from "src/services";
 import { IIdentity } from "../../../models";
 import { history } from '../../../services';
+import { SubjectConstants } from "../../constants";
 import { CommonActions } from "../commonActions";
 import { ReadonlyActionBase } from "./readonlyactionsbase";
 
@@ -8,7 +9,7 @@ export class ActionBase<T extends IIdentity> extends ReadonlyActionBase<T>
 {
     constructor(
         readonly commonActions: CommonActions,
-        readonly subject: string,
+        readonly subject: SubjectConstants,
         readonly service: IService<T>
     ) {
         super(commonActions, subject, service)

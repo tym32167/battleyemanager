@@ -7,3 +7,4 @@ export interface IStore {
 export const StoreInitialState: IStore = {
     auth: AuthUserStateInitial
 }
+

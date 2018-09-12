@@ -1,4 +1,4 @@
-import { combineConstants, commonConstants } from "../constants";
+import { ActionConstants, combineConstants, ResultConstants } from "../constants";
 import { itemReducer } from "./itemReducer";
 
 export function itemsReducer(
@@ -10,8 +10,8 @@ export function itemsReducer(
 
     switch (action.type) {
         case combineConstants(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST):
+            ActionConstants.GET_ITEMS,
+            ResultConstants.ASYNC_REQUEST):
             return {
                 busy: true,
                 ...state,
@@ -19,15 +19,15 @@ export function itemsReducer(
 
             };
         case combineConstants(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST_SUCCESS):
+            ActionConstants.GET_ITEMS,
+            ResultConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 busy: false,
                 items: [...action.items],
             };
         case combineConstants(subject,
-            commonConstants.GET_ITEMS,
-            commonConstants.ASYNC_REQUEST_FAILURE):
+            ActionConstants.GET_ITEMS,
+            ResultConstants.ASYNC_REQUEST_FAILURE):
             return {
                 busy: false,
                 error: action.error,

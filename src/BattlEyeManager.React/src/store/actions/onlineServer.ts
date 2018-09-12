@@ -1,8 +1,8 @@
 import { IOnlineServer } from '../../models';
 import { onlineServerService } from '../../services';
-import { onlineServerConstants } from '../constants';
+import { SubjectConstants } from '../constants';
 import { commonActions } from './commonActions';
 import { ReadonlyActionBase } from './core/readonlyactionsbase';
 
 export const onlineServerActions =
-    new ReadonlyActionBase<IOnlineServer>(commonActions, onlineServerConstants.SUBJECT, onlineServerService);
+    new ReadonlyActionBase<IOnlineServer>(commonActions, SubjectConstants.ONLINE_SERVER, onlineServerService);
