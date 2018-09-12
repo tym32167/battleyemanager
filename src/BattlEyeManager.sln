@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Web", "BattlEyeManager.Web\BattlEyeManager.Web.csproj", "{D0505D1F-3CFC-40FE-BE3F-A636275841AF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.BE", "BattlEyeManager.BE\BattlEyeManager.BE.csproj", "{93B22071-10B8-43DB-AFAE-22A0B1C093D7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.DataLayer", "BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj", "{FD53DBFF-9ECC-44E6-86D2-A982CE1E5EF1}"
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0505D1F-3CFC-40FE-BE3F-A636275841AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93B22071-10B8-43DB-AFAE-22A0B1C093D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
