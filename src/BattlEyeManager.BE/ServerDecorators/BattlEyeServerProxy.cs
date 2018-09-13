@@ -1,7 +1,6 @@
 using BattleNET;
 using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.Core;
-using BattlEyeManager.Services.Logging;
 
 namespace BattlEyeManager.BE.ServerDecorators
 {
@@ -9,10 +8,11 @@ namespace BattlEyeManager.BE.ServerDecorators
     {
         private BattlEyeClient _battlEyeClient;
         private readonly string _serverName;
-        private readonly ILog _log = new Log(typeof(BattlEyeServerProxy));
+        private readonly ILog _log;
 
-        public BattlEyeServerProxy(BattlEyeClient client, string serverName)
+        public BattlEyeServerProxy(BattlEyeClient client, string serverName, ILog log)
         {
+            _log = log;
             _battlEyeClient = client;
             _serverName = serverName;
 

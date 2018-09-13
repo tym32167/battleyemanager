@@ -5,6 +5,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Services;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
@@ -22,7 +23,6 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BattlEyeManager.Services;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BattlEyeManager.Spa

@@ -6,10 +6,8 @@ using BattlEyeManager.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using BattlEyeManager.Services.Logging;
 
 namespace BattlEyeManager.BE.Services
 {
@@ -18,10 +16,13 @@ namespace BattlEyeManager.BE.Services
         private readonly IBattlEyeServerFactory _battlEyeServerFactory;
         private readonly IIpService _ipService;
         private readonly ConcurrentDictionary<int, ServerItem> _servers = new ConcurrentDictionary<int, ServerItem>();
-        private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
+        private readonly ILog _log;
 
-        public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory, IIpService ipService)
+        public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory,
+            IIpService ipService,
+            ILog log)
         {
+            _log = log;
             _battlEyeServerFactory = battlEyeServerFactory;
             _ipService = ipService;
         }
