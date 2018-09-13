@@ -1,16 +1,15 @@
-﻿using BattlEyeManager.BE.Abstract;
-using BattleNET;
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
+﻿using BattleNET;
+using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
-using BattlEyeManager.BE.Net;
+using BattlEyeManager.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using BattlEyeManager.Services.Logging;
 
 namespace BattlEyeManager.BE.Services
 {

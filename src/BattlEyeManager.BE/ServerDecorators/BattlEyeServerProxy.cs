@@ -1,7 +1,7 @@
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
-using BattlEyeManager.BE.Abstract;
 using BattleNET;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.Core;
+using BattlEyeManager.Services.Logging;
 
 namespace BattlEyeManager.BE.ServerDecorators
 {

@@ -1,6 +1,4 @@
-﻿using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
-using BattlEyeManager.BE.Abstract;
+﻿using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
 using System;
@@ -8,6 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using BattleNET;
+using BattlEyeManager.Core;
+using BattlEyeManager.Services.Logging;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 

@@ -1,4 +1,4 @@
-﻿namespace BattlEyeManager.BE.Logging
+﻿namespace BattlEyeManager.Core
 {
     public interface ILog
     {

@@ -1,11 +1,12 @@
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
-using BattlEyeManager.BE.Abstract;
 using BattleNET;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.Core;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using BattlEyeManager.Services.Logging;
+
 // ReSharper disable MemberCanBePrivate.Local
 
 namespace BattlEyeManager.BE.ServerDecorators

@@ -1,6 +1,7 @@
 ﻿using System;
+using BattlEyeManager.Core;
 
-namespace BattlEyeManager.BE.Logging
+namespace BattlEyeManager.Services.Logging
 {
     public static class LogFactory
     {

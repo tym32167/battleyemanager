@@ -1,8 +1,8 @@
 using AutoMapper;
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.Net;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Auth;
@@ -22,6 +22,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BattlEyeManager.Services;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BattlEyeManager.Spa

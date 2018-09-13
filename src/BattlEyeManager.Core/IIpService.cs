@@ -1,4 +1,4 @@
-﻿namespace BattlEyeManager.BE.Net
+﻿namespace BattlEyeManager.Core
 {
     public interface IIpService
     {

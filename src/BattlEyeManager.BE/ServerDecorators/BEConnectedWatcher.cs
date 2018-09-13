@@ -1,10 +1,10 @@
 using BattlEyeManager.BE.Abstract;
 using BattleNET;
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using BattlEyeManager.Core;
+using BattlEyeManager.Services.Logging;
 
 namespace BattlEyeManager.BE.ServerDecorators
 {

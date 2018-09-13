@@ -5,12 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BeNet\" />
-    <Folder Include="Net\" />
+    <Compile Remove="BeNet\**" />
+    <EmbeddedResource Remove="BeNet\**" />
+    <None Remove="BeNet\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BattleNET\BattleNET\BattleNET.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.Core\BattlEyeManager.Core.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.Services\BattlEyeManager.Services.csproj" />
   </ItemGroup>
 
 </Project>

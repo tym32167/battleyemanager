@@ -1,4 +1,6 @@
-﻿namespace BattlEyeManager.BE.Logging
+﻿using BattlEyeManager.Core;
+
+namespace BattlEyeManager.Services.Logging
 {
     //public class Log : ILog
     //{
