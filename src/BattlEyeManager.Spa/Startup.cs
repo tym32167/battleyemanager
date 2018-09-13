@@ -23,6 +23,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BattlEyeManager.Services.Logging;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BattlEyeManager.Spa
@@ -102,6 +103,8 @@ namespace BattlEyeManager.Spa
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
+
+            services.AddSingleton<ILog, Log>();
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();

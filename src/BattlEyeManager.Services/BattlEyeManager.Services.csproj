@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Redbus" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BattlEyeManager.Core\BattlEyeManager.Core.csproj" />
   </ItemGroup>
 
