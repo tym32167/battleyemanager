@@ -1,6 +1,4 @@
-﻿using BattlEyeManager.Core.MessageBus;
-
-namespace BattlEyeManager.Services.MessageBus
+﻿namespace BattlEyeManager.Core.MessageBus
 {
     public class Message<T> : Message, IMessage<T>
     {
@@ -10,6 +8,11 @@ namespace BattlEyeManager.Services.MessageBus
         {
             Data = data;
         }
+    }
+
+    public class MessageFactory
+    {
+        public static Message<T> Create<T>(T payload) => new Message<T>(payload);
     }
 
     public class Message : IMessage

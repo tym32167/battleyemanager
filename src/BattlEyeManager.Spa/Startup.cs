@@ -1,11 +1,15 @@
 using AutoMapper;
 using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.DataServices;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
+using BattlEyeManager.Core.MessageBus;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Services;
+using BattlEyeManager.Services.Logging;
+using BattlEyeManager.Services.MessageBus;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
@@ -23,7 +27,6 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BattlEyeManager.Services.Logging;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BattlEyeManager.Spa
@@ -105,11 +108,14 @@ namespace BattlEyeManager.Spa
 
 
             services.AddSingleton<ILog, Log>();
+            services.AddSingleton<IMessageBus, MessageBus>();
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
             services.AddSingleton<ServerStateService, ServerStateService>();
             services.AddSingleton<DataRegistrator, DataRegistrator>();
+
+            services.AddSingleton<EventToMessageProxy>();
 
             services.AddSingleton<BELogic, BELogic>();
 
@@ -132,7 +138,8 @@ namespace BattlEyeManager.Spa
             AppDbContext store,
             ServerStateService service,
             DataRegistrator dataRegistrator,
-            BELogic beLogic
+            BELogic beLogic,
+            EventToMessageProxy eventToMessageProxy
         )
         {
             store.Database.Migrate();
@@ -169,6 +176,7 @@ namespace BattlEyeManager.Spa
 
             SetupMappings();
             dataRegistrator.Init().Wait();
+            eventToMessageProxy.Init();
             beLogic.Init();
             CheckAdminUser(userManager, roleManager).Wait();
             RunActiveServers(beServerAggregator, store, service).Wait();

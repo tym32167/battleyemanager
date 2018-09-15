@@ -304,29 +304,4 @@ namespace BattlEyeManager.BE.Services
             BanLog?.Invoke(this, e);
         }
     }
-
-
-
-
-    public class ServerInfo
-    {
-        public int Id { get; set; }
-        public string Host { get; set; }
-        public int Port { get; set; }
-        public string Password { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    public class BEServerEventArgs<T> : EventArgs
-    {
-        public BEServerEventArgs(ServerInfo server, T data)
-        {
-            Server = server;
-            Data = data;
-        }
-
-        public ServerInfo Server { get; }
-        public T Data { get; }
-    }
 }
