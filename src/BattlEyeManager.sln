@@ -13,11 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{6C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleNET", "..\BattleNET\BattleNET\BattleNET.csproj", "{518CEBDE-B8A6-48CB-B719-5729A325DACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.Core", "BattlEyeManager.Core\BattlEyeManager.Core.csproj", "{079C2048-62C1-45D2-B116-0E73B5F06584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Core", "BattlEyeManager.Core\BattlEyeManager.Core.csproj", "{079C2048-62C1-45D2-B116-0E73B5F06584}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.Services", "BattlEyeManager.Services\BattlEyeManager.Services.csproj", "{017A3A84-F274-493B-AD68-D7FCA53ED29D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.BE.DataServices", "BattlEyeManager.BE.DataServices\BattlEyeManager.BE.DataServices.csproj", "{77346A42-DB89-4B57-87D7-12342CBE9DE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Services", "BattlEyeManager.Services\BattlEyeManager.Services.csproj", "{017A3A84-F274-493B-AD68-D7FCA53ED29D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +47,6 @@ Global
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77346A42-DB89-4B57-87D7-12342CBE9DE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77346A42-DB89-4B57-87D7-12342CBE9DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77346A42-DB89-4B57-87D7-12342CBE9DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77346A42-DB89-4B57-87D7-12342CBE9DE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

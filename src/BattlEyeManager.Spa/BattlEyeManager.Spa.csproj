@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BattleNET\BattleNET\BattleNET.csproj" />
-    <ProjectReference Include="..\BattlEyeManager.BE.DataServices\BattlEyeManager.BE.DataServices.csproj" />
     <ProjectReference Include="..\BattlEyeManager.BE\BattlEyeManager.BE.csproj" />
     <ProjectReference Include="..\BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj" />
     <ProjectReference Include="..\BattlEyeManager.Services\BattlEyeManager.Services.csproj" />
