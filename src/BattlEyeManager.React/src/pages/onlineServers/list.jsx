@@ -20,7 +20,7 @@ class List extends Component {
         return (
             <React.Fragment>
                 <h2>Online Servers ({len})</h2>
-                <Error error={error} />                
+                <Error error={error} />
                 {items && <Serverstable items={items} />}
             </React.Fragment>
         );
@@ -50,9 +50,9 @@ const ServerItem = ({ item }) => (
         <td>{item.port}</td>
         <td>
             <input type="checkbox" disabled checked={item.active} />
-        </td>  
+        </td>
         <td>
-            <Button color="success" to={'/online/' + item.id } tag={Link} size="sm">Dashboard</Button>
+            <Button color="success" to={'/online/' + item.id} tag={Link} size="sm">Dashboard</Button>
         </td>
     </tr>)
 

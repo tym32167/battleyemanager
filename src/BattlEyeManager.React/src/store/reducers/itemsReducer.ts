@@ -1,12 +1,11 @@
-import { ActionConstants, combineConstants, ResultConstants } from "../constants";
+import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from "../constants";
+import { IItemsState, IRequestAction } from "../models";
 import { itemReducer } from "./itemReducer";
 
-export function itemsReducer(
-    state: any = {
-        items: [],
-    }, action: any, subject: any) {
+export function itemsReducer<T>(
+    state: IItemsState<T> = {}, action: IRequestAction<T>, subject: SubjectConstants): IItemsState<T> {
 
-    state = itemReducer(state, action, subject);
+    state = itemReducer<T>(state, action, subject);
 
     switch (action.type) {
         case combineConstants(subject,
@@ -23,7 +22,7 @@ export function itemsReducer(
             ResultConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 busy: false,
-                items: [...action.items],
+                items: action.items,
             };
         case combineConstants(subject,
             ActionConstants.GET_ITEMS,

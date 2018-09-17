@@ -1,6 +1,7 @@
 import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from "../constants";
+import { IItemsState, IRequestAction } from "../models";
 
-export function itemReducer(state = {}, action: any, subject: SubjectConstants) {
+export function itemReducer<T>(state: IItemsState<T> = {}, action: IRequestAction<T>, subject: SubjectConstants): IItemsState<T> {
     switch (action.type) {
 
         case combineConstants(subject,
@@ -8,9 +9,7 @@ export function itemReducer(state = {}, action: any, subject: SubjectConstants) 
             ResultConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                createRequest: {
-                    ...action.item
-                }
+                createItemRequest: action.item
             };
 
         case combineConstants(subject,
@@ -18,9 +17,7 @@ export function itemReducer(state = {}, action: any, subject: SubjectConstants) 
             ResultConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 ...state,
-                createItem: {
-                    ...action.item
-                }
+                createItem: action.item
             };
         case combineConstants(subject,
             ActionConstants.CREATE_ITEM,
@@ -35,18 +32,14 @@ export function itemReducer(state = {}, action: any, subject: SubjectConstants) 
             ResultConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                request: {
-                    ...action.item
-                }
+                request: action.item
             };
         case combineConstants(subject,
             ActionConstants.GET_ITEM,
             ResultConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 ...state,
-                item: {
-                    ...action.item
-                }
+                item: action.item
             };
         case combineConstants(subject,
             ActionConstants.GET_ITEM,
@@ -60,18 +53,14 @@ export function itemReducer(state = {}, action: any, subject: SubjectConstants) 
             ResultConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                updateRequest: {
-                    ...action.item
-                }
+                updateItemRequest: action.item
             };
         case combineConstants(subject,
             ActionConstants.UPDATE_ITEM,
             ResultConstants.ASYNC_REQUEST_SUCCESS):
             return {
                 ...state,
-                updateUser: {
-                    ...action.item
-                }
+                updateItem: action.item
             };
         case combineConstants(subject,
             ActionConstants.UPDATE_ITEM,
@@ -86,9 +75,7 @@ export function itemReducer(state = {}, action: any, subject: SubjectConstants) 
             ResultConstants.ASYNC_REQUEST):
             return {
                 ...state,
-                deleteRequest: {
-                    ...action.item
-                }
+                deleteItemRequest: action.item
             };
         case combineConstants(subject,
             ActionConstants.DELETE_ITEM,
