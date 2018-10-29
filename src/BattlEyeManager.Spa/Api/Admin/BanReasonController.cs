@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BattlEyeManager.Spa.Api
+namespace BattlEyeManager.Spa.Api.Admin
 {
     [Route("api/[controller]")]
     public class BanReasonController : BaseController

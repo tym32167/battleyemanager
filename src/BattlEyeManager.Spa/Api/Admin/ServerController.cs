@@ -1,17 +1,17 @@
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using BattlEyeManager.Spa.Constants;
 
-namespace BattlEyeManager.Spa.Api
+namespace BattlEyeManager.Spa.Api.Admin
 {
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]

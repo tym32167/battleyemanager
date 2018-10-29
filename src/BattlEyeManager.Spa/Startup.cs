@@ -8,6 +8,7 @@ using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Services;
 using BattlEyeManager.Services.Logging;
 using BattlEyeManager.Spa.Auth;
+using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
@@ -179,7 +180,7 @@ namespace BattlEyeManager.Spa
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager)
         {
-            const string adminRole = "Administrator";
+            const string adminRole = RoleConstants.Administrator;
 
             if (!await roleManager.RoleExistsAsync(adminRole))
             {

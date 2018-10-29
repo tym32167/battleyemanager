@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
@@ -5,11 +8,8 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BattlEyeManager.Spa.Api
+namespace BattlEyeManager.Spa.Api.Admin
 {
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]

@@ -87,19 +87,34 @@ MainMenu.propTypes = {
 }
 
 const AdminMenu = () => (
-  <UncontrolledDropdown nav inNavbar>
-    <DropdownToggle nav caret>
-      Admin
+  <React.Fragment>
+    <UncontrolledDropdown nav inNavbar>
+      <DropdownToggle nav caret>
+        Admin
                 </DropdownToggle>
-    <DropdownMenu right>
-      <DropdownItem tag={Link} to="/users">
-        Users
+      <DropdownMenu right>
+        <DropdownItem tag={Link} to="/users">
+          Users
                   </DropdownItem>
-      <DropdownItem tag={Link} to="/servers">
-        Servers
+        <DropdownItem tag={Link} to="/servers">
+          Servers
                   </DropdownItem>
-    </DropdownMenu>
-  </UncontrolledDropdown>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+    <UncontrolledDropdown nav inNavbar>
+      <DropdownToggle nav caret>
+        Dictionaries
+                </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem tag={Link} to="/kickReasons">
+          Kick reasons
+                  </DropdownItem>
+        <DropdownItem tag={Link} to="/banReasons">
+          Ban reasons
+                  </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+  </React.Fragment>
 );
 
 
