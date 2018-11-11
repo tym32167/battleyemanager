@@ -1,4 +1,5 @@
-export interface IBanReason {
-    id: number,
-    text: string
+import { IIdTextItem } from ".";
+
+// tslint:disable-next-line:no-empty-interface
+export interface IBanReason extends IIdTextItem {
 }

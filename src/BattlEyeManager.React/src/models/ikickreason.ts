@@ -1,4 +1,6 @@
-export interface IKickReason {
-    id: number,
-    text: string
+import { IIdTextItem } from ".";
+
+// tslint:disable-next-line:no-empty-interface
+export interface IKickReason extends IIdTextItem {
+
 }

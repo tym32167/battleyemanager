@@ -4,4 +4,4 @@ import { SubjectConstants } from '../constants';
 import { commonActions } from "./commonActions";
 import { ActionBase } from './core/actionbase';
 export const userActions =
-    new ActionBase<IUser>(commonActions, SubjectConstants.USER, userService);
+    new ActionBase<IUser>(commonActions, SubjectConstants.USER, userService, '/users');

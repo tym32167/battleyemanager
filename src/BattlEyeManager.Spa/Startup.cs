@@ -221,8 +221,16 @@ namespace BattlEyeManager.Spa
             {
                 config.CreateMap<Server, ServerModel>();
                 config.CreateMap<ServerModel, Server>();
+
+                config.CreateMap<KickReason, KickReasonModel>();
+                config.CreateMap<KickReasonModel, KickReason>();
+
+                config.CreateMap<BanReason, BanReasonModel>();
+                config.CreateMap<BanReasonModel, BanReason>();
+
                 config.CreateMap<Server, ServerInfo>();
                 config.CreateMap<ServerModel, ServerInfo>();
+
                 config.CreateMap<Server, OnlineServerModel>();
             });
         }

@@ -5,5 +5,5 @@ import { commonActions } from "./commonActions";
 import { ActionBase } from "./core/actionbase";
 
 export const serverActions =
-    new ActionBase<IServer>(commonActions, SubjectConstants.SERVER, serverService);
+    new ActionBase<IServer>(commonActions, SubjectConstants.SERVER, serverService, '/servers');
 

@@ -7,3 +7,5 @@ export * from './ionlineplayer'
 export * from './iserver'
 export * from './ikickreason'
 export * from './ibanreason'
+
+export * from './shared/iidtext'

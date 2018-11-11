@@ -10,7 +10,8 @@ export class ActionBase<T extends IIdentity> extends ReadonlyActionBase<T>
     constructor(
         readonly commonActions: CommonActions,
         readonly subject: SubjectConstants,
-        readonly service: IService<T>
+        readonly service: IService<T>,
+        readonly listUrl: string
     ) {
         super(commonActions, subject, service)
     }
@@ -22,11 +23,11 @@ export class ActionBase<T extends IIdentity> extends ReadonlyActionBase<T>
     }
 
     public addItem(item: T) {
-        return this.commonActions.addItem<T>(item, this.subject, this.service, () => history.push('/users'));
+        return this.commonActions.addItem<T>(item, this.subject, this.service, () => history.push(this.listUrl));
     }
 
     public updateItem(item: T) {
-        return this.commonActions.updateItem<T>(item, this.subject, this.service, () => history.push('/users'));
+        return this.commonActions.updateItem<T>(item, this.subject, this.service, () => history.push(this.listUrl));
     }
 }
 

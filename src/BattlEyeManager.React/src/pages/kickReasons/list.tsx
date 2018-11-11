@@ -1,18 +1,29 @@
-import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { IdTextList } from 'src/controls';
 import { IKickReason } from 'src/models';
+import { kickReasonActions } from "../../store/actions";
 
-interface IKickListProps {
-    data: IKickReason[]
-}
-
-export class List extends Component<IKickListProps>{
-
-    constructor(props: IKickListProps) {
-        super(props);
-    }
-    public render() {
-        return (<React.Fragment>
-            <h1>List</h1>
-        </React.Fragment>)
+const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
+    return {
+        createUrl: "/kickReasons/create",
+        editUrl: "/kickReasons/",
+        error: kickReasons.error,
+        items: kickReasons.items || [],
+        title: "Kick reasons:",
     }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+    return {
+        deleteItem: (item: IKickReason) => dispatch(kickReasonActions.deleteItem(item)),
+        onLoad: () => dispatch(kickReasonActions.getItems()),
+    }
+}
+
+const ConnectedList = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IdTextList);
+
+export { ConnectedList as List };
