@@ -2,6 +2,7 @@ using AutoMapper;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace BattlEyeManager.Spa.Api
     public class OnlineServerController : BaseController
     {
         private readonly AppDbContext _dbContext;
+        private readonly ServerStateService _serverStateService;
 
-        public OnlineServerController(AppDbContext dbContext)
+        public OnlineServerController(AppDbContext dbContext, ServerStateService serverStateService)
         {
             _dbContext = dbContext;
+            _serverStateService = serverStateService;
         }
 
         [HttpGet]
@@ -28,8 +31,9 @@ namespace BattlEyeManager.Spa.Api
                 .ToArrayAsync();
 
             var items = dbItems
-                .Select(Mapper.Map<OnlineServerModel>)
+                .Select(x => Update(Mapper.Map<OnlineServerModel>(x)))
                 .ToArray();
+
             return Ok(items);
         }
 
@@ -45,8 +49,17 @@ namespace BattlEyeManager.Spa.Api
             }
 
             var ret = Mapper.Map<OnlineServerModel>(item);
+            return Ok(Update(ret));
+        }
 
-            return Ok(ret);
+        private OnlineServerModel Update(OnlineServerModel input)
+        {
+            input.PlayersCount = _serverStateService.GetPlayersCount(input.Id);
+            input.AdminsCount = _serverStateService.GetAdminsCount(input.Id);
+            input.BansCount = _serverStateService.GetBansCount(input.Id);
+
+            input.IsConnected = _serverStateService.IsConnected(input.Id);
+            return input;
         }
     }
 }

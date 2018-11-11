@@ -1,16 +1,21 @@
 import React from 'react';
 
-import { Form, Button, Modal, ModalBody, ModalHeader, ModalFooter, Input } from 'reactstrap';
-import { Field, reset, reduxForm, actionCreators } from 'redux-form'
-import { requiredValidator } from '../../formValidators';
+import { Button, Form } from 'reactstrap';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { FormInputField } from '../../../controls';
+import { requiredValidator } from '../../formValidators';
 
 
-const KickPlayerForm = ({ handleSubmit, onCancel, kickReasons }) =>
+
+interface IKickPlayerFormProps extends InjectedFormProps {
+    onCancel: () => void;
+}
+
+
+const KickPlayerForm = ({ handleSubmit, onCancel }: IKickPlayerFormProps) =>
     (<Form onSubmit={handleSubmit} className="mt-1">
         <Field name="kickReason" component={FormInputField} type="textarea" placeholder="Kick reason"
             validate={[requiredValidator]} className="col-sm" />
-            {'items: ' + kickReasons.length + ' '}
         <Button color="primary" type="submit">Kick</Button>
         {' '}
         <Button color="secondary" onClick={onCancel}>Cancel</Button>

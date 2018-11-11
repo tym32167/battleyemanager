@@ -74,6 +74,16 @@ namespace BattlEyeManager.BE.Services
             return _servers.Values.Select(x => x.ServerInfo).ToArray();
         }
 
+        public bool IsConnected(int serverId)
+        {
+            if (_servers.TryGetValue(serverId, out ServerItem item))
+            {
+                return item.Connected;
+            }
+
+            return false;
+        }
+
         private void ProcessMessage(ServerInfo server, ServerMessage message)
         {
             var logMessage = new LogMessage

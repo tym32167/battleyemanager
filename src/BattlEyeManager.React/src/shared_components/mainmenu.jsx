@@ -63,6 +63,7 @@ class MainMenu extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   {servers && servers.map((server) => <OnlineServer key={server.id} server={server} />)}
+                  {!servers && "No active servers"}
                 </DropdownMenu>
               </UncontrolledDropdown>
               {isAdmin && <AdminMenu />}

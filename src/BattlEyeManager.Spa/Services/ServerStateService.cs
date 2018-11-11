@@ -232,5 +232,37 @@ namespace BattlEyeManager.Spa.Services
         {
             _aggregator.Send(serverId, BattlEyeCommand.Say, $" {audience} {adminName}: {chatMessage}");
         }
+
+        public int GetPlayersCount(int serverId)
+        {
+            if (_playerState.TryGetValue(serverId, out IEnumerable<Player> res))
+            {
+                return res.Count();
+            }
+            return 0;
+        }
+
+        public bool IsConnected(int serverId)
+        {
+            return _aggregator.IsConnected(serverId);
+        }
+
+        public int GetAdminsCount(int serverId)
+        {
+            if (_adminState.TryGetValue(serverId, out IEnumerable<Admin> res))
+            {
+                return res.Count();
+            }
+            return 0;
+        }
+
+        public int GetBansCount(int serverId)
+        {
+            if (_banState.TryGetValue(serverId, out IEnumerable<Ban> res))
+            {
+                return res.Count();
+            }
+            return 0;
+        }
     }
 }

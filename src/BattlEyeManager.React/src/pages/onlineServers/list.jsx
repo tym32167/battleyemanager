@@ -30,11 +30,16 @@ class List extends Component {
 const Serverstable = ({ items }) =>
     <Table size="sm" responsive>
         <thead>
-            <tr>
+            <tr nowrap >
                 <th>Name</th>
                 <th>Host</th>
                 <th>Port</th>
                 <th>Active</th>
+
+                <th>Connected</th>
+                <th>Players</th>
+                <th>Bans</th>
+                <th>Admins</th>
                 <th></th>
             </tr>
         </thead>
@@ -45,12 +50,21 @@ const Serverstable = ({ items }) =>
 
 const ServerItem = ({ item }) => (
     <tr>
-        <td>{item.name}</td>
+        <td style={{ "white-space": "nowrap" }} >{item.name}</td>
         <td>{item.host}</td>
         <td>{item.port}</td>
         <td>
             <input type="checkbox" disabled checked={item.active} />
         </td>
+
+        <td>
+            <input type="checkbox" disabled checked={item.isConnected} />
+        </td>
+
+        <td>{item.playersCount}</td>
+        <td>{item.bansCount}</td>
+        <td>{item.adminsCount}</td>
+
         <td>
             <Button color="success" to={'/online/' + item.id} tag={Link} size="sm">Dashboard</Button>
         </td>
