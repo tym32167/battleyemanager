@@ -30,17 +30,17 @@ class List extends Component {
 const Serverstable = ({ items }) =>
     <Table size="sm" responsive>
         <thead>
-            <tr nowrap >
+            <tr>
                 <th>Name</th>
-                <th>Host</th>
-                <th>Port</th>
-                <th>Active</th>
+                <th style={{ width: "1%" }} >Host</th>
+                <th style={{ width: "1%" }}>Port</th>
+                <th style={{ width: "1%" }}>Active</th>
 
-                <th>Connected</th>
-                <th>Players</th>
-                <th>Bans</th>
-                <th>Admins</th>
-                <th></th>
+                <th style={{ width: "1%" }}>Connected</th>
+                <th style={{ width: "1%" }}>Players</th>
+                <th style={{ width: "1%" }}>Bans</th>
+                <th style={{ width: "1%" }}>Admins</th>
+                <th style={{ width: "1%" }}></th>
             </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@ const Serverstable = ({ items }) =>
 
 const ServerItem = ({ item }) => (
     <tr>
-        <td style={{ "white-space": "nowrap" }} >{item.name}</td>
+        <td style={{ whiteSpace: "nowrap" }} >{item.name}</td>
         <td>{item.host}</td>
         <td>{item.port}</td>
         <td>

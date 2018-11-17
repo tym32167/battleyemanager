@@ -264,5 +264,14 @@ namespace BattlEyeManager.Spa.Services
             }
             return 0;
         }
+
+        public IEnumerable<Ban> GetBans(int serverId)
+        {
+            if (_banState.TryGetValue(serverId, out IEnumerable<Ban> res))
+            {
+                return res;
+            }
+            return Enumerable.Empty<Ban>();
+        }
     }
 }

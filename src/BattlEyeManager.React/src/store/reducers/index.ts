@@ -4,6 +4,7 @@ import { authentication } from './auth';
 import { banReasonsReducer } from './banReason';
 import { currentUsersReducer } from './currentUser';
 import { kickReasonsReducer } from './kickReason';
+import { onlineBansReducer } from './onlineBan';
 import { onlineChatReducer } from './onlineChat';
 import { onlinePlayersReducer } from './onlinePlayer';
 import { onlineServersReducer } from './onlineServer';
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
     currentUser: currentUsersReducer,
     form: formReducer,
     kickReasons: kickReasonsReducer,
+    onlineBans: onlineBansReducer,
     onlineChat: onlineChatReducer,
     onlinePlayers: onlinePlayersReducer,
     onlineServers: onlineServersReducer,
