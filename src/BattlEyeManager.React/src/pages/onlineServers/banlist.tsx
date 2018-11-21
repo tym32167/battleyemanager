@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
-import { Error } from '../../controls';
+import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps } from '../../controls';
 import { ServerHeader } from './onlineServerHeader';
-
 
 export const BanList = (props: any) => (
     <React.Fragment>
@@ -28,14 +27,15 @@ export const BanList = (props: any) => (
 );
 
 interface IBanListProps {
-    onLoad: () => void,
+    onLoad: (serverId: number) => void,
     items: IOnlineBan[],
+    serverId: number,
     error: any
 }
 
 
 
-class BanListTable extends Component<any> {
+class BanListTable extends Component<IBanListProps> {
     public t: IBanListProps;
     public componentDidMount() {
         this.props.onLoad(this.props.serverId);
@@ -46,11 +46,27 @@ class BanListTable extends Component<any> {
         const { items, error } = this.props;
         const len = items ? items.length : 0;
 
+        const columns: Array<IBootstrapTableColumn<IOnlineBan>> = [
+            { header: "Num", renderer: row => row.num },
+            { header: "Minutes left", renderer: row => row.minutesleft },
+            { header: "Reason", renderer: row => row.reason },
+            { header: "Guid or IP", renderer: row => row.guidIp },
+        ];
+
+
+        const filterProps: IFilterControlProps<IOnlineBan> = {
+            children: (props) => <BootstrapTable columns={columns} {...props} />,
+            data: items,
+        }
+
         return (
             <React.Fragment>
                 <h2>Online Bans ({len})</h2>
                 <Error error={error} />
-                {/* {items && <Serverstable items={items} />} */}
+                {items &&
+                    <React.Fragment>
+                        <FilterControl {...filterProps} />
+                    </React.Fragment>}
             </React.Fragment>
         );
     }
