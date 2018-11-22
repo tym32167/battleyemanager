@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { IOnlineBan } from 'src/models';
+import { IOnlineBan, IOnlineServer } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps } from '../../controls';
+import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, PagerControl } from '../../controls';
 import { ServerHeader } from './onlineServerHeader';
 
 export const BanList = (props: any) => (
@@ -55,7 +55,14 @@ class BanListTable extends Component<IBanListProps> {
 
 
         const filterProps: IFilterControlProps<IOnlineBan> = {
-            children: (props) => <BootstrapTable columns={columns} {...props} />,
+            children: (props) => {
+                const pagerProps: IPagerControlProps<IOnlineServer> = {
+                    ...props,
+                    children: (p) => <BootstrapTable columns={columns} {...p} />,
+                    pageSize: 10,
+                }
+                return (<PagerControl {...pagerProps} />);
+            },
             data: items,
         }
 

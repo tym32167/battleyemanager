@@ -38,10 +38,6 @@ export class IdTextEdit extends Component<IEditProps<IIdTextItem>>{
 
 const IdTextEditForm = (props: IEditProps<IIdTextItem>) => {
     const { handleSubmit, listUrl } = props;
-
-    // tslint:disable-next-line:no-console
-    console.log(listUrl);
-
     return (
         <Form onSubmit={handleSubmit} className="m-1">
             <Field name="id" component={FormInputField} type="text" label="Id" readOnly={true} />

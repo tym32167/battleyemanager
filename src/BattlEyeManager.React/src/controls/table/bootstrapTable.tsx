@@ -22,8 +22,6 @@ interface IBootstrapItemProps<T> {
 
 export const BootstrapTable = <T extends any>(props: IBootstrapTableProps<T>) => {
     const { data, columns } = props;
-    // tslint:disable-next-line:no-console
-    console.log(data);
     return (
         <Table size="sm" responsive={true}>
             <thead>
