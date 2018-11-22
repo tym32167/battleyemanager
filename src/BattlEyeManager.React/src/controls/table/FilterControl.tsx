@@ -53,8 +53,6 @@ export class FilterControl<T> extends React.Component<IFilterControlProps<T>, IF
             filtered = data.filter((el, ind, arr) => filter(el, filterString));
         }
 
-
-
         return (
             <React.Fragment>
                 <Form inline={true} onSubmit={this.handleSubmit}>
@@ -64,7 +62,7 @@ export class FilterControl<T> extends React.Component<IFilterControlProps<T>, IF
                     </FormGroup>
                     <Button>Filter</Button>
                 </Form>
-                {children({ data: filtered })}
+                {children({ ...this.props, data: filtered })}
             </React.Fragment>
         )
     }

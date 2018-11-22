@@ -4,6 +4,9 @@ import { Table } from 'reactstrap';
 
 export interface IBootstrapTableColumn<T> {
     header: string,
+
+    headerStyle?: any,
+    rowStyle?: any,
     renderer: (row: T) => any
 }
 
@@ -25,7 +28,7 @@ export const BootstrapTable = <T extends any>(props: IBootstrapTableProps<T>) =>
         <Table size="sm" responsive={true}>
             <thead>
                 <tr>
-                    {columns && columns.map((item, i) => <th key={i}>{item.header}</th>)}
+                    {columns && columns.map((item, i) => <th key={i} style={{ ...item.headerStyle }} >{item.header}</th>)}
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +42,7 @@ const BootstrapItem = <T extends any>(props: IBootstrapItemProps<T>) => {
     const { item, columns } = props;
     return (
         <tr>
-            {columns && columns.map((column, i) => <td key={i}>{column.renderer(item)}</td>)}
+            {columns && columns.map((column, i) => <td key={i} style={{ ...column.rowStyle }}>{column.renderer(item)}</td>)}
         </tr>
     );
 }
