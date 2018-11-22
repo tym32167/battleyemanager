@@ -30,7 +30,7 @@ export class PagerControl<T> extends React.Component<IPagerControlProps<T>, IPag
         let { page } = this.state;
 
         const total = data.length;
-        const maxPage = Math.ceil(total / pageSize + (((total % pageSize) > 0) ? 1 : 0));
+        const maxPage = Math.ceil(total / pageSize);
 
         if (page < 1) { page = 1; }
         if (page > maxPage) { page = maxPage; }
@@ -51,7 +51,13 @@ export class PagerControl<T> extends React.Component<IPagerControlProps<T>, IPag
             <React.Fragment>
                 {children({ ...this.props, data: paged })}
 
-                <Pagination size="sm" aria-label="Page navigation example">
+                <Pagination size="sm" aria-label="">
+
+                    <PaginationItem >
+                        {/* tslint:disable-next-line:jsx-no-lambda */}
+                        <PaginationLink previous={true} href="#" onClick={e => this.setPage(e, 1)} />
+                    </PaginationItem>
+
                     <PaginationItem >
                         {/* tslint:disable-next-line:jsx-no-lambda */}
                         <PaginationLink previous={true} href="#" onClick={e => this.setPage(e, page - 1)} />
@@ -68,8 +74,12 @@ export class PagerControl<T> extends React.Component<IPagerControlProps<T>, IPag
                         {/* tslint:disable-next-line:jsx-no-lambda */}
                         <PaginationLink next={true} href="#" onClick={e => this.setPage(e, page + 1)} />
                     </PaginationItem>
+                    <PaginationItem>
+                        {/* tslint:disable-next-line:jsx-no-lambda */}
+                        <PaginationLink next={true} href="#" onClick={e => this.setPage(e, maxPage)} />
+                    </PaginationItem>
                 </Pagination>
-
+                {'Pages: ' + maxPage}
 
             </React.Fragment>
         )

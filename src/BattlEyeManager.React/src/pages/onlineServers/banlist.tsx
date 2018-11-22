@@ -59,7 +59,7 @@ class BanListTable extends Component<IBanListProps> {
                 const pagerProps: IPagerControlProps<IOnlineServer> = {
                     ...props,
                     children: (p) => <BootstrapTable columns={columns} {...p} />,
-                    pageSize: 10,
+                    pageSize: 50,
                 }
                 return (<PagerControl {...pagerProps} />);
             },
