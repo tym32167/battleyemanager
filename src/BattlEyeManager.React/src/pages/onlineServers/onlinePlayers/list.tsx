@@ -22,6 +22,11 @@ class List extends React.Component<IListProps> {
 
     private connection: SignalR.HubConnection;
 
+    constructor(props: IListProps) {
+        super(props);
+        this.refresh = this.refresh.bind(this);
+    }
+
     public componentDidUpdate(prevProps: IListProps) {
         if (Number(prevProps.serverId) !== Number(this.props.serverId)) {
             this.refresh();
@@ -71,7 +76,6 @@ class List extends React.Component<IListProps> {
 
         const { items, error, busy } = this.props;
         const len = items.length;
-        const p = { refresh: this.refresh };
 
         const columns: Array<IBootstrapTableColumn<IOnlinePlayer>> = [
             { header: "Num", name: "num" },
@@ -98,7 +102,7 @@ class List extends React.Component<IListProps> {
 
         return (
             <React.Fragment>
-                <h4> <small><FontAwesomeIcon icon="sync" {...p} /></small> Players ({len}) {busy && <small>loading....</small>}</h4>
+                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> Players ({len}) {busy && <small>loading....</small>}</h4>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
