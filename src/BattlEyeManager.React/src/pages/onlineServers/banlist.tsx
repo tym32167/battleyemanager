@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IOnlineBan, IOnlineServer } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, PagerControl } from '../../controls';
+import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../controls';
 import { ServerHeader } from './onlineServerHeader';
 
 export const BanList = (props: any) => (
@@ -47,24 +47,34 @@ class BanListTable extends Component<IBanListProps> {
         const len = items ? items.length : 0;
 
         const columns: Array<IBootstrapTableColumn<IOnlineBan>> = [
-            { header: "Num", renderer: row => row.num },
-            { header: "Minutes left", renderer: row => row.minutesleft },
-            { header: "Reason", renderer: row => row.reason },
-            { header: "Guid or IP", renderer: row => row.guidIp },
+            { header: "Num", name: "num" },
+            { header: "Minutes left", name: "minutesleft" },
+            { header: "Reason", name: "reason" },
+            { header: "Guid or IP", name: "guidIp" },
         ];
 
+        const sortProps: ISortControlProps<IOnlineBan> = {
+            children: (props2) => {
+                const filterProps: IFilterControlProps<IOnlineBan> = {
+                    ...props2,
+                    children: (props) => {
+                        const pagerProps: IPagerControlProps<IOnlineServer> = {
+                            ...props,
+                            children: (p) => <BootstrapTable columns={columns} {...p} />,
+                            pageSize: 50,
+                        }
+                        return (<PagerControl {...pagerProps} />);
+                    }
+                };
 
-        const filterProps: IFilterControlProps<IOnlineBan> = {
-            children: (props) => {
-                const pagerProps: IPagerControlProps<IOnlineServer> = {
-                    ...props,
-                    children: (p) => <BootstrapTable columns={columns} {...p} />,
-                    pageSize: 50,
-                }
-                return (<PagerControl {...pagerProps} />);
+                return (
+                    <FilterControl {...filterProps} />
+                );
             },
             data: items,
-        }
+        };
+
+
 
         return (
             <React.Fragment>
@@ -72,7 +82,7 @@ class BanListTable extends Component<IBanListProps> {
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
-                        <FilterControl {...filterProps} />
+                        <SortControl {...sortProps} />
                     </React.Fragment>}
             </React.Fragment>
         );

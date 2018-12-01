@@ -2,7 +2,7 @@ import * as SignalR from '@aspnet/signalr';
 import React from 'react';
 import { connect } from 'react-redux';
 // import { Table } from 'reactstrap';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps } from '../../../controls';
+import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, ISortControlProps, SortControl } from '../../../controls';
 import { onlinePlayerActions } from "../../../store/actions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -74,18 +74,27 @@ class List extends React.Component<IListProps> {
         const p = { refresh: this.refresh };
 
         const columns: Array<IBootstrapTableColumn<IOnlinePlayer>> = [
-            { header: "Num", renderer: row => row.num },
-            { header: "Name", renderer: row => row.name },
-            { header: "IP", renderer: row => row.ip },
-            { header: "Port", renderer: row => row.port },
-            { header: "Ping", renderer: row => row.ping },
+            { header: "Num", name: "num" },
+            { header: "Name", name: "name" },
+            { header: "IP", name: "ip" },
+            { header: "Port", name: "port" },
+            { header: "Ping", name: "ping" },
             { header: "", renderer: row => (<KickPlayer player={row} />) },
         ];
 
-        const filterProps: IFilterControlProps<IOnlinePlayer> = {
-            children: (props) => <BootstrapTable columns={columns} {...props} />,
-            data: items
-        }
+        const sortProps: ISortControlProps<IOnlinePlayer> = {
+            children: (props2) => {
+                const filterProps: IFilterControlProps<IOnlinePlayer> = {
+                    ...props2,
+                    children: (props) => <BootstrapTable columns={columns} {...props} />,
+                };
+
+                return (
+                    <FilterControl {...filterProps} />
+                );
+            },
+            data: items,
+        };
 
         return (
             <React.Fragment>
@@ -93,7 +102,7 @@ class List extends React.Component<IListProps> {
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
-                        <FilterControl {...filterProps} />
+                        <SortControl {...sortProps} />
                     </React.Fragment>
                 }
             </React.Fragment>

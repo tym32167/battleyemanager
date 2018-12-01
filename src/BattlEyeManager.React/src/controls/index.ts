@@ -5,4 +5,5 @@ export * from './FormInput';
 export * from './table/bootstrapTable';
 export * from './table/FilterControl';
 export * from './table/PagerControl';
+export * from './table/SortControl';
 export * from './idtext';
