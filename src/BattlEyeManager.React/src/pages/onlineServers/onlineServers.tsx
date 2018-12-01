@@ -40,7 +40,7 @@ const DefaultLayout = (props: IDefaultLayoutProps) => {
     const { component, ...rest } = props;
 
     const rend = (matchProps: any) => (
-        <React.Fragment {...matchProps}>
+        <React.Fragment>
             <div className="my-3 p-3 bg-white rounded box-shadow  col-12 col-lg-11 col-md-12">
                 <Comp {...matchProps} />
             </div>
