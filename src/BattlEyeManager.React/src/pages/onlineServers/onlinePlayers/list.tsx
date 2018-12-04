@@ -13,6 +13,7 @@ import { KickPlayer } from './kickPlayer';
 interface IListProps {
     serverId: number,
     onLoad: (serverId: number) => void,
+    onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => void,
     items: IOnlinePlayer[],
     busy: boolean,
     error: any
@@ -25,6 +26,12 @@ class List extends React.Component<IListProps> {
     constructor(props: IListProps) {
         super(props);
         this.refresh = this.refresh.bind(this);
+        this.kickPlayerCallback = this.kickPlayerCallback.bind(this);
+    }
+
+    public kickPlayerCallback(player: IOnlinePlayer, { kickReason }: { kickReason: string }) {
+        const { serverId, onKick } = this.props;
+        onKick(serverId, player, kickReason);
     }
 
     public componentDidUpdate(prevProps: IListProps) {
@@ -83,7 +90,7 @@ class List extends React.Component<IListProps> {
             { header: "IP", name: "ip" },
             { header: "Port", name: "port" },
             { header: "Ping", name: "ping" },
-            { header: "", renderer: row => (<KickPlayer player={row} />) },
+            { header: "", renderer: row => (<KickPlayer player={row} onKick={this.kickPlayerCallback} />) },
         ];
 
         const sortProps: ISortControlProps<IOnlinePlayer> = {
@@ -136,7 +143,11 @@ const mapDispatchToProps = (dispatch: Dispatch<void>) => {
     return {
         onLoad: (serverId: number) => {
             dispatch(onlinePlayerActions.getItems(serverId));
-        }
+        },
+
+        onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => {
+            dispatch(onlinePlayerActions.kickPlayer(serverId, player, kickReason))
+        },
     }
 }
 

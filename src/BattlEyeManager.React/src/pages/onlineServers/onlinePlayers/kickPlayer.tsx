@@ -79,7 +79,6 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<void>) => {
     return {
-        onKick: (player: IOnlinePlayer, { kickReason }: { kickReason: string }) => { alert("kick " + player.name + " because of " + kickReason); },
         onLoad: () => dispatch(kickReasonActions.getItems())
     }
 }

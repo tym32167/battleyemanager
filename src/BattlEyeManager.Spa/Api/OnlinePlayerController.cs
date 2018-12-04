@@ -1,8 +1,9 @@
-﻿using BattlEyeManager.Spa.Services;
+﻿using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core;
 
 namespace BattlEyeManager.Spa.Api
 {
@@ -22,6 +23,15 @@ namespace BattlEyeManager.Spa.Api
             return Ok(ret
                 .OrderBy(x => x.Num)
                 .ToArray());
+        }
+
+        [HttpPost("{serverId}")]
+        [Route("api/onlineserver/{serverId}/kick")]
+        public async Task<IActionResult> Kick(int serverId, [FromBody] KickPlayerModel model)
+        {
+            await _onlinePlayerService.KickAsync(serverId, model.Player.Num, model.Player.Guid, model.Reason,
+                User.Identity.Name);
+            return Ok(model);
         }
     }
 }

@@ -1,10 +1,24 @@
+import axios from 'axios';
 import { IOnlinePlayer } from 'src/models';
 import { ReadonlyCommonService } from './core/readonlycommonservice';
 
-const baseUrl = '/api/onlineserver/'
+class OnlinePlayersService {
+    constructor(readonly baseUrl: string = '', readonly service: ReadonlyCommonService<IOnlinePlayer>) {
+    }
 
-const service = new ReadonlyCommonService<IOnlinePlayer>();
+    public getItems(serverId: string | number) {
+        return this.service.getItemsBy(this.baseUrl + serverId + '/players/');
+    }
 
-export const onlinePlayersService = {
-    getItems: (serverId: string | number) => service.getItemsBy(baseUrl + serverId + '/players/'),
-};
+    public kickPlayer(serverId: string | number, reason: string, player: IOnlinePlayer) {
+        return axios.post(this.baseUrl + serverId + '/kick', {
+            player,
+            reason,
+            serverId
+        })
+            .catch(error => Promise.reject(this.service.getError(error)));
+    }
+}
+
+
+export const onlinePlayersService = new OnlinePlayersService('/api/onlineserver/', new ReadonlyCommonService<IOnlinePlayer>());

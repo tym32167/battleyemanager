@@ -6,6 +6,8 @@ export enum ActionConstants {
     UPDATE_ITEM = 'UPDATE_ITEM',
     CREATE_ITEM = 'CREATE_ITEM',
     DELETE_ITEM = 'DELETE_ITEM',
+
+    KICK_PLAYER = 'KICK_PLAYER',
 };
 
 export enum ResultConstants {
