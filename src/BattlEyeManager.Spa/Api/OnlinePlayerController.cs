@@ -1,23 +1,25 @@
 ﻿using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 using BattlEyeManager.Spa.Core;
 
 namespace BattlEyeManager.Spa.Api
 {
     public class OnlinePlayerController : BaseController
     {
-        private readonly ServerStateService _serverStateService;
+        private readonly OnlinePlayerService _onlinePlayerService;
 
-        public OnlinePlayerController(ServerStateService serverStateService)
+        public OnlinePlayerController(OnlinePlayerService onlinePlayerService)
         {
-            _serverStateService = serverStateService;
+            _onlinePlayerService = onlinePlayerService;
         }
 
         [HttpGet("api/onlineserver/{serverId}/players")]
-        public IActionResult Get(int serverId)
+        public async Task<IActionResult> Get(int serverId)
         {
-            return Ok(_serverStateService.GetPlayers(serverId)
+            var ret = await _onlinePlayerService.GetOnlinePlayers(serverId);
+            return Ok(ret
                 .OrderBy(x => x.Num)
                 .ToArray());
         }

@@ -115,6 +115,8 @@ namespace BattlEyeManager.Spa
 
             services.AddSingleton<BELogic, BELogic>();
 
+            services.AddSingleton<OnlinePlayerService, OnlinePlayerService>();
+
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>
                 {
@@ -232,6 +234,9 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<ServerModel, ServerInfo>();
 
                 config.CreateMap<Server, OnlineServerModel>();
+
+
+                config.CreateMap<Player, OnlinePlayerModel>();
             });
         }
     }
