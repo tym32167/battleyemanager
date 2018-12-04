@@ -46,15 +46,19 @@ namespace BattlEyeManager.Spa.Services
             {
                 using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
                 {
-                    var player = await ctx.Players.FirstOrDefaultAsync(x => x.GUID == playerGuid);
+                    var player = await ctx.Players.Include(p => p.Notes).FirstOrDefaultAsync(x => x.GUID == playerGuid);
 
-                    player?.Notes.Add(new PlayerNote()
+                    if (player != null)
                     {
-                        Author = currentUser,
-                        Date = DateTime.UtcNow,
-                        PlayerId = player.Id,
-                        Text = $"Kicked with reason: {reason}"
-                    });
+                        player.Notes.Add(new PlayerNote()
+                        {
+                            Author = currentUser,
+                            Date = DateTime.UtcNow,
+                            PlayerId = player.Id,
+                            Text = $"Kicked with reason: {reason}"
+                        });
+
+                    }
 
                     await ctx.SaveChangesAsync();
                 }

@@ -48,6 +48,7 @@ class KickPlayer extends React.Component<IKickPlayerProps> {
 
     public submit(data: any) {
         this.props.onKick(this.props.player, data);
+        this.toggle();
     }
 
     public render() {
