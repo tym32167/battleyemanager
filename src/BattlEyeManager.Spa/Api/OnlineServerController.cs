@@ -57,7 +57,6 @@ namespace BattlEyeManager.Spa.Api
             input.PlayersCount = _serverStateService.GetPlayersCount(input.Id);
             input.AdminsCount = _serverStateService.GetAdminsCount(input.Id);
             input.BansCount = _serverStateService.GetBansCount(input.Id);
-
             input.IsConnected = _serverStateService.IsConnected(input.Id);
             return input;
         }

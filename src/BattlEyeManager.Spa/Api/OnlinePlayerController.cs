@@ -33,5 +33,16 @@ namespace BattlEyeManager.Spa.Api
                 User.Identity.Name);
             return Ok(model);
         }
+
+
+        [HttpPost("{serverId}")]
+        [Route("api/onlineserver/{serverId}/ban")]
+        public async Task<IActionResult> Ban(int serverId, [FromBody] BanPlayerModel model)
+        {
+            await _onlinePlayerService.BanGuidOnlineAsync(serverId, model.Player.Num, model.Player.Guid, model.Reason,
+                model.Minutes,
+                User.Identity.Name);
+            return Ok(model);
+        }
     }
 }

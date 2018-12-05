@@ -115,7 +115,10 @@ namespace BattlEyeManager.Spa
 
             services.AddSingleton<BELogic, BELogic>();
 
-            services.AddSingleton<OnlinePlayerService, OnlinePlayerService>();
+            services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
+            services.AddTransient<MessageHelper, MessageHelper>();
+            services.AddTransient<ISettingsStore, SettingsStore>();
+
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>

@@ -3,8 +3,9 @@ import { onlinePlayersService } from '../../services';
 import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from '../constants';
 
 export const onlinePlayerActions = {
+    banPlayerOnline,
     getItems,
-    kickPlayer
+    kickPlayer,
 };
 
 function getItems(serverId: any) {
@@ -38,6 +39,49 @@ function kickPlayer(serverId: number | string, player: IOnlinePlayer, reason: st
     };
 }
 
+function banPlayerOnline(serverId: number | string, minutes: number, player: IOnlinePlayer, reason: string) {
+    return (dispatch: any) => {
+        dispatch(requestBan(serverId, player, reason, minutes));
+        onlinePlayersService.BanPlayerOnline(serverId, minutes, reason, player)
+            .then(
+                _ => {
+                    dispatch(successBan(serverId));
+                },
+                error => {
+                    dispatch(failureBan(serverId, error));
+                }
+            );
+    };
+}
+
+
+
+function requestBan(serverId: any, player: IOnlinePlayer, reason: string, minutes: number) {
+    return {
+        kick: {
+            minutes,
+            player,
+            reason,
+            serverId
+        },
+        serverId,
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.BAN_PLAYER, ResultConstants.ASYNC_REQUEST),
+    }
+}
+function successBan(serverId: any) {
+    return {
+        kick: {},
+        serverId,
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.BAN_PLAYER, ResultConstants.ASYNC_REQUEST_SUCCESS),
+    }
+}
+function failureBan(serverId: any, error: any) {
+    return {
+        error,
+        serverId,
+        type: combineConstants(SubjectConstants.ONLINE_PLAYER, ActionConstants.BAN_PLAYER, ResultConstants.ASYNC_REQUEST_FAILURE),
+    }
+}
 
 
 function requestKick(serverId: any, player: IOnlinePlayer, reason: string) {

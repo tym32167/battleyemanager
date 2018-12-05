@@ -8,12 +8,14 @@ import { onlinePlayerActions } from "../../../store/actions";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Dispatch } from 'redux';
 import { IOnlinePlayer } from 'src/models';
+import { BanPlayer } from './banPlayer';
 import { KickPlayer } from './kickPlayer';
 
 interface IListProps {
     serverId: number,
     onLoad: (serverId: number) => void,
     onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => void,
+    onBan: (serverId: number, player: IOnlinePlayer, reason: string, minutes: number) => void,
     items: IOnlinePlayer[],
     busy: boolean,
     error: any
@@ -27,11 +29,17 @@ class List extends React.Component<IListProps> {
         super(props);
         this.refresh = this.refresh.bind(this);
         this.kickPlayerCallback = this.kickPlayerCallback.bind(this);
+        this.banPlayerCallback = this.banPlayerCallback.bind(this);
     }
 
     public kickPlayerCallback(player: IOnlinePlayer, { kickReason }: { kickReason: string }) {
         const { serverId, onKick } = this.props;
         onKick(serverId, player, kickReason);
+    }
+
+    public banPlayerCallback(player: IOnlinePlayer, { reason, minutes }: { reason: string, minutes: number }) {
+        const { serverId, onBan } = this.props;
+        onBan(serverId, player, reason, minutes);
     }
 
     public componentDidUpdate(prevProps: IListProps) {
@@ -90,7 +98,8 @@ class List extends React.Component<IListProps> {
             { header: "IP", name: "ip" },
             { header: "Port", name: "port" },
             { header: "Ping", name: "ping" },
-            { header: "", renderer: row => (<KickPlayer player={row} onKick={this.kickPlayerCallback} />) },
+            { header: "", renderer: row => (<KickPlayer player={row} onKick={this.kickPlayerCallback} />), headerStyle: { width: '1%' } },
+            { header: "", renderer: row => (<BanPlayer player={row} onBan={this.banPlayerCallback} />), headerStyle: { width: '1%' } },
         ];
 
         const sortProps: ISortControlProps<IOnlinePlayer> = {
@@ -147,6 +156,10 @@ const mapDispatchToProps = (dispatch: Dispatch<void>) => {
 
         onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => {
             dispatch(onlinePlayerActions.kickPlayer(serverId, player, kickReason))
+        },
+
+        onBan: (serverId: number, player: IOnlinePlayer, reason: string, minutes: number) => {
+            dispatch(onlinePlayerActions.banPlayerOnline(serverId, minutes, player, reason))
         },
     }
 }

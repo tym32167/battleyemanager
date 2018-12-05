@@ -8,6 +8,7 @@ export enum ActionConstants {
     DELETE_ITEM = 'DELETE_ITEM',
 
     KICK_PLAYER = 'KICK_PLAYER',
+    BAN_PLAYER = 'BAN_PLAYER',
 };
 
 export enum ResultConstants {
