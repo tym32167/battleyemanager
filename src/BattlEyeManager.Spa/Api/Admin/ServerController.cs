@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
@@ -10,6 +8,8 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -100,7 +100,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             if (item.Active)
                 _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
 
-            return CreatedAtAction(nameof(Get), new { id = item.Id }, Get(item.Id));
+            return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
 
         [HttpDelete("{id}")]

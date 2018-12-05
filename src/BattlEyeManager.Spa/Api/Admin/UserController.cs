@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
@@ -8,6 +5,9 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -136,7 +136,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             {
                 if (model.IsAdmin) await _userManager.AddToRoleAsync(user, RoleConstants.Administrator);
 
-                return CreatedAtAction(nameof(Get), new { id = user.Id }, Get(user.Id));
+                return CreatedAtAction(nameof(Get), new { id = user.Id }, await Get(user.Id));
             }
 
             foreach (var identityError in result.Errors) ModelState.AddModelError("errors", identityError.Description);

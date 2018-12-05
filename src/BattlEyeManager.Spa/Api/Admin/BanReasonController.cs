@@ -87,7 +87,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             await _dbContext.SaveChangesAsync();
 
 
-            return CreatedAtAction(nameof(Get), new { id = item.Id }, Get(item.Id));
+            return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
 
         [HttpDelete("{id}")]
