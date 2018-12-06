@@ -1,25 +1,30 @@
 ﻿using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
     public class OnlineBanController : BaseController
     {
-        private readonly ServerStateService _serverStateService;
+        private readonly OnlineBanService _onlineBanService;
 
-        public OnlineBanController(ServerStateService serverStateService)
+        public OnlineBanController(OnlineBanService onlineBanService)
         {
-            _serverStateService = serverStateService;
+            _onlineBanService = onlineBanService;
         }
 
         [HttpGet("api/onlineserver/{serverId}/bans")]
-        public IActionResult Get(int serverId)
+        public async Task<IActionResult> Get(int serverId)
         {
-            return Ok(_serverStateService.GetBans(serverId)
-                .OrderBy(x => x.Num)
-                .ToArray());
+            return Ok(await _onlineBanService.GetOnlineBans(serverId));
+        }
+
+        [HttpDelete("api/onlineserver/{serverId}/bans/{banNumber}")]
+        public async Task<IActionResult> Delete(int serverId, int banNumber)
+        {
+            await _onlineBanService.RemoveBan(serverId, banNumber);
+            return NoContent();
         }
     }
 }

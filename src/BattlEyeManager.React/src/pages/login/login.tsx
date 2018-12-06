@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { IAuthUserState } from 'src/store/models/IAuthUserState';
+import { Error } from '../../controls';
 import { authActions } from '../../store/actions';
 import './login.css'
 
 interface ILoginProps {
-    login: (username: string, password: string) => void
+    login: (username: string, password: string) => void,
+    error?: any
 }
 
 interface ILoginState {
@@ -48,6 +51,7 @@ class Login extends Component<ILoginProps, ILoginState> {
 
     public render() {
         const { username, password } = this.state;
+        const { error } = this.props;
         return (
             <div className="text-center body">
                 <form className="form-signin" onSubmit={this.handleSubmit}>
@@ -60,6 +64,7 @@ class Login extends Component<ILoginProps, ILoginState> {
                         <input type="password" className="form-control" name="password" placeholder="Password"
                             value={password} onChange={this.handleChange} required={true} />
                     </div>
+                    <Error error={error} />
                     <button className="btn btn-lg btn-primary btn-block">Sign in</button>
                     <hr />
                     <footer>
@@ -70,11 +75,17 @@ class Login extends Component<ILoginProps, ILoginState> {
     }
 }
 
+const mapStateToProps = ({ auth }: { auth: IAuthUserState }) => {
+    return {
+        error: auth.error
+    }
+}
+
 function mapDispatchToProps(dispatch: Dispatch<void>) {
     return {
         login: (username: any, password: any) => dispatch(authActions.login(username, password))
     }
 }
 
-const connectedLogin = connect(undefined, mapDispatchToProps)(Login);
+const connectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
 export { connectedLogin as Login };

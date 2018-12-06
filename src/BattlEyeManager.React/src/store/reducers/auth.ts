@@ -1,7 +1,7 @@
 import { authConstants } from '../constants';
 import { StoreInitialState } from '../models';
 
-export function authentication(state = StoreInitialState.auth, action:any) {
+export function authentication(state = StoreInitialState.auth, action: any) {
   switch (action.type) {
     case authConstants.LOGIN_REQUEST:
       return {
@@ -14,7 +14,9 @@ export function authentication(state = StoreInitialState.auth, action:any) {
         user: action.user
       };
     case authConstants.LOGIN_FAILURE:
-      return {};
+      return {
+        error: action.error
+      };
     case authConstants.LOGOUT:
       return {};
     default:

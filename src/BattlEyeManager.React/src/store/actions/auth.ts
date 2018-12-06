@@ -21,7 +21,9 @@ function login(username: string, password: string) {
                     history.push('/');
                 }
             )
-            .catch(error => dispatch(failure(error)));
+            .catch(error => {
+                dispatch(failure(error));
+            });
     };
 
     function request(user: any) { return { type: authConstants.LOGIN_REQUEST, user } }

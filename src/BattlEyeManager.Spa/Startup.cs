@@ -1,5 +1,6 @@
 using AutoMapper;
 using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
@@ -26,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
+using Player = BattlEyeManager.DataLayer.Models.Player;
 
 namespace BattlEyeManager.Spa
 {
@@ -116,6 +118,8 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<BELogic, BELogic>();
 
             services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
+            services.AddScoped<OnlineBanService, OnlineBanService>();
+
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();
 
@@ -237,6 +241,7 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<ServerModel, ServerInfo>();
 
                 config.CreateMap<Server, OnlineServerModel>();
+                config.CreateMap<Ban, OnlineBanViewModel>();
 
 
                 config.CreateMap<Player, OnlinePlayerModel>();
