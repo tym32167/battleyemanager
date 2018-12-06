@@ -1,10 +1,13 @@
+import * as SignalR from '@aspnet/signalr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { IOnlineBan, IOnlineServer } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../controls';
-import { ServerHeader } from './onlineServerHeader';
+import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../../controls';
+import { ServerHeader } from '../onlineServerHeader';
+import { RemoveBan } from './removeBan';
 
 export const BanList = (props: any) => (
     <React.Fragment>
@@ -37,9 +40,58 @@ interface IBanListProps {
 
 class BanListTable extends Component<IBanListProps> {
     public t: IBanListProps;
-    public componentDidMount() {
-        this.props.onLoad(this.props.serverId);
+    private connection: SignalR.HubConnection;
+    constructor(props: IBanListProps) {
+        super(props);
+        this.refresh = this.refresh.bind(this);
     }
+
+    public componentDidUpdate(prevProps: IBanListProps) {
+        if (Number(prevProps.serverId) !== Number(this.props.serverId)) {
+            this.refresh();
+        }
+    }
+
+    public signalrStart() {
+
+        this.connection = new SignalR.HubConnectionBuilder()
+            .withUrl("/api/serverfallback")
+            .build();
+
+        this.connection.on('event', (id, message) => {
+            const { serverId } = this.props;
+            if (Number(id) === Number(serverId) && message === 'banlist') {
+                this.refresh();
+            }
+        });
+
+        this.connection.start()
+            .catch(error => Promise.reject(error));
+    }
+
+    public signalrStop() {
+        const connection = this.connection;
+        if (connection && connection.stop) {
+            connection.stop()
+                .catch(error => Promise.reject(error));
+        }
+    }
+
+    public componentWillUnmount() {
+        this.signalrStop();
+    }
+
+    public componentDidMount() {
+        this.refresh();
+        this.signalrStart();
+    }
+
+    public refresh() {
+        const { serverId } = this.props;
+        this.props.onLoad(serverId);
+    }
+
+
 
     public render() {
 
@@ -51,6 +103,7 @@ class BanListTable extends Component<IBanListProps> {
             { header: "Minutes left", name: "minutesleft" },
             { header: "Reason", name: "reason" },
             { header: "Guid or IP", name: "guidIp" },
+            { header: "", renderer: (ban) => <RemoveBan ban={ban} /> },
         ];
 
         const sortProps: ISortControlProps<IOnlineBan> = {
@@ -74,11 +127,9 @@ class BanListTable extends Component<IBanListProps> {
             data: items,
         };
 
-
-
         return (
             <React.Fragment>
-                <h2>Online Bans ({len})</h2>
+                <h2><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> Online Bans ({len})</h2>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>

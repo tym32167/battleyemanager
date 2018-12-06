@@ -43,7 +43,7 @@ namespace BattlEyeManager.Spa.Services
             _aggregator.BanHandler += _aggregator_BanHandler;
         }
 
-        private void _aggregator_BanHandler(object sender, BEServerEventArgs<IEnumerable<Ban>> e)
+        private async void _aggregator_BanHandler(object sender, BEServerEventArgs<IEnumerable<Ban>> e)
         {
             _banState.AddOrUpdate(e.Server.Id, guid =>
             {
@@ -66,6 +66,12 @@ namespace BattlEyeManager.Spa.Services
 #pragma warning restore 4014
                 return ret;
             });
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var ctx = scope.ServiceProvider.GetService<IHubContext<FallbackHub>>();
+                await ctx.Clients.All.SendAsync("event", e.Server.Id, "banlist");
+            }
         }
 
         private void _aggregator_AdminHandler(object sender, BEServerEventArgs<IEnumerable<Admin>> e)

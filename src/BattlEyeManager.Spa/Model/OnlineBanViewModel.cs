@@ -9,5 +9,7 @@
         public int Minutesleft { get; set; }
 
         public string Reason { get; set; }
+
+        public int ServerId { get; set; }
     }
 }

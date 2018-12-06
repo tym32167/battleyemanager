@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BattleNET;
-using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
@@ -30,7 +29,8 @@ namespace BattlEyeManager.Spa.Services
         {
             var bans = _serverStateService.GetBans(serverId);
             var ret =
-                bans.Select(Mapper.Map<Ban, OnlineBanViewModel>)
+                bans.Select(x => Mapper.Map(x,
+                        new OnlineBanViewModel { ServerId = serverId }))
                     .OrderBy(x => x.Num)
                     .ToArray();
             return ret;
@@ -39,6 +39,8 @@ namespace BattlEyeManager.Spa.Services
         public async Task RemoveBan(int serverId, int banNumber)
         {
             _serverAggregator.Send(serverId, BattlEyeCommand.RemoveBan, banNumber.ToString());
+            await Task.Delay(TimeSpan.FromSeconds(2));
+            _serverAggregator.Send(serverId, BattlEyeCommand.Bans);
         }
     }
 

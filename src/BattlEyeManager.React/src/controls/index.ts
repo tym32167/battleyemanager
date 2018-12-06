@@ -1,4 +1,5 @@
 export * from './FormInputField';
+export * from './confirmPopup';
 export * from './error';
 export * from './chat/chat';
 export * from './FormInput';

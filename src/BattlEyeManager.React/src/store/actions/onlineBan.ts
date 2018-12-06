@@ -2,7 +2,8 @@ import { onlineBansService } from '../../services';
 import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from '../constants';
 
 export const onlineBanActions = {
-    getItems
+    getItems,
+    removeBan
 };
 
 function getItems(serverId: any) {
@@ -17,6 +18,13 @@ function getItems(serverId: any) {
                     dispatch(failure(serverId, error));
                 }
             );
+    };
+}
+
+function removeBan(serverId: number, banNumber: number) {
+    return (dispatch: any) => {
+        dispatch(request(serverId, []));
+        onlineBansService.removeBan(serverId, banNumber);
     };
 }
 

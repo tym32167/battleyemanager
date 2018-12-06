@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import { NotFound } from '../404';
-import { BanList } from './banlist';
 import { DashBoard } from './dashboard';
 import { List } from './list';
+import { BanList } from './onlineBans/banlist';
 import { List as ChatList } from './onlineChat/list';
 import { List as PlayersList } from './onlinePlayers/list';
 
