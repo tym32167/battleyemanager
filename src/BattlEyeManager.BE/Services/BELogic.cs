@@ -18,6 +18,19 @@ namespace BattlEyeManager.BE.Services
             _serverAggregator.BanLog += _serverAggregator_BanLog;
             _serverAggregator.RConAdminLog += _serverAggregator_RConAdminLog;
             _serverAggregator.ConnectingHandler += _serverAggregator_ConnectingHandler;
+            _serverAggregator.CommandHandler += _serverAggregator_CommandHandler;
+        }
+
+        private void _serverAggregator_CommandHandler(object sender, CommandArgs e)
+        {
+            switch (e.Command)
+            {
+                case BattlEyeCommand.Ban:
+                case BattlEyeCommand.AddBan:
+                case BattlEyeCommand.RemoveBan:
+                    _serverAggregator.Send(e.ServerId, BattlEyeCommand.Bans);
+                    break;
+            }
         }
 
         private void _serverAggregator_ConnectingHandler(object sender, BEServerEventArgs<ServerInfo> e)

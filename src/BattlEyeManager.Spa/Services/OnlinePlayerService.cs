@@ -39,8 +39,6 @@ namespace BattlEyeManager.Spa.Services
         public async Task RemoveBan(int serverId, int banNumber)
         {
             _serverAggregator.Send(serverId, BattlEyeCommand.RemoveBan, banNumber.ToString());
-            await Task.Delay(TimeSpan.FromSeconds(2));
-            _serverAggregator.Send(serverId, BattlEyeCommand.Bans);
         }
     }
 

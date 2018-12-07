@@ -18,11 +18,15 @@ namespace BattlEyeManager.BE.Services
         event EventHandler<BEServerEventArgs<LogMessage>> PlayerLog;
         event EventHandler<BEServerEventArgs<LogMessage>> RConAdminLog;
 
+        event EventHandler<CommandArgs> CommandHandler;
+
         bool AddServer(ServerInfo info);
         bool RemoveServer(int serverId);
         bool IsConnected(int serverId);
 
         IEnumerable<ServerInfo> GetConnectedServers();
         void Send(int serverId, BattlEyeCommand command, string param = null);
+
+
     }
 }

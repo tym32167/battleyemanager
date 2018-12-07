@@ -27,6 +27,8 @@ namespace BattlEyeManager.BE.Services
             _ipService = ipService;
         }
 
+        public event EventHandler<CommandArgs> CommandHandler;
+
         public bool AddServer(ServerInfo info)
         {
             RemoveServer(info.Id);
@@ -66,6 +68,7 @@ namespace BattlEyeManager.BE.Services
             if (_servers.TryGetValue(serverId, out ServerItem item))
             {
                 item.Send(command, param);
+                OnCommandHandler(new CommandArgs(serverId, command, param));
             }
         }
 
@@ -312,6 +315,11 @@ namespace BattlEyeManager.BE.Services
         protected virtual void OnBanLog(BEServerEventArgs<LogMessage> e)
         {
             BanLog?.Invoke(this, e);
+        }
+
+        protected virtual void OnCommandHandler(CommandArgs e)
+        {
+            CommandHandler?.Invoke(this, e);
         }
     }
 }
