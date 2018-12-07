@@ -1,11 +1,10 @@
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
-using BattlEyeManager.BE.Abstract;
 using BattleNET;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.Core;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
 // ReSharper disable MemberCanBePrivate.Local
 
 namespace BattlEyeManager.BE.ServerDecorators
@@ -16,12 +15,13 @@ namespace BattlEyeManager.BE.ServerDecorators
         private readonly ConcurrentQueue<BattlEyeMessageEventArgs> _messages = new ConcurrentQueue<BattlEyeMessageEventArgs>();
 
         private readonly object _lock = new object();
-        private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
+        private readonly ILog _log;
         private readonly Timer _timer;
         private IBattlEyeServer _battlEyeServer;
 
-        public ThreadSafeBattleEyeServer(IBattlEyeServer battlEyeServer)
+        public ThreadSafeBattleEyeServer(IBattlEyeServer battlEyeServer, ILog log)
         {
+            _log = log;
             _battlEyeServer = battlEyeServer;
             _battlEyeServer.BattlEyeConnected += OnBattlEyeConnected;
             _battlEyeServer.BattlEyeMessageReceived += OnBattlEyeMessageReceived;

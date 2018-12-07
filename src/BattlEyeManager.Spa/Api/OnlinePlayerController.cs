@@ -1,24 +1,48 @@
-﻿using BattlEyeManager.Spa.Services;
+﻿using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
-    public class OnlinePlayerController : Controller
+    public class OnlinePlayerController : BaseController
     {
-        private readonly ServerStateService _serverStateService;
+        private readonly OnlinePlayerService _onlinePlayerService;
 
-        public OnlinePlayerController(ServerStateService serverStateService)
+        public OnlinePlayerController(OnlinePlayerService onlinePlayerService)
         {
-            _serverStateService = serverStateService;
+            _onlinePlayerService = onlinePlayerService;
         }
 
         [HttpGet("api/onlineserver/{serverId}/players")]
-        public IActionResult Get(int serverId)
+        public async Task<IActionResult> Get(int serverId)
         {
-            return Ok(_serverStateService.GetPlayers(serverId)
+            var ret = await _onlinePlayerService.GetOnlinePlayers(serverId);
+            return Ok(ret
                 .OrderBy(x => x.Num)
                 .ToArray());
+        }
+
+        [HttpPost("{serverId}")]
+        [Route("api/onlineserver/{serverId}/kick")]
+        public async Task<IActionResult> Kick(int serverId, [FromBody] KickPlayerModel model)
+        {
+            await _onlinePlayerService.KickAsync(serverId, model.Player.Num, model.Player.Guid, model.Reason,
+                User.Identity.Name);
+            return Ok(model);
+        }
+
+
+        [HttpPost("{serverId}")]
+        [Route("api/onlineserver/{serverId}/ban")]
+        public async Task<IActionResult> Ban(int serverId, [FromBody] BanPlayerModel model)
+        {
+            await _onlinePlayerService.BanGuidOnlineAsync(serverId, model.Player.Num, model.Player.Guid, model.Reason,
+                model.Minutes,
+                User.Identity.Name);
+            return Ok(model);
         }
     }
 }

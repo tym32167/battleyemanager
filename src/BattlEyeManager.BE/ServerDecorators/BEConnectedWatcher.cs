@@ -1,9 +1,7 @@
-using BattlEyeManager.BE.Abstract;
 using BattleNET;
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
+using BattlEyeManager.BE.Abstract;
+using BattlEyeManager.Core;
 using System;
-using System.Diagnostics;
 using System.Threading;
 
 namespace BattlEyeManager.BE.ServerDecorators
@@ -13,8 +11,6 @@ namespace BattlEyeManager.BE.ServerDecorators
         private readonly IBattlEyeServerFactory _battlEyeServerFactory;
         private readonly BattlEyeLoginCredentials _credentials;
 
-        private static readonly ILog Log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
-
         private Timer _timer;
         private Timer _keepAliveTimer;
 
@@ -23,13 +19,14 @@ namespace BattlEyeManager.BE.ServerDecorators
         private int _numAttempts;
 
         public bool Connected => _battlEyeServer != null && _battlEyeServer.Connected;
+        private readonly ILog _log;
 
         public BEConnectedWatcher(IBattlEyeServerFactory battlEyeServerFactory,
-            BattlEyeLoginCredentials credentials)
+            BattlEyeLoginCredentials credentials, ILog log)
         {
             _battlEyeServerFactory = battlEyeServerFactory;
             _credentials = credentials;
-
+            _log = log;
             _battlEyeServer = Init(_credentials);
         }
 
@@ -104,7 +101,7 @@ namespace BattlEyeManager.BE.ServerDecorators
             {
                 _numAttempts = 0;
                 _lastReceived = DateTime.UtcNow;
-                Log.Info(
+                _log.Info(
                     $"RECREATE CLIENT FOR {_credentials.Host}:{_credentials.Port} WITH LAST RECEIVED {lastReceivedSpan}");
 
                 var local = _battlEyeServer;
@@ -124,7 +121,7 @@ namespace BattlEyeManager.BE.ServerDecorators
 
         private IBattlEyeServer Init(BattlEyeLoginCredentials battlEyeLoginCredentials)
         {
-            Log.Info($"Init {battlEyeLoginCredentials.Host}:{battlEyeLoginCredentials.Port}");
+            _log.Info($"Init {battlEyeLoginCredentials.Host}:{battlEyeLoginCredentials.Port}");
 
             var battlEyeServer = _battlEyeServerFactory.Create(battlEyeLoginCredentials);
             battlEyeServer.BattlEyeConnected += OnBattlEyeConnected;
@@ -136,7 +133,7 @@ namespace BattlEyeManager.BE.ServerDecorators
 
         private void Release(IBattlEyeServer battlEyeServer, BattlEyeLoginCredentials battlEyeLoginCredentials)
         {
-            Log.Info($"Release {battlEyeLoginCredentials.Host}:{battlEyeLoginCredentials.Port}");
+            _log.Info($"Release {battlEyeLoginCredentials.Host}:{battlEyeLoginCredentials.Port}");
             if (battlEyeServer != null)
             {
                 battlEyeServer.BattlEyeConnected -= OnBattlEyeConnected;

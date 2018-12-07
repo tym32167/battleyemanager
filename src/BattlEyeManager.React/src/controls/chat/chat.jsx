@@ -53,7 +53,8 @@ function getClassname(messageType) {
 
 const ChatItem = ({ item }) => (
     <div className="media text-muted @GetClass(item)">
-        <p className={'media-body mb-0 small lh-125 ' + getClassname(item.type)}>
+        <p className={'media-body mb-0 small lh-125 ' + getClassname(item.type)}
+        style = {{wordBreak: 'break-all'}}>
             <strong>{new Date(item.date).toLocaleTimeString()}{' '}</strong>
             {item.message}
         </p>

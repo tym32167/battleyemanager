@@ -1,0 +1,1 @@
+export const requiredValidator = (value: any) => (value && value !== '' ? undefined : 'Required')

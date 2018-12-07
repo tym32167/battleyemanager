@@ -1,14 +1,11 @@
-﻿using BattlEyeManager.BE.Abstract;
-using BattleNET;
-using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
+﻿using BattleNET;
+using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
-using BattlEyeManager.BE.Net;
+using BattlEyeManager.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
@@ -19,10 +16,13 @@ namespace BattlEyeManager.BE.Services
         private readonly IBattlEyeServerFactory _battlEyeServerFactory;
         private readonly IIpService _ipService;
         private readonly ConcurrentDictionary<int, ServerItem> _servers = new ConcurrentDictionary<int, ServerItem>();
-        private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
+        private readonly ILog _log;
 
-        public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory, IIpService ipService)
+        public BeServerAggregator(IBattlEyeServerFactory battlEyeServerFactory,
+            IIpService ipService,
+            ILog log)
         {
+            _log = log;
             _battlEyeServerFactory = battlEyeServerFactory;
             _ipService = ipService;
         }
@@ -72,6 +72,16 @@ namespace BattlEyeManager.BE.Services
         public IEnumerable<ServerInfo> GetConnectedServers()
         {
             return _servers.Values.Select(x => x.ServerInfo).ToArray();
+        }
+
+        public bool IsConnected(int serverId)
+        {
+            if (_servers.TryGetValue(serverId, out ServerItem item))
+            {
+                return item.Connected;
+            }
+
+            return false;
         }
 
         private void ProcessMessage(ServerInfo server, ServerMessage message)
@@ -303,30 +313,5 @@ namespace BattlEyeManager.BE.Services
         {
             BanLog?.Invoke(this, e);
         }
-    }
-
-
-
-
-    public class ServerInfo
-    {
-        public int Id { get; set; }
-        public string Host { get; set; }
-        public int Port { get; set; }
-        public string Password { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    public class BEServerEventArgs<T> : EventArgs
-    {
-        public BEServerEventArgs(ServerInfo server, T data)
-        {
-            Server = server;
-            Data = data;
-        }
-
-        public ServerInfo Server { get; }
-        public T Data { get; }
     }
 }

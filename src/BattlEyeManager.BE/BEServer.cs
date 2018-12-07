@@ -1,13 +1,11 @@
-﻿using BattlEyeManager.BE.Core;
-using BattlEyeManager.BE.Logging;
+﻿using BattleNET;
 using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.Messaging;
 using BattlEyeManager.BE.Models;
+using BattlEyeManager.Core;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
-using BattleNET;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -19,14 +17,14 @@ namespace BattlEyeManager.BE
         private readonly string _host;
 
         private readonly object _lock = new object();
-        private readonly ILog _log = LogFactory.Create(new StackTrace().GetFrame(0).GetMethod().DeclaringType);
+        private readonly ILog _log;
         private readonly string _password;
         private readonly int _port;
         private IBattlEyeServer _battlEyeServer;
 
-
-        public BEServer(string host, int port, string password, IBattlEyeServerFactory battlEyeServerFactory)
+        public BEServer(string host, int port, string password, IBattlEyeServerFactory battlEyeServerFactory, ILog log)
         {
+            _log = log;
             _host = host;
             _port = port;
             _password = password;

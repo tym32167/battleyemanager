@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\**" />
     <Compile Remove="wwwroot\dist\**" />
+    <Content Remove="Views\**" />
     <Content Remove="wwwroot\dist\**" />
+    <EmbeddedResource Remove="Views\**" />
     <EmbeddedResource Remove="wwwroot\dist\**" />
+    <None Remove="Views\**" />
     <None Remove="wwwroot\dist\**" />
   </ItemGroup>
 
@@ -31,10 +35,10 @@
     <ProjectReference Include="..\..\BattleNET\BattleNET\BattleNET.csproj" />
     <ProjectReference Include="..\BattlEyeManager.BE\BattlEyeManager.BE.csproj" />
     <ProjectReference Include="..\BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.Services\BattlEyeManager.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>    
 

@@ -1,13 +1,12 @@
 ﻿using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Auth;
+using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -27,20 +26,21 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public async Task<ActionResult> Auth([FromBody] TokenRequest tokenRequest)
         {
             var username = tokenRequest.UserName;
-            var password = tokenRequest.Password;            
+            var password = tokenRequest.Password;
 
             var principal = await GetIdentity(username, password);
             if (principal == null)
-            {   
+            {
                 return StatusCode(400, "Invalid username or password.");
             }
 
             var now = DateTime.UtcNow;
             // создаем JWT-токен
-            var jwt = new JwtSecurityToken(                    
+            var jwt = new JwtSecurityToken(
                     notBefore: now,
                     claims: principal.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
@@ -53,7 +53,7 @@ namespace BattlEyeManager.Spa.Api
                 username = principal.Identity.Name
             };
 
-            return Json(response);           
+            return Json(response);
         }
 
         private async Task<ClaimsPrincipal> GetIdentity(string username, string password)
@@ -64,8 +64,8 @@ namespace BattlEyeManager.Spa.Api
                 var check = await _userManager.CheckPasswordAsync(user, password);
                 if (check)
                 {
-                    var principal = await  _signInManager.CreateUserPrincipalAsync(user);
-                    return principal;                                        
+                    var principal = await _signInManager.CreateUserPrincipalAsync(user);
+                    return principal;
                 }
             }
             return null;

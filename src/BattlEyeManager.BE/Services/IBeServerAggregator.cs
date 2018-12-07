@@ -20,6 +20,7 @@ namespace BattlEyeManager.BE.Services
 
         bool AddServer(ServerInfo info);
         bool RemoveServer(int serverId);
+        bool IsConnected(int serverId);
 
         IEnumerable<ServerInfo> GetConnectedServers();
         void Send(int serverId, BattlEyeCommand command, string param = null);

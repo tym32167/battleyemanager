@@ -1,11 +1,15 @@
 using AutoMapper;
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.Net;
+using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Services;
+using BattlEyeManager.Services.Logging;
 using BattlEyeManager.Spa.Auth;
+using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
@@ -23,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
+using Player = BattlEyeManager.DataLayer.Models.Player;
 
 namespace BattlEyeManager.Spa
 {
@@ -101,6 +106,9 @@ namespace BattlEyeManager.Spa
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
+
+            services.AddSingleton<ILog, Log>();
+
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
@@ -108,6 +116,13 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<DataRegistrator, DataRegistrator>();
 
             services.AddSingleton<BELogic, BELogic>();
+
+            services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
+            services.AddScoped<OnlineBanService, OnlineBanService>();
+
+            services.AddTransient<MessageHelper, MessageHelper>();
+            services.AddTransient<ISettingsStore, SettingsStore>();
+
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>
@@ -174,7 +189,7 @@ namespace BattlEyeManager.Spa
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager)
         {
-            const string adminRole = "Administrator";
+            const string adminRole = RoleConstants.Administrator;
 
             if (!await roleManager.RoleExistsAsync(adminRole))
             {
@@ -215,9 +230,21 @@ namespace BattlEyeManager.Spa
             {
                 config.CreateMap<Server, ServerModel>();
                 config.CreateMap<ServerModel, Server>();
+
+                config.CreateMap<KickReason, KickReasonModel>();
+                config.CreateMap<KickReasonModel, KickReason>();
+
+                config.CreateMap<BanReason, BanReasonModel>();
+                config.CreateMap<BanReasonModel, BanReason>();
+
                 config.CreateMap<Server, ServerInfo>();
                 config.CreateMap<ServerModel, ServerInfo>();
+
                 config.CreateMap<Server, OnlineServerModel>();
+                config.CreateMap<Ban, OnlineBanViewModel>();
+
+
+                config.CreateMap<Player, OnlinePlayerModel>();
             });
         }
     }

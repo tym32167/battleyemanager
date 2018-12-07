@@ -11,7 +11,7 @@ namespace BattlEyeManager.Spa.Model
 
         [Required]
         public int Port { get; set; }
-       
+
         [Required]
         public string Name { get; set; }
 
@@ -20,5 +20,16 @@ namespace BattlEyeManager.Spa.Model
 
         [Required]
         public int SteamPort { get; set; }
+
+
+
+        [Required]
+        public int PlayersCount { get; set; }
+        [Required]
+        public int AdminsCount { get; set; }
+        [Required]
+        public int BansCount { get; set; }
+        [Required]
+        public bool IsConnected { get; set; }
     }
 }
