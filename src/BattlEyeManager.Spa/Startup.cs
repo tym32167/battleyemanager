@@ -7,9 +7,9 @@ using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Services;
-using BattlEyeManager.Services.Logging;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
+using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
@@ -107,7 +107,7 @@ namespace BattlEyeManager.Spa
             });
 
 
-            services.AddSingleton<ILog, Log>();
+            services.AddTransient<ILog, LogImpl>();
 
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();

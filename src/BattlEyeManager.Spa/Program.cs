@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System;
 
@@ -37,8 +36,8 @@ namespace BattlEyeManager.Spa
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
+                    //logging.ClearProviders();
+                    //logging.SetMinimumLevel(LogLevel.Trace);
                 })
                 .UseNLog()  // NLog: setup NLog for Dependency injection
                 .Build();
