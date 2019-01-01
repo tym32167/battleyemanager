@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattlEyeManager.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181231131136_BaseIndexes")]
+    [Migration("20190101003218_BaseIndexes")]
     partial class BaseIndexes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,14 +233,11 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.HasIndex("GUID")
                         .IsUnique();
 
-                    b.HasIndex("IP")
-                        .IsUnique();
+                    b.HasIndex("IP");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("Name");
 
-                    b.HasIndex("SteamId")
-                        .IsUnique();
+                    b.HasIndex("SteamId");
 
                     b.ToTable("Players");
                 });

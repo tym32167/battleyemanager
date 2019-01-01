@@ -6,6 +6,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Services;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
@@ -119,6 +120,15 @@ namespace BattlEyeManager.Spa
 
             services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
             services.AddScoped<OnlineBanService, OnlineBanService>();
+
+            services.AddTransient<IFactory<AppDbContext>, DbContextScopedFactory>();
+
+
+            services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
+            services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
+
+
+
 
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();
@@ -246,6 +256,21 @@ namespace BattlEyeManager.Spa
 
                 config.CreateMap<Player, OnlinePlayerModel>();
             });
+        }
+    }
+
+    public class DbContextScopedFactory : IFactory<AppDbContext>
+    {
+        private readonly DbContextOptions<AppDbContext> _options;
+
+        public DbContextScopedFactory(DbContextOptions<AppDbContext> options)
+        {
+            _options = options;
+        }
+
+        public AppDbContext GetService()
+        {
+            return new AppDbContext(_options);
         }
     }
 }

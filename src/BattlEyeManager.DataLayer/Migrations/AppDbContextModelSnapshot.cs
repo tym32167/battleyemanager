@@ -231,14 +231,11 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.HasIndex("GUID")
                         .IsUnique();
 
-                    b.HasIndex("IP")
-                        .IsUnique();
+                    b.HasIndex("IP");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("Name");
 
-                    b.HasIndex("SteamId")
-                        .IsUnique();
+                    b.HasIndex("SteamId");
 
                     b.ToTable("Players");
                 });

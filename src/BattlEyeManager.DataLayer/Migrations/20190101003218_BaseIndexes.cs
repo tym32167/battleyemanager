@@ -47,20 +47,17 @@ namespace BattlEyeManager.DataLayer.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Players_IP",
                 table: "Players",
-                column: "IP",
-                unique: true);
+                column: "IP");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_Name",
                 table: "Players",
-                column: "Name",
-                unique: true);
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_SteamId",
                 table: "Players",
-                column: "SteamId",
-                unique: true);
+                column: "SteamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChatMessages_Date",
