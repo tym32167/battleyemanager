@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BattlEyeManager.Spa.Api.Admin
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class BanReasonController : GenericController<BanReason, int, BanReasonModel>
     {
         public BanReasonController(IGenericRepository<BanReason, int> repository) : base(repository)

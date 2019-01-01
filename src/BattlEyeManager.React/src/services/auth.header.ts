@@ -9,8 +9,6 @@ axios.interceptors.request.use((config) => {
   if (user && user.token) {
     config.headers.common.Authorization = 'Bearer ' + user.token;
   }
-  // tslint:disable-next-line:no-string-literal
-  config.headers.common['Accept'] = 'application/json';
   return config;
 }, (error) => {
   // Do something with request error

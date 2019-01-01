@@ -10,10 +10,6 @@
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.12" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\BattlEyeManager.Services\BattlEyeManager.Services.csproj" />
-  </ItemGroup>
   
 
   <!--<ItemGroup>

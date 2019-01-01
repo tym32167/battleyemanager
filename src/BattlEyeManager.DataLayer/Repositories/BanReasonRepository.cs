@@ -1,6 +1,5 @@
 ﻿using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -17,77 +16,53 @@ namespace BattlEyeManager.DataLayer.Repositories
 
     public class GenericRepository<T, TKey> : IGenericRepository<T, TKey> where T : class
     {
-        private readonly IFactory<AppDbContext> _contextFactory;
+        private readonly AppDbContext _context;
 
-        protected GenericRepository(IFactory<AppDbContext> contextFactory)
+        protected GenericRepository(AppDbContext context)
         {
-            _contextFactory = contextFactory;
+            _context = context;
         }
 
         public Task<T[]> GetItemsAsync()
         {
-            using (var dc = _contextFactory.GetService())
-            {
-                return dc.Set<T>().ToArrayAsync();
-            }
+            return _context.Set<T>().ToArrayAsync();
         }
 
         public Task<T> GetItemByIdAsync(TKey id)
         {
-            using (var dc = _contextFactory.GetService())
-            {
-                return dc.Set<T>().FindAsync(id);
-            }
+            return _context.Set<T>().FindAsync(id);
         }
 
         public Task UpdateItemAsync(T item)
         {
-            using (var dc = _contextFactory.GetService())
-            {
-                dc.Set<T>().Update(item);
-                return dc.SaveChangesAsync();
-            }
+            _context.Set<T>().Update(item);
+            return _context.SaveChangesAsync();
         }
 
         public Task AddItemAsync(T item)
         {
-            using (var dc = _contextFactory.GetService())
-            {
-                dc.Set<T>().Add(item);
-                return dc.SaveChangesAsync();
-            }
+            _context.Set<T>().Add(item);
+            return _context.SaveChangesAsync();
         }
 
         public async Task DeleteItemByIdAsync(TKey id)
         {
-            using (var dc = _contextFactory.GetService())
-            {
-                var item = await dc.Set<T>().FindAsync(id);
-                dc.Set<T>().Remove(item);
-                await dc.SaveChangesAsync();
-            }
+            var item = await _context.Set<T>().FindAsync(id);
+            _context.Set<T>().Remove(item);
+            await _context.SaveChangesAsync();
         }
     }
 
-    public interface IBanReasonRepository : IGenericRepository<BanReason, int>
+    public class BanReasonRepository : GenericRepository<BanReason, int>
     {
-    }
-
-    public class BanReasonRepository : GenericRepository<BanReason, int>, IBanReasonRepository
-    {
-        public BanReasonRepository(IFactory<AppDbContext> contextFactory) : base(contextFactory)
+        public BanReasonRepository(AppDbContext context) : base(context)
         {
         }
     }
 
-
-    public interface IKickReasonRepository : IGenericRepository<KickReason, int>
+    public class KickReasonRepository : GenericRepository<KickReason, int>
     {
-    }
-
-    public class KickReasonRepository : GenericRepository<KickReason, int>, IKickReasonRepository
-    {
-        public KickReasonRepository(IFactory<AppDbContext> contextFactory) : base(contextFactory)
+        public KickReasonRepository(AppDbContext context) : base(context)
         {
         }
     }
