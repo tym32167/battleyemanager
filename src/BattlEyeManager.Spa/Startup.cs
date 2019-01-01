@@ -120,11 +120,14 @@ namespace BattlEyeManager.Spa
 
             services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
             services.AddScoped<OnlineBanService, OnlineBanService>();
-            
+
 
             services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
             services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
-            
+
+            services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
+            services.AddTransient<IServerRepository, ServerRepository>();
+
 
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();

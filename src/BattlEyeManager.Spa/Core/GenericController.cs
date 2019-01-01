@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BattlEyeManager.DataLayer.Repositories;
-using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace BattlEyeManager.Spa.Core
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public virtual async Task<IActionResult> Get()
         {
             var dbItems = await _repository.GetItemsAsync();
 
@@ -29,7 +28,7 @@ namespace BattlEyeManager.Spa.Core
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(TKey id)
+        public virtual async Task<IActionResult> Get(TKey id)
         {
             var item = await _repository.GetItemByIdAsync(id);
             if (item == null)
@@ -37,19 +36,17 @@ namespace BattlEyeManager.Spa.Core
                 return NotFound();
             }
 
-            var ret = Mapper.Map<BanReasonModel>(item);
+            var ret = Mapper.Map<TModel>(item);
             return Ok(ret);
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post(int id, [FromBody] BanReasonModel model)
+        public virtual async Task<IActionResult> Post(TKey id, [FromBody] TModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id <= 0) return NotFound();
 
             var item = new T();
 
@@ -62,9 +59,9 @@ namespace BattlEyeManager.Spa.Core
 
 
         [HttpPut]
-        [ProducesResponseType(201, Type = typeof(BanReasonModel))]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Put([FromBody] TModel model)
+        public virtual async Task<IActionResult> Put([FromBody] TModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +76,7 @@ namespace BattlEyeManager.Spa.Core
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(TKey id)
+        public virtual async Task<IActionResult> Delete(TKey id)
         {
             await _repository.DeleteItemByIdAsync(id);
             return NoContent();

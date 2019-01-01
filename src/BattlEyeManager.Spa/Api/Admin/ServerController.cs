@@ -1,7 +1,7 @@
 using AutoMapper;
 using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
@@ -15,78 +15,57 @@ namespace BattlEyeManager.Spa.Api.Admin
 {
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
-    public class ServerController : BaseController
+    public class ServerController : GenericController<Server, int, ServerModel>
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
 
-        public ServerController(AppDbContext dbContext, IBeServerAggregator beServerAggregator)
+        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator) : base(repository)
         {
-            _dbContext = dbContext;
+            _repository = repository;
             _beServerAggregator = beServerAggregator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public override async Task<IActionResult> Get()
         {
-            var dbItems = await _dbContext.Servers
+            var dbItems = await _repository.GetItems()
                 .OrderBy(x => x.Name)
                 .ToArrayAsync();
 
             var items = dbItems
                 .Select(Mapper.Map<ServerModel>)
                 .ToArray();
+
             return Ok(items);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            if (id <= 0) return NotFound();
-
-            var item = await _dbContext.Servers.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            var ret = Mapper.Map<ServerModel>(item);
-            return Ok(ret);
-        }
-
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post(int id, [FromBody] ServerModel model)
+        public override async Task<IActionResult> Post(int id, [FromBody] ServerModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var isActive = model.Active;
             if (id <= 0) return NotFound();
 
-            var item = await _dbContext.Servers.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+            var ret = await base.Post(id, model);
 
-            Mapper.Map(model, item);
-
-            await _dbContext.SaveChangesAsync();
-
-            if (item.Active)
+            if (isActive)
                 _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
             else
                 _beServerAggregator.RemoveServer(model.Id);
 
-            return NoContent();
+            return ret;
         }
 
 
         [HttpPut]
         [ProducesResponseType(201, Type = typeof(ServerModel))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Put([FromBody] ServerModel model)
+        public override async Task<IActionResult> Put([FromBody] ServerModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -94,8 +73,8 @@ namespace BattlEyeManager.Spa.Api.Admin
             }
 
             var item = Mapper.Map<Server>(model);
-            _dbContext.Servers.Add(item);
-            await _dbContext.SaveChangesAsync();
+
+            await base.Put(model);
 
             if (item.Active)
                 _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
@@ -104,20 +83,18 @@ namespace BattlEyeManager.Spa.Api.Admin
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public override async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return NotFound();
 
-            var item = await _dbContext.Servers.FindAsync(id);
+            var item = await _repository.GetItemByIdAsync(id);
             if (item == null)
             {
                 return NotFound();
             }
 
             _beServerAggregator.RemoveServer(id);
-            _dbContext.Servers.Remove(item);
-            await _dbContext.SaveChangesAsync();
-            return NoContent();
+            return await base.Delete(id);
         }
     }
 }

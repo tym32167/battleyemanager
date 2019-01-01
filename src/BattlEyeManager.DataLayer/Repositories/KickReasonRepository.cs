@@ -3,9 +3,9 @@ using BattlEyeManager.DataLayer.Models;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class BanReasonRepository : GenericRepository<BanReason, int>
+    public class KickReasonRepository : GenericRepository<KickReason, int>
     {
-        public BanReasonRepository(AppDbContext context) : base(context)
+        public KickReasonRepository(AppDbContext context) : base(context)
         {
         }
     }
