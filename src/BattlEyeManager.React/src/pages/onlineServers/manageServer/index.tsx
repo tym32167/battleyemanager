@@ -28,16 +28,16 @@ export const ManageServerControl = (props: any) => {
                     <Container>
                         <MissionSelector />
                     </Container>
-                    <Container style={{ 'padding-top': '8px' }}>
+                    <Container style={{ 'paddingTop': '8px' }}>
                         <Row>
-                            <Col xs={12} sm={6} style={{ 'padding-bottom': '8px' }}>
+                            <Col xs={12} sm={6} style={{ 'paddingBottom': '8px' }}>
                                 <CommandButton commandText="Lock" {...props} />
                                 <CommandButton commandText="Unlock" {...props} />
                                 <CommandButton commandText="Shutdown" {...props} />
                                 <CommandButton commandText="Restart" {...props} />
                                 <CommandButton commandText="Restart Server" {...props} />
                             </Col>
-                            <Col xs={12} sm={6} style={{ 'padding-bottom': '8px' }}>
+                            <Col xs={12} sm={6} style={{ 'paddingBottom': '8px' }}>
                                 <CommandButton commandText="Init" {...props} />
                                 <CommandButton commandText="Reassign" {...props} />
                                 <CommandButton commandText="Load bans" {...props} />
@@ -61,18 +61,20 @@ const CommandButton = (props: IManageServersCommandProps) => {
 const MissionSelector = (props: any) => {
     return <React.Fragment>
         <table>
-            <tr>
-                <td>
-                    <Input type="select" name="select" id="exampleSelect">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </Input>
-                </td>
-                <td><Button color="danger">Set mission</Button>     </td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td>
+                        <Input type="select" name="select" id="exampleSelect">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </Input>
+                    </td>
+                    <td><Button color="danger">Set mission</Button>     </td>
+                </tr>
+            </tbody>
         </table>
     </React.Fragment>
 };
