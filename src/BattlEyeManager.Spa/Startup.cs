@@ -120,6 +120,7 @@ namespace BattlEyeManager.Spa
 
             services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
             services.AddScoped<OnlineBanService, OnlineBanService>();
+            services.AddScoped<OnlineMissionService, OnlineMissionService>();
 
 
             services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
@@ -250,10 +251,12 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<ServerModel, ServerInfo>();
 
                 config.CreateMap<Server, OnlineServerModel>();
+
                 config.CreateMap<Ban, OnlineBanViewModel>();
 
-
                 config.CreateMap<Player, OnlinePlayerModel>();
+
+                config.CreateMap<Mission, OnlineMissionModel>();
             });
         }
     }

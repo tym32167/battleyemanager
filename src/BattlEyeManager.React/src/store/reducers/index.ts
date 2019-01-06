@@ -6,6 +6,7 @@ import { currentUsersReducer } from './currentUser';
 import { kickReasonsReducer } from './kickReason';
 import { onlineBansReducer } from './onlineBan';
 import { onlineChatReducer } from './onlineChat';
+import { onlineMissionsReducer } from './onlineMission';
 import { onlinePlayersReducer } from './onlinePlayer';
 import { onlineServersReducer } from './onlineServer';
 import { serversReducer } from "./server";
@@ -20,6 +21,7 @@ const appReducer = combineReducers({
     kickReasons: kickReasonsReducer,
     onlineBans: onlineBansReducer,
     onlineChat: onlineChatReducer,
+    onlineMissions: onlineMissionsReducer,
     onlinePlayers: onlinePlayersReducer,
     onlineServers: onlineServersReducer,
     servers: serversReducer,
