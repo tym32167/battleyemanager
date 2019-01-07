@@ -4,6 +4,7 @@ import { Button, Col, Container, Input, Row } from "reactstrap";
 import { Dispatch } from "redux";
 import { ConfirmWindow } from "src/controls";
 import { IOnlineMission } from "src/models";
+import { onlineServerService } from "src/services";
 import { onlineMissionActions } from "src/store/actions";
 import { ServerHeader } from "../onlineServerHeader";
 
@@ -162,8 +163,8 @@ const mapDispatchToProps = (dispatch: Dispatch<void>) => {
         },
 
         commandCallback: (serverId: number, command: string) => {
-            // 
-            alert('command: ' + serverId + ' ' + command);
+            onlineServerService.getItems();
+            // onlineServerService.sendCommand(serverId, command);
         },
         missionCallback: (serverId: number, mission: string) => {
             // 

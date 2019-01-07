@@ -52,6 +52,13 @@ namespace BattlEyeManager.Spa.Api
             return Ok(Update(ret));
         }
 
+        //[HttpPost]
+        ////[Route("api/onlineserver/{serverId}/command")]
+        //public async Task<IActionResult> Command(int serverId, [FromBody]ServerCommand command)
+        //{
+        //    return Ok(new { serverId, command });
+        //}
+
         private OnlineServerModel Update(OnlineServerModel input)
         {
             input.PlayersCount = _serverStateService.GetPlayersCount(input.Id);
@@ -59,6 +66,12 @@ namespace BattlEyeManager.Spa.Api
             input.BansCount = _serverStateService.GetBansCount(input.Id);
             input.IsConnected = _serverStateService.IsConnected(input.Id);
             return input;
+        }
+
+        public class ServerCommand
+        {
+            public int ServerId { get; set; }
+            public string Command { get; set; }
         }
     }
 }

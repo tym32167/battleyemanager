@@ -14,7 +14,7 @@ namespace BattlEyeManager.Spa.Api
             _onlineMissionService = onlineMissionService;
         }
 
-        [HttpGet("api/onlineserver/{serverId}/missions")]
+        //[HttpGet("api/onlineserver/{serverId}/missions")]
         public async Task<IActionResult> Get(int serverId)
         {
             return Ok(await _onlineMissionService.GetOnlineMissions(serverId));
