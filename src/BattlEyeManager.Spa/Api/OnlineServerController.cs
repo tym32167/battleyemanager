@@ -52,12 +52,12 @@ namespace BattlEyeManager.Spa.Api
             return Ok(Update(ret));
         }
 
-        //[HttpPost]
-        ////[Route("api/onlineserver/{serverId}/command")]
-        //public async Task<IActionResult> Command(int serverId, [FromBody]ServerCommand command)
-        //{
-        //    return Ok(new { serverId, command });
-        //}
+        [HttpPost("{serverId}/command")]
+        //[Route("api/onlineserver/{serverId}/command")]
+        public async Task<IActionResult> Command(int serverId, [FromBody]ServerCommand command)
+        {
+            return Ok(new { serverId, command });
+        }
 
         private OnlineServerModel Update(OnlineServerModel input)
         {

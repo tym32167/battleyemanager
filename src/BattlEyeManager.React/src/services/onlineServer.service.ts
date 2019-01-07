@@ -7,7 +7,7 @@ import { ReadonlyCommonService } from './core/readonlycommonservice';
 
 
 const baseUrl = '/api/onlineserver/'
-export const onlineServerService: IReadonlyService<IOnlineServer>
+export const onlineServerService22: IReadonlyService<IOnlineServer>
     = new ReadonlyCommonService<IOnlineServer>(baseUrl);
 
 
@@ -22,7 +22,7 @@ class OnlineServerService22 extends ReadonlyCommonService<IOnlineServer>{
     }
 }
 
-export const onlineServerService2: OnlineServerService22
+export const onlineServerService: OnlineServerService22
     = new OnlineServerService22(baseUrl);
 
 

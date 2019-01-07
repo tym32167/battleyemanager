@@ -163,8 +163,8 @@ const mapDispatchToProps = (dispatch: Dispatch<void>) => {
         },
 
         commandCallback: (serverId: number, command: string) => {
-            onlineServerService.getItems();
-            // onlineServerService.sendCommand(serverId, command);
+            // onlineServerService.getItems();
+            onlineServerService.sendCommand(serverId, command);
         },
         missionCallback: (serverId: number, mission: string) => {
             // 
