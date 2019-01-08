@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { NotFound } from '../404';
 import { DashBoard } from './dashboard';
 import { List } from './list';
+import { ManageServerControl } from './manageServer';
 import { BanList } from './onlineBans/banlist';
 import { List as ChatList } from './onlineChat/list';
 import { List as PlayersList } from './onlinePlayers/list';
@@ -21,6 +22,8 @@ export class OnlineServers extends Component {
                     <DefaultLayout exact={true} path="/online/:serverId/players" component={PlayersList} />
                     <Route exact={true} path="/online/:serverId/bans" component={BanList} />
                     <DefaultLayout exact={true} path="/online/:serverId/chat" component={ChatList} />
+
+                    <Route exact={true} path="/online/:serverId/manage" component={ManageServerControl} />
 
                     <DefaultLayout component={NotFound} />
                 </Switch>

@@ -20,6 +20,9 @@ namespace BattlEyeManager.Spa.Services
         private readonly DataRegistrator _dataRegistrator;
 
         private readonly ConcurrentDictionary<int, IEnumerable<Player>> _playerState = new ConcurrentDictionary<int, IEnumerable<Player>>();
+
+        private readonly ConcurrentDictionary<int, IEnumerable<Mission>> _missionsState = new ConcurrentDictionary<int, IEnumerable<Mission>>();
+
         private readonly ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>> _chat = new ConcurrentDictionary<int, ConcurrentQueue<ChatMessage>>();
 
         private readonly ConcurrentDictionary<int, IEnumerable<Admin>> _adminState = new ConcurrentDictionary<int, IEnumerable<Admin>>();
@@ -41,6 +44,12 @@ namespace BattlEyeManager.Spa.Services
 
             _aggregator.AdminHandler += _aggregator_AdminHandler;
             _aggregator.BanHandler += _aggregator_BanHandler;
+            _aggregator.MissionHandler += _aggregator_MissionHandler;
+        }
+
+        private void _aggregator_MissionHandler(object sender, BEServerEventArgs<IEnumerable<Mission>> e)
+        {
+            _missionsState.AddOrUpdate(e.Server.Id, i => e.Data, (i, p) => e.Data);
         }
 
         private async void _aggregator_BanHandler(object sender, BEServerEventArgs<IEnumerable<Ban>> e)
@@ -213,6 +222,24 @@ namespace BattlEyeManager.Spa.Services
                 return res;
             }
             return Enumerable.Empty<Player>();
+        }
+
+        public IEnumerable<Admin> GetAdmins(int serverId)
+        {
+            if (_adminState.TryGetValue(serverId, out IEnumerable<Admin> res))
+            {
+                return res;
+            }
+            return Enumerable.Empty<Admin>();
+        }
+
+        public IEnumerable<Mission> GetMissions(int serverId)
+        {
+            if (_missionsState.TryGetValue(serverId, out IEnumerable<Mission> res))
+            {
+                return res;
+            }
+            return Enumerable.Empty<Mission>();
         }
 
         public IEnumerable<ChatMessage> GetChat(int serverId)

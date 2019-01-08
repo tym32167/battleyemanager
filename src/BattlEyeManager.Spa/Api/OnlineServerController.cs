@@ -1,40 +1,26 @@
-using AutoMapper;
-using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class OnlineServerController : BaseController
     {
-        private readonly AppDbContext _dbContext;
-        private readonly ServerStateService _serverStateService;
+        private readonly OnlineServerService _onlineServerService;
 
-        public OnlineServerController(AppDbContext dbContext, ServerStateService serverStateService)
+        public OnlineServerController(OnlineServerService onlineServerService)
         {
-            _dbContext = dbContext;
-            _serverStateService = serverStateService;
+            _onlineServerService = onlineServerService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var dbItems = await _dbContext.Servers
-                .Where(x => x.Active)
-                .OrderBy(x => x.Name)
-                .ToArrayAsync();
-
-            var items = dbItems
-                .Select(x => Update(Mapper.Map<OnlineServerModel>(x)))
-                .ToArray();
-
-            return Ok(items);
+            return Ok(await _onlineServerService.GetOnlineServers());
         }
 
         [HttpGet("{id}")]
@@ -42,23 +28,20 @@ namespace BattlEyeManager.Spa.Api
         {
             if (id <= 0) return NotFound();
 
-            var item = await _dbContext.Servers.FindAsync(id);
+            var item = await _onlineServerService.GetOnlineServer(id);
             if (item == null)
             {
                 return NotFound();
             }
-
-            var ret = Mapper.Map<OnlineServerModel>(item);
-            return Ok(Update(ret));
+            return Ok(item);
         }
 
-        private OnlineServerModel Update(OnlineServerModel input)
+        [HttpPost("{serverId}/command")]
+        public async Task<IActionResult> Command(int serverId, [FromBody]OnlineServerCommandModel command)
         {
-            input.PlayersCount = _serverStateService.GetPlayersCount(input.Id);
-            input.AdminsCount = _serverStateService.GetAdminsCount(input.Id);
-            input.BansCount = _serverStateService.GetBansCount(input.Id);
-            input.IsConnected = _serverStateService.IsConnected(input.Id);
-            return input;
+            if (serverId != command.ServerId) return BadRequest();
+            await _onlineServerService.Execute(command);
+            return Ok(new { serverId, command });
         }
     }
 }

@@ -24,6 +24,34 @@ namespace BattlEyeManager.DataLayer.Context
             builder.Entity<Player>()
                 .HasIndex(u => u.GUID)
                 .IsUnique();
+
+            builder.Entity<Player>()
+                .HasIndex(u => u.SteamId)
+                .IsUnique(false);
+
+            builder.Entity<Player>()
+                .HasIndex(u => u.Name)
+                .IsUnique(false);
+
+            builder.Entity<Player>()
+                .HasIndex(u => u.IP)
+                .IsUnique(false);
+
+            builder.Entity<ChatMessage>()
+                .HasIndex(u => u.Date)
+                .IsUnique(false);
+
+            builder.Entity<ChatMessage>()
+                .HasIndex(u => u.Text)
+                .IsUnique(false);
+
+            builder.Entity<PlayerSession>()
+                .HasIndex(u => u.StartDate)
+                .IsUnique(false);
+
+            builder.Entity<PlayerSession>()
+                .HasIndex(u => u.EndDate)
+                .IsUnique(false);
         }
 
         public DbSet<Server> Servers { get; set; }

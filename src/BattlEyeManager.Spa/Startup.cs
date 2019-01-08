@@ -6,6 +6,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Services;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
@@ -100,11 +101,12 @@ namespace BattlEyeManager.Spa
 
             //--------------------------------------------------------------------------
 
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            });
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
 
 
             services.AddTransient<ILog, LogImpl>();
@@ -119,6 +121,16 @@ namespace BattlEyeManager.Spa
 
             services.AddScoped<OnlinePlayerService, OnlinePlayerService>();
             services.AddScoped<OnlineBanService, OnlineBanService>();
+            services.AddScoped<OnlineMissionService, OnlineMissionService>();
+            services.AddScoped<OnlineServerService, OnlineServerService>();
+
+
+            services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
+            services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
+
+            services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
+            services.AddTransient<IServerRepository, ServerRepository>();
+
 
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();
@@ -241,10 +253,12 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<ServerModel, ServerInfo>();
 
                 config.CreateMap<Server, OnlineServerModel>();
+
                 config.CreateMap<Ban, OnlineBanViewModel>();
 
-
                 config.CreateMap<Player, OnlinePlayerModel>();
+
+                config.CreateMap<Mission, OnlineMissionModel>();
             });
         }
     }

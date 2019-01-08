@@ -14,6 +14,8 @@ const ServerHeader = ({ id, title }: IServerHeaderProps) => (
         <Link to={'/online/' + id}>Dashboard</Link>
         {' '}
         <Link to={'/online/' + id + '/bans'}>Bans</Link>
+        {' '}
+        <Link to={'/online/' + id + '/manage'}>Manage</Link>
     </React.Fragment>
 );
 

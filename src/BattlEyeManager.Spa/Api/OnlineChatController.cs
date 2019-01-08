@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace BattlEyeManager.Spa.Api
 {
+    [ApiController]
     public class OnlineChatController : BaseController
     {
         private readonly ServerStateService _serverStateService;

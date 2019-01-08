@@ -8,5 +8,6 @@ export * from './iserver'
 export * from './ikickreason'
 export * from './ibanreason'
 export * from './ionlineban'
+export * from './ionlinemission'
 
 export * from './shared/iidtext'

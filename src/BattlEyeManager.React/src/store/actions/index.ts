@@ -4,6 +4,7 @@ export * from './server';
 export * from './onlineServer';
 export * from './onlinePlayer';
 export * from './onlineBan';
+export * from './onlineMission';
 export * from './onlineChat';
 export * from './currentUser';
 export * from './kickReason';

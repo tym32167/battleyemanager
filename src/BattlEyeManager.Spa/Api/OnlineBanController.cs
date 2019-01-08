@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
+    [ApiController]
     public class OnlineBanController : BaseController
     {
         private readonly OnlineBanService _onlineBanService;

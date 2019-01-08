@@ -1,15 +1,41 @@
 ﻿using BattleNET;
 using System;
+using System.Linq;
+using System.Threading;
 
 namespace BattlEyeManager.BE.Services
 {
     public sealed class BELogic : IDisposable
     {
         private readonly IBeServerAggregator _serverAggregator;
+        private readonly Timer _playerTimer;
+        private readonly Timer _stateTimer;
+
+        private void PlayerTimed(object state)
+        {
+            var servers = _serverAggregator.GetConnectedServers().Select(x => x.Id).ToArray();
+            foreach (var server in servers)
+            {
+                _serverAggregator.Send(server, BattlEyeCommand.Players);
+            }
+        }
+
+        private void StateTimed(object state)
+        {
+            var servers = _serverAggregator.GetConnectedServers().Select(x => x.Id).ToArray();
+            foreach (var server in servers)
+            {
+                _serverAggregator.Send(server, BattlEyeCommand.Admins);
+                _serverAggregator.Send(server, BattlEyeCommand.Bans);
+                _serverAggregator.Send(server, BattlEyeCommand.Missions);
+            }
+        }
 
         public BELogic(IBeServerAggregator serverAggregator)
         {
             _serverAggregator = serverAggregator;
+            _playerTimer = new Timer(PlayerTimed, null, TimeSpan.Zero, TimeSpan.FromSeconds(40));
+            _stateTimer = new Timer(StateTimed, null, TimeSpan.Zero, TimeSpan.FromMinutes(10));
         }
 
         public void Init()
