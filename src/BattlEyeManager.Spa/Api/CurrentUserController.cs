@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class CurrentUserController : BaseController
     {

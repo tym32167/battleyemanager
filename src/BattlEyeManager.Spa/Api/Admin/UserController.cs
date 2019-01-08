@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
+    [ApiController]
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     public class UserController : BaseController

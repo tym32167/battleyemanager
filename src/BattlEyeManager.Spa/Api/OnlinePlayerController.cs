@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
+    [ApiController]
     public class OnlinePlayerController : BaseController
     {
         private readonly OnlinePlayerService _onlinePlayerService;

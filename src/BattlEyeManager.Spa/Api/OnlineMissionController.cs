@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
+    [ApiController]
     public class OnlineMissionController : BaseController
     {
         private readonly OnlineMissionService _onlineMissionService;

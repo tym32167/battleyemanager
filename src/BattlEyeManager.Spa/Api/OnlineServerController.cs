@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class OnlineServerController : BaseController
     {
         private readonly AppDbContext _dbContext;
