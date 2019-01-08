@@ -16,9 +16,9 @@ namespace BattlEyeManager.Spa.Services
     {
         private readonly ServerStateService _serverStateService;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly BeServerAggregator _beServerAggregator;
+        private readonly IBeServerAggregator _beServerAggregator;
 
-        public OnlineServerService(ServerStateService serverStateService, IServiceScopeFactory scopeFactory, BeServerAggregator beServerAggregator)
+        public OnlineServerService(ServerStateService serverStateService, IServiceScopeFactory scopeFactory, IBeServerAggregator beServerAggregator)
         {
             _serverStateService = serverStateService;
             _scopeFactory = scopeFactory;

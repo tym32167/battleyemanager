@@ -11,9 +11,9 @@ namespace BattlEyeManager.Spa.Services
     public class OnlineMissionService
     {
         private readonly ServerStateService _stateService;
-        private readonly BeServerAggregator _beServerAggregator;
+        private readonly IBeServerAggregator _beServerAggregator;
 
-        public OnlineMissionService(ServerStateService stateService, BeServerAggregator beServerAggregator)
+        public OnlineMissionService(ServerStateService stateService, IBeServerAggregator beServerAggregator)
         {
             _stateService = stateService;
             _beServerAggregator = beServerAggregator;
