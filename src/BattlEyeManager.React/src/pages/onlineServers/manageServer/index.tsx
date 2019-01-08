@@ -4,7 +4,7 @@ import { Button, Col, Container, Input, Row } from "reactstrap";
 import { Dispatch } from "redux";
 import { ConfirmWindow } from "src/controls";
 import { IOnlineMission } from "src/models";
-import { onlineServerService } from "src/services";
+import { onlineMissionsService, onlineServerService } from "src/services";
 import { onlineMissionActions } from "src/store/actions";
 import { ServerHeader } from "../onlineServerHeader";
 
@@ -12,7 +12,7 @@ import { ServerHeader } from "../onlineServerHeader";
 interface IManageServersProps {
     serverId: number,
     commandCallback: (serverId: number, command: string) => void,
-    missionCallback: (serverId: number, mission: string) => void,
+    missionCallback: (mission: IOnlineMission) => void,
     onLoad: (serverId: number) => void,
     items: IOnlineMission[]
 }
@@ -116,27 +116,74 @@ const CommandButton = (props: IManageServersCommandProps) => {
 
 interface IMissionSelectorProps {
     serverId: number,
+    missionCallback: (mission: IOnlineMission) => void,
     items: IOnlineMission[]
 }
 
-const MissionSelector = (props: IMissionSelectorProps) => {
-    return <React.Fragment>
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <Input type="select" name="select" id="missionsSelect">
-                            {props.items && props.items.map((m, i) => (<option key={i}>{m.name}</option>))}
-                        </Input>
-                    </td>
-                    <td><Button color="danger">Set mission</Button></td>
-                </tr>
-            </tbody>
-        </table>
-    </React.Fragment>
-};
+interface IMissionSelectorState {
+    mission?: IOnlineMission
+}
 
 
+// tslint:disable-next-line:max-classes-per-file
+class MissionSelector extends Component<IMissionSelectorProps, IMissionSelectorState> {
+
+    constructor(props: IMissionSelectorProps) {
+        super(props);
+        this.state = {};
+        if (props && props.items && props.items.length > 0) {
+            this.state = { mission: props.items[0] };
+        }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    public handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const mission = this.props.items.find(x => x.name === event.target.value);
+        this.setState({ mission });
+    }
+
+    public handleSubmit() {
+        const { mission } = this.state;
+        if (mission) {
+            this.props.missionCallback(mission);
+        }
+    }
+
+    public componentWillReceiveProps(nextProps: IMissionSelectorProps) {
+        const p = nextProps;
+        if (p && p.items && p.items.length > 0) {
+            this.setState({ mission: p.items[0] });
+        }
+    }
+
+    public render() {
+        const { items } = this.props;
+        const renderer = (toggle: () => void) => <Button color="danger" onClick={toggle} >Set mission</Button>;
+        return (<React.Fragment>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <Input type="select" name="select" id="missionsSelect" onChange={this.handleChange}>
+                                {items && items.map((m, i) => (<option key={i}>{m.name}</option>))}
+                            </Input>
+                        </td>
+                        <td>
+                            <ConfirmWindow
+                                submit={this.handleSubmit}
+                                text={'Do you want to setup mission ' + (this.state.mission ? this.state.mission.name : '') + '?'}
+                                title="Set mission"
+                                buttonRenderer={renderer}
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </React.Fragment>);
+    }
+}
 
 const mapStateToProps = ({ onlineMissions }: { onlineMissions: any }, ownProps: any) => {
     const server = onlineMissions && onlineMissions[ownProps.match.params.serverId];
@@ -166,9 +213,9 @@ const mapDispatchToProps = (dispatch: Dispatch<void>) => {
             // onlineServerService.getItems();
             onlineServerService.sendCommand(serverId, command);
         },
-        missionCallback: (serverId: number, mission: string) => {
+        missionCallback: (mission: IOnlineMission) => {
             // 
-            alert('mission: ' + serverId + ' ' + mission);
+            onlineMissionsService.setMission(mission);
         }
     }
 }

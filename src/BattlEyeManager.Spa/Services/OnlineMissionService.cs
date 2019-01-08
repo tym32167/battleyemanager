@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BattleNET;
+using BattlEyeManager.BE.Services;
 using BattlEyeManager.Spa.Model;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,12 @@ namespace BattlEyeManager.Spa.Services
     public class OnlineMissionService
     {
         private readonly ServerStateService _stateService;
+        private readonly BeServerAggregator _beServerAggregator;
 
-        public OnlineMissionService(ServerStateService stateService)
+        public OnlineMissionService(ServerStateService stateService, BeServerAggregator beServerAggregator)
         {
             _stateService = stateService;
+            _beServerAggregator = beServerAggregator;
         }
 
         public async Task<IEnumerable<OnlineMissionModel>> GetOnlineMissions(int serverId)
@@ -23,6 +27,11 @@ namespace BattlEyeManager.Spa.Services
                 .OrderBy(x => x.Name)
                 .ToArray();
             return ret;
+        }
+
+        public async Task SetOnlineMission(OnlineMissionModel mission)
+        {
+            _beServerAggregator.Send(mission.ServerId, BattlEyeCommand.Mission, mission.Name);
         }
     }
 }
