@@ -20,7 +20,7 @@ namespace BattlEyeManager.Spa.Api
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(_onlineServerService.GetOnlineServers());
+            return Ok(await _onlineServerService.GetOnlineServers());
         }
 
         [HttpGet("{id}")]
