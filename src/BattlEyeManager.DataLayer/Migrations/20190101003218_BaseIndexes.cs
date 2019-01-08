@@ -30,6 +30,7 @@ namespace BattlEyeManager.DataLayer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Text",
                 table: "ChatMessages",
+                maxLength:512,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldNullable: true);
