@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using NLog.Web;
 using System;
 
@@ -32,7 +33,11 @@ namespace BattlEyeManager.Spa
 
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://localhost:58175", "http://192.168.0.10:58175")
+            .ConfigureAppConfiguration((hostingContext, config)=>
+            {                
+                config.AddJsonFile($"appsettings.json", optional: false);                
+            })
+                //.UseUrls("http://localhost:58175", "http://192.168.0.10:58175")
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {

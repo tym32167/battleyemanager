@@ -44,7 +44,11 @@ namespace BattlEyeManager.Spa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);            
+
+            // Console.WriteLine("-------------------------------------------------");
+            // Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
+            // Console.WriteLine("--------------------------------------------------");
 
             services.AddDbContext<AppDbContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
