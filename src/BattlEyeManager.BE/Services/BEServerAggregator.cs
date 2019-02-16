@@ -34,6 +34,7 @@ namespace BattlEyeManager.BE.Services
             RemoveServer(info.Id);
 
             var host = _ipService.GetIpAddress(info.Host);
+            if (string.IsNullOrEmpty(host)) return false;
 
             var credentials = new BattlEyeLoginCredentials(IPAddress.Parse(host), info.Port, info.Password);
             var server = _battlEyeServerFactory.Create(credentials);

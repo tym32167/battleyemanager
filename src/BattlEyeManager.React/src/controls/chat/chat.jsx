@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './chat.css';
 import { InputMessage } from './inputMessage';
+import moment from 'moment';
 
 export class Chat extends Component {
     constructor(props) {
@@ -13,8 +14,8 @@ export class Chat extends Component {
     componentDidUpdate() {
         var height = this.chatBox.current.scrollHeight;
         this.chatBox.current.scrollTop = height;
-    }    
-   
+    }
+
     render() {
         const { items, newMessage } = this.props;
         return (
@@ -22,7 +23,7 @@ export class Chat extends Component {
 
                 <div id="chatBox" ref={this.chatBox} className="bg-white rounded box-shadow">
                     {items && items.map && items.map((item, i) => <ChatItem key={i} item={item} />)}
-                </div>  
+                </div>
 
                 <InputMessage onSubmit={newMessage} />
             </div>
@@ -54,8 +55,8 @@ function getClassname(messageType) {
 const ChatItem = ({ item }) => (
     <div className="media text-muted @GetClass(item)">
         <p className={'media-body mb-0 small lh-125 ' + getClassname(item.type)}
-        style = {{wordBreak: 'break-all'}}>
-            <strong>{new Date(item.date).toLocaleTimeString()}{' '}</strong>
+            style={{ wordBreak: 'break-all' }}>
+            {moment.utc(item.date).local().format('YYYY-MM-DD')}{' '}<strong>{moment.utc(item.date).local().format('HH:mm:ss')}{' '}</strong>
             {item.message}
         </p>
     </div>
