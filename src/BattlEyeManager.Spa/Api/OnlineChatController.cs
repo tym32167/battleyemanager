@@ -1,4 +1,5 @@
-﻿using BattlEyeManager.Spa.Core;
+﻿using AutoMapper;
+using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace BattlEyeManager.Spa.Api
         public IActionResult Get(int serverId)
         {
             var chatMessages = _serverStateService.GetChat(serverId)
+                .Select(Mapper.Map<ChatMessageModel>)
                 .OrderBy(x => x.Date)
                 .ToArray();
             return Ok(chatMessages);

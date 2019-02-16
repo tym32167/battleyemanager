@@ -27,6 +27,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChatMessage = BattlEyeManager.BE.Models.ChatMessage;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using Player = BattlEyeManager.DataLayer.Models.Player;
 
@@ -44,7 +45,7 @@ namespace BattlEyeManager.Spa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);            
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             // Console.WriteLine("-------------------------------------------------");
             // Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
@@ -263,6 +264,12 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<Player, OnlinePlayerModel>();
 
                 config.CreateMap<Mission, OnlineMissionModel>();
+
+                config.CreateMap<ChatMessage, ChatMessageModel>()
+                    .AfterMap((message, messageModel) =>
+                        {
+                            messageModel.Date = DateTime.SpecifyKind(messageModel.Date, DateTimeKind.Utc);
+                        });
             });
         }
     }

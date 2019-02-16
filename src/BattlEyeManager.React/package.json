@@ -11,6 +11,7 @@
     "bootstrap": "^4.1.1",
     "core-js": "^2.5.7",
     "history": "^4.7.2",
+    "moment": "^2.24.0",
     "prop-types": "^15.6.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -34,7 +35,7 @@
   },
   "proxy": {
     "/api": {
-      "target": "http://localhost:58175"
+      "target": "http://localhost:59205"
     }
   },
   "devDependencies": {
