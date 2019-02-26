@@ -138,7 +138,7 @@ namespace BattlEyeManager.Spa
 
             // features
 
-            services.AddSingleton<PlayerConnectFeature, PlayerConnectFeature>();
+            services.AddSingleton<WelcomeFeature, WelcomeFeature>();
 
             // end features
 
@@ -176,7 +176,7 @@ namespace BattlEyeManager.Spa
             applicationBuilder.ApplicationServices.GetService<DataRegistrator>();
             applicationBuilder.ApplicationServices.GetService<BELogic>();
 
-            applicationBuilder.ApplicationServices.GetService<PlayerConnectFeature>();
+            applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -229,6 +229,17 @@ namespace BattlEyeManager.Spa
             RunActiveServers(beServerAggregator, store, service).Wait();
 
             InitSingletones(app);
+            InitFeatures(store, app);
+        }
+
+        private void InitFeatures(AppDbContext store, IApplicationBuilder applicationBuilder)
+        {
+            var servers = store.Servers.Where(x => x.WelcomeFeatureEnabled).ToArray();
+            var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
+            foreach (var server in servers)
+            {
+                welcomeFeature.SetEnabled(server.Id, true);
+            }
         }
 
         private async Task CheckAdminUser(

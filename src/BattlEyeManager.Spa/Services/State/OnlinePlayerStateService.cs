@@ -16,9 +16,8 @@ namespace BattlEyeManager.Spa.Services.State
 
         public OnlinePlayerStateService(IBeServerAggregator serverAggregator)
         {
-            var serverAggregator1 = serverAggregator;
-            serverAggregator1.PlayerHandler += _serverAggregator_PlayerHandler;
-            serverAggregator1.DisconnectHandler += _serverAggregator_DisconnectHandler;
+            serverAggregator.PlayerHandler += _serverAggregator_PlayerHandler;
+            serverAggregator.DisconnectHandler += _serverAggregator_DisconnectHandler;
         }
 
         private void _serverAggregator_DisconnectHandler(object sender, BEServerEventArgs<ServerInfo> e)
