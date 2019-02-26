@@ -21,5 +21,7 @@ namespace BattlEyeManager.Spa.Model
 
         [Required]
         public int SteamPort { get; set; }
+
+        public bool WelcomeFeatureEnabled { get; set; }
     }
 }

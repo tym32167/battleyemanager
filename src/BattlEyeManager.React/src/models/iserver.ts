@@ -1,6 +1,7 @@
 import { IOnlineServer } from "./ionlineserver";
 
 export interface IServer extends IOnlineServer {
-    password: string
+    password: string,
+    welcomeFeatureEnabled: boolean
 }
 
