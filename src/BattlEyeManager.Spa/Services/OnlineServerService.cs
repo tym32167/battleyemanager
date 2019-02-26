@@ -3,6 +3,7 @@ using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services.State;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,12 +18,17 @@ namespace BattlEyeManager.Spa.Services
         private readonly ServerStateService _serverStateService;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IBeServerAggregator _beServerAggregator;
+        private readonly OnlinePlayerStateService _onlinePlayerStateService;
 
-        public OnlineServerService(ServerStateService serverStateService, IServiceScopeFactory scopeFactory, IBeServerAggregator beServerAggregator)
+        public OnlineServerService(ServerStateService serverStateService,
+            IServiceScopeFactory scopeFactory,
+            IBeServerAggregator beServerAggregator,
+            OnlinePlayerStateService onlinePlayerStateService)
         {
             _serverStateService = serverStateService;
             _scopeFactory = scopeFactory;
             _beServerAggregator = beServerAggregator;
+            _onlinePlayerStateService = onlinePlayerStateService;
         }
 
 
@@ -65,7 +71,7 @@ namespace BattlEyeManager.Spa.Services
 
         private OnlineServerModel Update(OnlineServerModel input)
         {
-            input.PlayersCount = _serverStateService.GetPlayersCount(input.Id);
+            input.PlayersCount = _onlinePlayerStateService.GetPlayersCount(input.Id);
             input.AdminsCount = _serverStateService.GetAdminsCount(input.Id);
             input.BansCount = _serverStateService.GetBansCount(input.Id);
             input.IsConnected = _serverStateService.IsConnected(input.Id);
@@ -88,12 +94,13 @@ namespace BattlEyeManager.Spa.Services
 
         };
 
-        public async Task Execute(OnlineServerCommandModel command)
+        public Task Execute(OnlineServerCommandModel command)
         {
             if (!_commands.ContainsKey(command.Command))
                 throw new NotSupportedException();
             var c = _commands[command.Command];
             _beServerAggregator.Send(command.ServerId, c);
+            return Task.FromResult(true);
         }
     }
 }

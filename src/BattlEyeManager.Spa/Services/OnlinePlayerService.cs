@@ -4,6 +4,7 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services.State;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,28 +17,30 @@ namespace BattlEyeManager.Spa.Services
 {
     public class OnlinePlayerService
     {
-        private readonly ServerStateService _serverStateService;
         private readonly IBeServerAggregator _serverAggregator;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly MessageHelper _messageHelper;
+        private readonly OnlinePlayerStateService _onlinePlayerStateService;
 
-        public OnlinePlayerService(ServerStateService serverStateService, IBeServerAggregator serverAggregator,
-            IServiceScopeFactory scopeFactory, MessageHelper messageHelper)
+        public OnlinePlayerService(IBeServerAggregator serverAggregator,
+            IServiceScopeFactory scopeFactory,
+            MessageHelper messageHelper,
+            OnlinePlayerStateService onlinePlayerStateService)
         {
-            _serverStateService = serverStateService;
             _serverAggregator = serverAggregator;
             _scopeFactory = scopeFactory;
             _messageHelper = messageHelper;
+            _onlinePlayerStateService = onlinePlayerStateService;
         }
 
-        public async Task<OnlinePlayerModel[]> GetOnlinePlayers(int serverId)
+        public Task<OnlinePlayerModel[]> GetOnlinePlayers(int serverId)
         {
-            var players = _serverStateService.GetPlayers(serverId);
+            var players = _onlinePlayerStateService.GetPlayers(serverId);
             var ret =
                 players.Select(Mapper.Map<Player, OnlinePlayerModel>)
                     .OrderBy(x => x.Num)
                     .ToArray();
-            return ret;
+            return Task.FromResult(ret);
         }
 
         public async Task KickAsync(int serverId, int playerNum, string playerGuid, string reason, string currentUser)

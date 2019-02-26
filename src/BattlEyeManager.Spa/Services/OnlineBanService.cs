@@ -1,10 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services.State;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Services
 {
@@ -19,7 +20,7 @@ namespace BattlEyeManager.Spa.Services
             _serverAggregator = serverAggregator;
         }
 
-        public async Task<OnlineBanViewModel[]> GetOnlineBans(int serverId)
+        public Task<OnlineBanViewModel[]> GetOnlineBans(int serverId)
         {
             var bans = _serverStateService.GetBans(serverId);
             var ret =
@@ -27,12 +28,13 @@ namespace BattlEyeManager.Spa.Services
                         new OnlineBanViewModel { ServerId = serverId }))
                     .OrderBy(x => x.Num)
                     .ToArray();
-            return ret;
+            return Task.FromResult(ret);
         }
 
-        public async Task RemoveBan(int serverId, int banNumber)
+        public Task RemoveBan(int serverId, int banNumber)
         {
             _serverAggregator.Send(serverId, BattlEyeCommand.RemoveBan, banNumber.ToString());
+            return Task.FromResult(true);
         }
     }
 }
