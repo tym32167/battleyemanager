@@ -73,7 +73,20 @@ namespace BattlEyeManager.Spa.Services
         }
 
 
-        private static Dictionary<string, BattlEyeCommand> _commands = new Dictionary<string, BattlEyeCommand>();
+        private static Dictionary<string, BattlEyeCommand> _commands = new Dictionary<string, BattlEyeCommand>()
+        {
+            { "lock", BattlEyeCommand.Lock},
+            { "unlock", BattlEyeCommand.Unlock},
+            { "shutdown", BattlEyeCommand.Shutdown},
+            { "restart", BattlEyeCommand.Restart},
+            { "restartserver", BattlEyeCommand.RestartServer},
+            { "init", BattlEyeCommand.Init},
+            { "reassign", BattlEyeCommand.Reassign},
+            { "loadbans", BattlEyeCommand.LoadBans},
+            { "loadscripts", BattlEyeCommand.LoadScripts},
+            { "loadevents", BattlEyeCommand.LoadEvents},
+
+        };
 
         public async Task Execute(OnlineServerCommandModel command)
         {
