@@ -48,7 +48,7 @@ namespace BattlEyeManager.Spa.Services.Featues
                         if (sessions.Length != 0)
                         {
                             int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-                            _serverStateService.PostChat(e.Server.Id, "bot", -1, $"Welcome, {player.Name}! {sessions.Length} sessions and {hours} on server!");
+                            _serverStateService.PostChat(e.Server.Id, "bot", -1, $"Welcome, {player.Name}! {sessions.Length} sessions and {hours} hours on server!");
                         }
                         else
                         {
