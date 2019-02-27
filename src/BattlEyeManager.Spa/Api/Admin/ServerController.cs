@@ -5,6 +5,7 @@ using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Spa.Services.Featues;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,13 @@ namespace BattlEyeManager.Spa.Api.Admin
     {
         private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
+        private readonly WelcomeFeature _welcomeFeature;
 
-        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator) : base(repository)
+        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator, WelcomeFeature welcomeFeature) : base(repository)
         {
             _repository = repository;
             _beServerAggregator = beServerAggregator;
+            _welcomeFeature = welcomeFeature;
         }
 
         [HttpGet]
@@ -59,6 +62,8 @@ namespace BattlEyeManager.Spa.Api.Admin
             else
                 _beServerAggregator.RemoveServer(model.Id);
 
+            _welcomeFeature.SetEnabled(model.Id, model.WelcomeFeatureEnabled);
+
             return ret;
         }
 
@@ -80,6 +85,8 @@ namespace BattlEyeManager.Spa.Api.Admin
             if (item.Active)
                 _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
 
+            _welcomeFeature.SetEnabled(item.Id, item.WelcomeFeatureEnabled);
+
             return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
 
@@ -94,6 +101,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 return NotFound();
             }
 
+            _welcomeFeature.SetEnabled(item.Id, false);
             _beServerAggregator.RemoveServer(id);
             return await base.Delete(id);
         }

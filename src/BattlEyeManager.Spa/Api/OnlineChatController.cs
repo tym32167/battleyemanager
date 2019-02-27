@@ -10,17 +10,17 @@ namespace BattlEyeManager.Spa.Api
     [ApiController]
     public class OnlineChatController : BaseController
     {
-        private readonly ServerStateService _serverStateService;
+        private readonly OnlineChatService _onlineChatService;
 
-        public OnlineChatController(ServerStateService serverStateService)
+        public OnlineChatController(OnlineChatService onlineChatService)
         {
-            _serverStateService = serverStateService;
+            _onlineChatService = onlineChatService;
         }
 
         [HttpGet("api/onlineserver/{serverId}/chat")]
         public IActionResult Get(int serverId)
         {
-            var chatMessages = _serverStateService.GetChat(serverId)
+            var chatMessages = _onlineChatService.GetChat(serverId)
                 .Select(Mapper.Map<ChatMessageModel>)
                 .OrderBy(x => x.Date)
                 .ToArray();
@@ -35,7 +35,7 @@ namespace BattlEyeManager.Spa.Api
                 return BadRequest(ModelState);
             }
 
-            _serverStateService.PostChat(serverId, User.Identity.Name, model.Audience, model.Message);
+            _onlineChatService.PostChat(serverId, User.Identity.Name, model.Audience, model.Message);
             return Ok();
         }
     }

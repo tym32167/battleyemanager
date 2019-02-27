@@ -68,14 +68,13 @@ namespace BattlEyeManager.Spa.Services
 
         private static readonly SemaphoreSlim SemaphoreSlimPlayers = new SemaphoreSlim(1, 1);
 
-        public async Task UsersOnlineChangeRegister(BE.Models.Player[] joined, BE.Models.Player[] leaved, ServerInfo server)
+        public async Task UsersOnlineChangeRegisterJoined(BE.Models.Player[] joined, ServerInfo server)
         {
             await SemaphoreSlimPlayers.WaitAsync();
 
             joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
-            leaved = leaved.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
 
-            _logger.LogInformation($"Register JOINED:{joined.Length}, LEAVED:{leaved.Length}");
+            _logger.LogInformation($"Register JOINED:{joined.Length}");
 
             try
             {
@@ -146,7 +145,29 @@ namespace BattlEyeManager.Spa.Services
 
                             await ctx.SaveChangesAsync();
                         }
+                    }
+                }
+            }
+            finally
+            {
+                SemaphoreSlimPlayers.Release();
+            }
+        }
 
+        public async Task UsersOnlineChangeRegisterLeaved(BE.Models.Player[] leaved, ServerInfo server)
+        {
+            await SemaphoreSlimPlayers.WaitAsync();
+
+            leaved = leaved.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
+
+            _logger.LogInformation($"Register LEAVED:{leaved.Length}");
+
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    {
                         if (leaved.Any())
                         {
 

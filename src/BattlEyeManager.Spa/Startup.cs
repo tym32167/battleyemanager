@@ -14,6 +14,8 @@ using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Spa.Services;
+using BattlEyeManager.Spa.Services.Featues;
+using BattlEyeManager.Spa.Services.State;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -119,7 +121,11 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<IIpService, IpService>();
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
+
             services.AddSingleton<ServerStateService, ServerStateService>();
+            services.AddSingleton<OnlinePlayerStateService, OnlinePlayerStateService>();
+            services.AddSingleton<OnlineChatStateService, OnlineChatStateService>();
+
             services.AddSingleton<DataRegistrator, DataRegistrator>();
 
             services.AddSingleton<BELogic, BELogic>();
@@ -128,6 +134,13 @@ namespace BattlEyeManager.Spa
             services.AddScoped<OnlineBanService, OnlineBanService>();
             services.AddScoped<OnlineMissionService, OnlineMissionService>();
             services.AddScoped<OnlineServerService, OnlineServerService>();
+            services.AddScoped<OnlineChatService, OnlineChatService>();
+
+            // features
+
+            services.AddSingleton<WelcomeFeature, WelcomeFeature>();
+
+            // end features
 
 
             services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
@@ -150,6 +163,20 @@ namespace BattlEyeManager.Spa
                 }));
 
             services.AddSignalR();
+        }
+
+        private void InitSingletones(IApplicationBuilder applicationBuilder)
+        {
+            applicationBuilder.ApplicationServices.GetService<IIpService>();
+            applicationBuilder.ApplicationServices.GetService<IBattlEyeServerFactory>();
+            applicationBuilder.ApplicationServices.GetService<IBeServerAggregator>();
+            applicationBuilder.ApplicationServices.GetService<ServerStateService>();
+            applicationBuilder.ApplicationServices.GetService<OnlinePlayerStateService>();
+            applicationBuilder.ApplicationServices.GetService<OnlineChatStateService>();
+            applicationBuilder.ApplicationServices.GetService<DataRegistrator>();
+            applicationBuilder.ApplicationServices.GetService<BELogic>();
+
+            applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -200,6 +227,19 @@ namespace BattlEyeManager.Spa
             beLogic.Init();
             CheckAdminUser(userManager, roleManager).Wait();
             RunActiveServers(beServerAggregator, store, service).Wait();
+
+            InitSingletones(app);
+            InitFeatures(store, app);
+        }
+
+        private void InitFeatures(AppDbContext store, IApplicationBuilder applicationBuilder)
+        {
+            var servers = store.Servers.Where(x => x.WelcomeFeatureEnabled).ToArray();
+            var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
+            foreach (var server in servers)
+            {
+                welcomeFeature.SetEnabled(server.Id, true);
+            }
         }
 
         private async Task CheckAdminUser(
