@@ -34,6 +34,7 @@ namespace BattlEyeManager.Spa.Services.Featues
             if (!_enabledServers.Contains(e.Server.Id)) return;
             var players = e.Data.ToArray();
             if (players.Length > 5) return;
+            var serverId = e.Server.Id;
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -42,7 +43,7 @@ namespace BattlEyeManager.Spa.Services.Featues
                     foreach (var player in players)
                     {
                         var sessions = await ctx.PlayerSessions
-                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID)
+                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
                             .ToArrayAsync();
 
                         if (sessions.Length != 0)
