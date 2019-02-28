@@ -12,6 +12,10 @@ using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Hubs;
+using BattlEyeManager.Spa.Infrastructure;
+using BattlEyeManager.Spa.Infrastructure.Featues;
+using BattlEyeManager.Spa.Infrastructure.Services;
+using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,10 +30,6 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Infrastructure;
-using BattlEyeManager.Spa.Infrastructure.Featues;
-using BattlEyeManager.Spa.Infrastructure.Services;
-using BattlEyeManager.Spa.Infrastructure.State;
 using ChatMessage = BattlEyeManager.BE.Models.ChatMessage;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using Player = BattlEyeManager.DataLayer.Models.Player;
@@ -239,7 +239,7 @@ namespace BattlEyeManager.Spa
             var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
             foreach (var server in servers)
             {
-                welcomeFeature.SetEnabled(server.Id, true);
+                welcomeFeature.SetEnabled(server);
             }
         }
 
@@ -297,6 +297,7 @@ namespace BattlEyeManager.Spa
 
                 config.CreateMap<Server, ServerInfo>();
                 config.CreateMap<ServerModel, ServerInfo>();
+                config.CreateMap<ServerModel, ServerInfoDto>();
 
                 config.CreateMap<Server, OnlineServerModel>();
 

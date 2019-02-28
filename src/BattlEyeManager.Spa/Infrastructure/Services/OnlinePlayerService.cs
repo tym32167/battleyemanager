@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Infrastructure.State;
+using BattlEyeManager.Spa.Infrastructure.Utils;
 using BattlEyeManager.Spa.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Player = BattlEyeManager.BE.Models.Player;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
@@ -142,40 +142,6 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             templater.AddParameter("Time", () => DateTime.UtcNow.ToString("HH:mm:ss"));
         }
     }
-
-
-    public class StringTemplater
-    {
-        private readonly IDictionary<string, Func<string>> _params;
-
-        public StringTemplater()
-        {
-            _params = new Dictionary<string, Func<string>>();
-        }
-
-        public string Template(string someText)
-        {
-            var result = someText;
-
-            foreach (var p in _params)
-            {
-                result = result.Replace($"{{{p.Key}}}", p.Value());
-            }
-
-            return result;
-        }
-
-        public void AddParameter(string param, string value)
-        {
-            _params.Add(param, () => value);
-        }
-
-        public void AddParameter(string param, Func<string> value)
-        {
-            _params.Add(param, value);
-        }
-    }
-
 
     public interface ISettingsStore
     {
