@@ -50,6 +50,7 @@ const Serverstable = ({ items, deleteCallback }) =>
                 <th>Host</th>
                 <th>Port</th>
                 <th>Active</th>
+                <th>Welcome feature</th>
                 <th colSpan="2" className="table-fit"></th>
             </tr>
         </thead>
@@ -65,6 +66,9 @@ const ServerItem = ({ item, deleteCallback }) => (
         <td>{item.port}</td>
         <td>
             <input type="checkbox" disabled checked={item.active} />
+        </td>
+        <td>
+            <input type="checkbox" disabled checked={item.welcomeFeatureEnabled} />
         </td>
         <td>
             <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm">Edit</Button>

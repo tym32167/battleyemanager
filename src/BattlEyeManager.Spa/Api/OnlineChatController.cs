@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
-using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 

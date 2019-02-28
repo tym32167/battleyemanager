@@ -1,14 +1,14 @@
-﻿using BattlEyeManager.BE.Models;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace BattlEyeManager.Spa.Services.State
+namespace BattlEyeManager.Spa.Infrastructure.State
 {
     public class OnlineChatStateService
     {

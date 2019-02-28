@@ -3,14 +3,16 @@ using System;
 using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BattlEyeManager.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190228195324_WelcomeFeatureTemplate")]
+    partial class WelcomeFeatureTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,10 +52,10 @@ namespace BattlEyeManager.DataLayer.Migrations
                         .IsConcurrencyToken();
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -76,7 +78,7 @@ namespace BattlEyeManager.DataLayer.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.Property<bool>("EmailConfirmed");
 
@@ -91,10 +93,10 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.Property<string>("Password")
                         .IsRequired();
@@ -111,7 +113,7 @@ namespace BattlEyeManager.DataLayer.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(256);
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -308,8 +310,6 @@ namespace BattlEyeManager.DataLayer.Migrations
                     b.Property<int>("Port");
 
                     b.Property<int>("SteamPort");
-
-                    b.Property<string>("WelcomeFeatureEmptyTemplate");
 
                     b.Property<bool>("WelcomeFeatureEnabled");
 

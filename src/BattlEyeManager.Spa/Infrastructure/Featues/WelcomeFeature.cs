@@ -1,18 +1,33 @@
 ﻿using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.Spa.Services.State;
+using BattlEyeManager.DataLayer.Repositories;
+using BattlEyeManager.Spa.Infrastructure.State;
+using BattlEyeManager.Spa.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BattlEyeManager.Spa.Services.Featues
+namespace BattlEyeManager.Spa.Infrastructure.Featues
 {
     public class WelcomeFeature
     {
         private readonly ServerStateService _serverStateService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private HashSet<int> _enabledServers = new HashSet<int>();
+        private Dictionary<int, ServerInfoDto> _enabledServers = new Dictionary<int, ServerInfoDto>();
+
+        private static string WelcomeMessageTemplate = "Welcome, {name}! {sessions} sessions and {hours} hours on server!";
+        private static string WelcomeEmptyMessageTemplate = "Welcome, {name}! First time on server!";
+
+        private static string GetMessageString(string template, string name, int sessions, int hours)
+        {
+            var templater = new StringTemplater();
+            templater.AddParameter("name", name);
+            templater.AddParameter("sessions", sessions.ToString());
+            templater.AddParameter("hours", hours.ToString());
+
+            return templater.Template(template);
+        }
 
         public WelcomeFeature(OnlinePlayerStateService playerStateService,
             ServerStateService serverStateService,
@@ -23,15 +38,18 @@ namespace BattlEyeManager.Spa.Services.Featues
             playerStateService.PlayersJoined += _playerStateService_PlayersJoined;
         }
 
-        public void SetEnabled(int serverId, bool enabled)
+        public void SetEnabled(ServerInfoDto server)
         {
-            if (enabled) _enabledServers.Add(serverId);
-            else _enabledServers.Remove(serverId);
+            if (server.WelcomeFeatureEnabled) _enabledServers[server.Id] = server;
+            else _enabledServers.Remove(server.Id);
         }
 
         private async void _playerStateService_PlayersJoined(object sender, BEServerEventArgs<IEnumerable<BE.Models.Player>> e)
         {
-            if (!_enabledServers.Contains(e.Server.Id)) return;
+            if (!_enabledServers.ContainsKey(e.Server.Id)) return;
+
+            var server = _enabledServers[e.Server.Id];
+
             var players = e.Data.ToArray();
             if (players.Length > 5) return;
             var serverId = e.Server.Id;
@@ -49,11 +67,13 @@ namespace BattlEyeManager.Spa.Services.Featues
                         if (sessions.Length != 0)
                         {
                             int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-                            _serverStateService.PostChat(e.Server.Id, "bot", -1, $"Welcome, {player.Name}! {sessions.Length} sessions and {hours} hours on server!");
+                            var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours);
+                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
                         }
                         else
                         {
-                            _serverStateService.PostChat(e.Server.Id, "bot", -1, $"Welcome, {player.Name}! First time on server!");
+                            var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0);
+                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
                         }
                     }
                 }
