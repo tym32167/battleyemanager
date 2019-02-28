@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
-using BattlEyeManager.Spa.Services.State;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BattlEyeManager.Spa.Services
+namespace BattlEyeManager.Spa.Infrastructure.Services
 {
     public class OnlineBanService
     {

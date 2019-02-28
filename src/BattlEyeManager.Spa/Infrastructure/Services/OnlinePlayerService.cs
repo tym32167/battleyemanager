@@ -1,19 +1,19 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
-using BattlEyeManager.Spa.Services.State;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Player = BattlEyeManager.BE.Models.Player;
 
-namespace BattlEyeManager.Spa.Services
+namespace BattlEyeManager.Spa.Infrastructure.Services
 {
     public class OnlinePlayerService
     {

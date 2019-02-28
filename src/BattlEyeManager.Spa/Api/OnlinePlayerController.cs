@@ -1,9 +1,9 @@
 ﻿using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
-using BattlEyeManager.Spa.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Infrastructure.Services;
 
 namespace BattlEyeManager.Spa.Api
 {

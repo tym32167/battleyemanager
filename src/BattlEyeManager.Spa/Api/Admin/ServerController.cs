@@ -5,12 +5,12 @@ using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
-using BattlEyeManager.Spa.Services.Featues;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Infrastructure.Featues;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {

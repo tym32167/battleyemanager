@@ -1,8 +1,8 @@
 ﻿using BattlEyeManager.BE.Models;
-using BattlEyeManager.Spa.Services.State;
+using BattlEyeManager.Spa.Infrastructure.State;
 using System.Collections.Generic;
 
-namespace BattlEyeManager.Spa.Services
+namespace BattlEyeManager.Spa.Infrastructure.Services
 {
     public class OnlineChatService
     {

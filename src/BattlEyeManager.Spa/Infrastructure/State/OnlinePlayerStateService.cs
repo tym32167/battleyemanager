@@ -1,11 +1,11 @@
-﻿using BattlEyeManager.BE.Models;
-using BattlEyeManager.BE.Services;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using BattlEyeManager.BE.Models;
+using BattlEyeManager.BE.Services;
 
-namespace BattlEyeManager.Spa.Services.State
+namespace BattlEyeManager.Spa.Infrastructure.State
 {
     public class OnlinePlayerStateService
     {

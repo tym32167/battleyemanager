@@ -1,15 +1,15 @@
-﻿using BattleNET;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BattleNET;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Spa.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BattlEyeManager.Spa.Services.State
+namespace BattlEyeManager.Spa.Infrastructure.State
 {
     public class ServerStateService
     {

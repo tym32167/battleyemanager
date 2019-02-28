@@ -1,12 +1,12 @@
-﻿using BattlEyeManager.BE.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.Spa.Services.State;
+using BattlEyeManager.Spa.Infrastructure.State;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace BattlEyeManager.Spa.Services.Featues
+namespace BattlEyeManager.Spa.Infrastructure.Featues
 {
     public class WelcomeFeature
     {
