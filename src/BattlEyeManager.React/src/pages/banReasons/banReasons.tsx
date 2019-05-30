@@ -5,7 +5,6 @@ import { Create } from './create';
 import { Edit } from './edit';
 import { List } from './list';
 
-
 export class BanReasons extends Component {
     public render() {
         return (
@@ -22,5 +21,3 @@ export class BanReasons extends Component {
         );
     }
 }
-
-
