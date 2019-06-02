@@ -1,0 +1,4 @@
+http://www.mysqltutorial.org/mysql-copy-database/
+
+.\mysqldump.exe -u root -p battleyemanager > c:\temp\data.sql
+.\mysql.exe -u root -p -h localhost -D battleyemanager --binary-mode -o < D:\temp\data.sql

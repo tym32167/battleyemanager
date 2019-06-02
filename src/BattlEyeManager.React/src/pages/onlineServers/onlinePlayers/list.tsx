@@ -114,6 +114,8 @@ class List extends React.Component<IListProps> {
                 );
             },
             data: items,
+            sortDirection: true,
+            sortField: "name"
         };
 
         return (
