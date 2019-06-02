@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { ClientGrid, ClientGridColumn } from 'src/controls';
+import { ClientGrid, ClientGridColumn, IGridParentProps } from 'src/controls';
 import { IOnlineServer } from 'src/models';
 import { onlineServerService } from 'src/services';
 
-export class List extends Component {
-    public render() {
+export class List extends Component<any, IGridParentProps<IOnlineServer>> {
+    constructor(props: any) {
+        super(props);
+        this.state = {};
+    }
 
-        const fetch = () => onlineServerService.getItems();
+    public componentDidMount() {
+        this.Load();
+    }
+
+    public Load() {
+        return onlineServerService.getItems().then(
+            (items: IOnlineServer[]) => this.setState({ data: items, error: undefined }),
+            (error: any) => this.setState({ data: undefined, error }));
+    }
+    public render() {
+        const { data, error } = this.state;
         const dashRender = (row: IOnlineServer) => (<Button color="success" to={'/online/' + row.id} tag={Link} size="sm">Dashboard</Button>);
 
         return (
             <React.Fragment>
-                <ClientGrid fetch={fetch} header="Online Servers" enableSort={true}>
+                <ClientGrid data={data} error={error} header="Online Servers" enableSort={true}>
                     <ClientGridColumn header="Name" name="name" rowStyle={{ whiteSpace: "nowrap" }} />
                     <ClientGridColumn header="Host" name="host" headerStyle={{ width: "1%" }} />
                     <ClientGridColumn header="Port" name="port" headerStyle={{ width: "1%" }} />

@@ -10,24 +10,26 @@ export interface IClientGridColumn<T> {
     renderer?: (row: T) => any
 }
 
+export interface IGridParentProps<T> {
+    data?: T[],
+    error?: any,
+}
+
 export interface IClientGridProps<T> {
-    fetch: () => Promise<T[]>,
     beforeGrid?: () => any,
     header: string,
-
     enableFilter?: boolean,
     enableSort?: boolean,
     enablePager?: boolean,
+    data?: T[],
+    error?: any,
 }
 
 export interface IClientGridState<T> {
-    data?: T[],
-    error?: any,
     columns?: Array<IClientGridColumn<T>>,
 }
 
 export class ClientGridColumn<T> extends React.Component<IClientGridColumn<T>>{
-
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -43,22 +45,11 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
         this.state = { columns };
     }
 
-    public async componentDidMount() {
-        const callb = this.props.fetch;
-        if (callb) {
-            callb().then(
-                (items: T[]) => this.setState({ data: items, error: undefined, ... this.state }),
-                (error: any) => this.setState({ data: undefined, error, ... this.state }));
-        }
-
-    }
-
     public render() {
-        const { data, error, columns } = this.state;
+        const { columns } = this.state;
+        const { data, error, header, beforeGrid, enableFilter, enableSort, enablePager } = this.props;
+
         const len = data ? data.length : 0;
-
-        const { header, beforeGrid, enableFilter, enableSort, enablePager } = this.props;
-
 
         let renderer = (p: any) => <BootstrapTable columns={columns} {...p} />;
 
@@ -110,7 +101,6 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
                     <React.Fragment>
                         {renderer(tableProps)}
                     </React.Fragment>}
-
             </React.Fragment>);
     }
 }
