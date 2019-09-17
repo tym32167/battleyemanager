@@ -29,8 +29,9 @@ export class Edit extends Component<any, IEditState> {
     }
 
     public async Update(item: IUser) {
-        await userService.updateItem(item);
-        history.push("/users");
+        userService.updateItem(item).then(
+            () => history.push("/users"),
+            (error: any) => this.setState({ error }))
     }
 
     public render() {

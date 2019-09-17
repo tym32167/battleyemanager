@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { ClientGrid, ClientGridColumn, IGridParentProps } from 'src/controls';
+import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
 import { IServer } from 'src/models';
 import { serverService } from 'src/services';
 
@@ -39,13 +39,15 @@ export class List extends Component<any, IGridParentProps<IServer>> {
         return (
             <React.Fragment>
                 <ClientGrid data={data} error={error} header="Servers" beforeGrid={header} enableSort={true}>
-                    <ClientGridColumn header="Name" name="name" />
-                    <ClientGridColumn header="Host" name="host" />
-                    <ClientGridColumn header="Port" name="port" />
-                    <ClientGridColumn header="Active" name="active" />
-                    <ClientGridColumn header="Welcome feature" name="welcomeFeatureEnabled" />
-                    <ClientGridColumn header="" name="" renderer={editRender} />
-                    <ClientGridColumn header="" name="" renderer={deleteRender} />
+                    <ClientGridColumns>
+                        <ClientGridColumn header="Name" name="name" />
+                        <ClientGridColumn header="Host" name="host" />
+                        <ClientGridColumn header="Port" name="port" />
+                        <ClientGridColumn header="Active" name="active" />
+                        <ClientGridColumn header="Welcome feature" name="welcomeFeatureEnabled" />
+                        <ClientGridColumn header="" name="" renderer={editRender} />
+                        <ClientGridColumn header="" name="" renderer={deleteRender} />
+                    </ClientGridColumns>
                 </ClientGrid>
             </React.Fragment>
         );

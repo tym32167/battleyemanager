@@ -27,9 +27,18 @@ export interface IClientGridProps<T> {
 
 export interface IClientGridState<T> {
     columns?: Array<IClientGridColumn<T>>,
+    header?: (props: any) => React.ReactNode;
 }
 
 export class ClientGridColumn<T> extends React.Component<IClientGridColumn<T>>{
+}
+
+// tslint:disable-next-line: max-classes-per-file
+export class ClientGridColumns<T> extends React.Component<any>{
+}
+
+// tslint:disable-next-line: max-classes-per-file
+export class ClientGridHeader<T> extends React.Component<any>{
 }
 
 // tslint:disable-next-line: max-classes-per-file
@@ -38,9 +47,18 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
     constructor(props: IClientGridProps<T>) {
         super(props);
 
-        const columns = React.Children.map(this.props.children, (child) => {
-            return (child as unknown as ClientGridColumn<T>).props;
-        })
+        const columns = Array<IClientGridColumn<T>>();
+
+        React.Children.toArray(this.props.children)
+            .map(v => (v as unknown as ClientGridColumns<T>))
+            .filter(v => v)
+            .forEach(v => {
+                React.Children.toArray(v.props.children)
+                    .map(c => (c as unknown as ClientGridColumn<T>))
+                    .filter(c => c)
+                    .map(c => c.props)
+                    .forEach(c => columns.push(c));
+            });
 
         this.state = { columns };
     }
@@ -93,8 +111,9 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
 
         return (
             <React.Fragment>
-                <h2>{header} ({len})</h2>
                 <Error error={error} />
+
+                <h2>{header} ({len})</h2>
                 {beforeGrid && beforeGrid()}
 
                 {data &&

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import { ClientGrid, ClientGridColumn, IGridParentProps } from 'src/controls';
+import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
 import { IUser } from 'src/models';
 import { userService } from 'src/services';
 
@@ -40,13 +40,15 @@ export class List extends Component<any, IGridParentProps<IUser>> {
         return (
             <React.Fragment>
                 <ClientGrid data={data} error={error} header="Users" beforeGrid={header} enableSort={true}>
-                    <ClientGridColumn header="Last Name" name="lastName" />
-                    <ClientGridColumn header="First Name" name="firstName" />
-                    <ClientGridColumn header="User Name" name="userName" />
-                    <ClientGridColumn header="Email" name="email" />
-                    <ClientGridColumn header="Is Admin" name="isAdmin" />
-                    <ClientGridColumn header="" name="" renderer={editRender} />
-                    <ClientGridColumn header="" name="" renderer={deleteRender} />
+                    <ClientGridColumns>
+                        <ClientGridColumn header="Last Name" name="lastName" />
+                        <ClientGridColumn header="First Name" name="firstName" />
+                        <ClientGridColumn header="User Name" name="userName" />
+                        <ClientGridColumn header="Email" name="email" />
+                        <ClientGridColumn header="Is Admin" name="isAdmin" />
+                        <ClientGridColumn header="" name="" renderer={editRender} />
+                        <ClientGridColumn header="" name="" renderer={deleteRender} />
+                    </ClientGridColumns>
                 </ClientGrid>
             </React.Fragment>
         );
