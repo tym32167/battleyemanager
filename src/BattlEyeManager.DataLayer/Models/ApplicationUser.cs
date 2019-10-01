@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BattlEyeManager.DataLayer.Models
@@ -25,5 +26,7 @@ namespace BattlEyeManager.DataLayer.Models
         [Display(Name = "Email")]
         [Required(ErrorMessage = "EmailRequired"), DataType(DataType.EmailAddress)]
         public override string Email { get; set; }
+
+        public ICollection<ServerModerators> Servers { get; set; }
     }
 }

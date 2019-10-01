@@ -149,6 +149,7 @@ namespace BattlEyeManager.Spa
 
             services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
             services.AddTransient<IServerRepository, ServerRepository>();
+            services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
 
 
             services.AddTransient<MessageHelper, MessageHelper>();
@@ -306,6 +307,8 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<Player, OnlinePlayerModel>();
 
                 config.CreateMap<Mission, OnlineMissionModel>();
+
+
 
                 config.CreateMap<ChatMessage, ChatMessageModel>()
                     .AfterMap((message, messageModel) =>

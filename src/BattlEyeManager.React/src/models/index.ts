@@ -9,5 +9,5 @@ export * from './ikickreason'
 export * from './ibanreason'
 export * from './ionlineban'
 export * from './ionlinemission'
-
+export * from './iservermoderatoritem'
 export * from './shared/iidtext'

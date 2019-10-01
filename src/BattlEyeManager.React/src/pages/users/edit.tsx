@@ -4,7 +4,6 @@ import { history, userService } from 'src/services';
 import { Error } from '../../controls';
 import { EditUserForm } from './controls';
 
-
 interface IEditState {
     item?: IUser,
     error?: any

@@ -18,6 +18,7 @@ export interface IGridParentProps<T> {
 export interface IClientGridProps<T> {
     beforeGrid?: () => any,
     header: string,
+    showLen?: boolean,
     enableFilter?: boolean,
     enableSort?: boolean,
     enablePager?: boolean,
@@ -65,7 +66,7 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
 
     public render() {
         const { columns } = this.state;
-        const { data, error, header, beforeGrid, enableFilter, enableSort, enablePager } = this.props;
+        const { data, error, header, showLen, beforeGrid, enableFilter, enableSort, enablePager } = this.props;
 
         const len = data ? data.length : 0;
 
@@ -109,11 +110,16 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
             data: data || []
         };
 
+        let lenHeader = "(" + len + ")";
+        if (showLen === false) {
+            lenHeader = "";
+        }
+
         return (
             <React.Fragment>
                 <Error error={error} />
 
-                <h2>{header} ({len})</h2>
+                <h2>{header}  {lenHeader}</h2>
                 {beforeGrid && beforeGrid()}
 
                 {data &&

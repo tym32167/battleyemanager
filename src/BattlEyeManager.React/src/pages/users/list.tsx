@@ -33,6 +33,7 @@ export class List extends Component<any, IGridParentProps<IUser>> {
         const { data, error } = this.state;
 
         const editRender = (user: IUser) => <Button color="success" to={'/users/' + user.id} tag={Link} size="sm">Edit</Button>;
+        const editVisibleRender = (user: IUser) => <Button color="success" to={'/users/visibleServers/' + user.id} tag={Link} size="sm">Edit Servers</Button>;
         const deleteRender = (user: IUser) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, user)}>Delete</Button>;
 
         const header = () => <Button tag={Link} to="/users/create" color="primary">Create</Button>;
@@ -47,6 +48,7 @@ export class List extends Component<any, IGridParentProps<IUser>> {
                         <ClientGridColumn header="Email" name="email" />
                         <ClientGridColumn header="Is Admin" name="isAdmin" />
                         <ClientGridColumn header="" name="" renderer={editRender} />
+                        <ClientGridColumn header="" name="" renderer={editVisibleRender} />
                         <ClientGridColumn header="" name="" renderer={deleteRender} />
                     </ClientGridColumns>
                 </ClientGrid>
