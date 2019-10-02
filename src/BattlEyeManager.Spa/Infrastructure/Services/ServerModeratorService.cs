@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -47,6 +48,18 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             return new HashSet<int>();
         }
 
+        public HashSet<int> GetServersByUser(ClaimsPrincipal user)
+        {
+            var userId = ((ClaimsIdentity)user.Identity).Claims
+                .Where(c => c.Type == "id")
+                .Select(x => x.Value)
+                .Single();
+
+            if (_privilidges.TryGetValue(userId, out var v))
+                return new HashSet<int>(v);
+            return new HashSet<int>();
+        }
+
         public async Task SetByUserId(string userId, HashSet<int> update)
         {
             using (var scope = _scopeFactory.CreateScope())
@@ -72,18 +85,26 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             }
         }
 
-        public bool CheckAccess(ClaimsPrincipal user, string userid, int serverId)
+        public void CheckAccess(ClaimsPrincipal user, int serverId)
         {
             var isAdmin = ((ClaimsIdentity)user.Identity).Claims
                 .Where(c => c.Type == ClaimTypes.Role)
                 .Any(x => String.Compare(RoleConstants.Administrator, x.Value, StringComparison.Ordinal) == 0);
 
-            if (isAdmin) return true;
+            if (isAdmin) return;
 
-            if (_privilidges.TryGetValue(userid, out var v))
-                return v.Contains(serverId);
+            var userId = ((ClaimsIdentity)user.Identity).Claims
+                .Where(c => c.Type == "id")
+                .Select(x => x.Value)
+                .Single();
 
-            return false;
+            var ret = false;
+
+            if (_privilidges.TryGetValue(userId, out var v))
+                ret = v.Contains(serverId);
+
+            if (!ret)
+                throw new AuthenticationException();
         }
     }
 }
