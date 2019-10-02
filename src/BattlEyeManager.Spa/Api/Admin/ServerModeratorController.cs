@@ -1,6 +1,7 @@
 ﻿using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +16,21 @@ namespace BattlEyeManager.Spa.Api.Admin
     [Route("api/[controller]")]
     public class ServerModeratorController : BaseController
     {
-        private readonly ServerModeratorRepository _serverModeratorRepository;
         private readonly IServerRepository _serverRepository;
+        private readonly ServerModeratorService _moderatorService;
 
-        public ServerModeratorController(ServerModeratorRepository serverModeratorRepository, IServerRepository serverRepository)
+        public ServerModeratorController(
+            IServerRepository serverRepository,
+            ServerModeratorService moderatorService)
         {
-            _serverModeratorRepository = serverModeratorRepository;
             _serverRepository = serverRepository;
+            _moderatorService = moderatorService;
         }
-
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> Get(string userId)
         {
-            var dbItems =
-                new HashSet<int>(
-                    (await _serverModeratorRepository.GetByUserId(userId))
-                    .Select(x => x.Id));
+            var dbItems = _moderatorService.GetServersByUserId(userId);
 
             var items =
                 (await _serverRepository.GetItemsAsync())
@@ -46,6 +45,15 @@ namespace BattlEyeManager.Spa.Api.Admin
                 .ToArray();
 
             return Ok(items);
+        }
+
+
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> Post(string userId, [FromBody] ServerModeratorItem[] data)
+        {
+            await _moderatorService.SetByUserId(userId,
+               new HashSet<int>(data.Where(x => x.IsChecked).Select(x => x.ServerId)));
+            return await Get(userId);
         }
     }
 }

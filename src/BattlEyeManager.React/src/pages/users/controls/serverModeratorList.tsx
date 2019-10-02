@@ -17,22 +17,31 @@ export class ServerModeratorList extends Component<any, IServerModeratorListStat
     constructor(props: any) {
         super(props);
         this.state = { data: undefined, error: undefined, user: undefined };
+        this.saveCallback = this.saveCallback.bind(this);
+    }
+
+    public saveCallback() {
+        const { match: { params: { id } } } = (this.props as any);
+        const { data } = this.state;
+        serverModeratorService.updateItems(id, data);
     }
 
     public componentDidMount() {
         this.Load();
     }
 
-    public Load() {
+    public async Load() {
         const { match: { params: { id } } } = (this.props as any);
-        serverModeratorService.getItems(id).then(
+
+        await serverModeratorService.getItems(id).then(
             (items: IServerModeratorItem[]) => {
                 this.setState({ data: items, error: undefined });
-                userService.getItem(id).then(
-                    (item: IUser) => this.setState({ user: item, error: undefined, data: this.state.data }),
-                    (error: any) => this.setState({ error }))
             },
             (error: any) => this.setState({ data: undefined, error }));
+
+        await userService.getItem(id).then(
+            (item: IUser) => this.setState({ user: item, error: undefined, data: this.state.data }),
+            (error: any) => this.setState({ error }));
     }
 
     public render() {
@@ -63,6 +72,7 @@ export class ServerModeratorList extends Component<any, IServerModeratorListStat
                         <ClientGridColumn header="Visible" name="isChecked" renderer={isCheckedRender} />
                     </ClientGridColumns>
                 </ClientGrid>
+                <Button color="primary" onClick={this.saveCallback} >Save</Button>
                 {' '}
                 <Button tag={Link} to="/users" color="secondary">Cancel</Button>
             </React.Fragment>

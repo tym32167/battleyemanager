@@ -124,6 +124,8 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
 
             services.AddSingleton<ServerStateService, ServerStateService>();
+            services.AddSingleton<ServerModeratorService, ServerModeratorService>();
+
             services.AddSingleton<OnlinePlayerStateService, OnlinePlayerStateService>();
             services.AddSingleton<OnlineChatStateService, OnlineChatStateService>();
 
@@ -189,7 +191,8 @@ namespace BattlEyeManager.Spa
             AppDbContext store,
             ServerStateService service,
             DataRegistrator dataRegistrator,
-            BELogic beLogic
+            BELogic beLogic,
+            ServerModeratorService moderatorService
         )
         {
             store.Database.Migrate();
@@ -225,8 +228,11 @@ namespace BattlEyeManager.Spa
             });
 
             SetupMappings();
+
+            moderatorService.Init().Wait();
             dataRegistrator.Init().Wait();
             beLogic.Init();
+
             CheckAdminUser(userManager, roleManager).Wait();
             RunActiveServers(beServerAggregator, store, service).Wait();
 
