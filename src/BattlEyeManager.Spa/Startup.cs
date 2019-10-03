@@ -129,6 +129,8 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<OnlinePlayerStateService, OnlinePlayerStateService>();
             services.AddSingleton<OnlineChatStateService, OnlineChatStateService>();
 
+            services.AddSingleton<ServerStatsService, ServerStatsService>();
+
             services.AddSingleton<DataRegistrator, DataRegistrator>();
 
             services.AddSingleton<BELogic, BELogic>();
@@ -192,7 +194,8 @@ namespace BattlEyeManager.Spa
             ServerStateService service,
             DataRegistrator dataRegistrator,
             BELogic beLogic,
-            ServerModeratorService moderatorService
+            ServerModeratorService moderatorService,
+            ServerStatsService serverStatsService
         )
         {
             store.Database.Migrate();
@@ -238,6 +241,8 @@ namespace BattlEyeManager.Spa
 
             InitSingletones(app);
             InitFeatures(store, app);
+
+            serverStatsService.Start();
         }
 
         private void InitFeatures(AppDbContext store, IApplicationBuilder applicationBuilder)

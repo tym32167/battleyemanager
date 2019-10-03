@@ -68,5 +68,7 @@ namespace BattlEyeManager.DataLayer.Context
         public DbSet<BanReason> BanReasons { get; set; }
         public DbSet<BadNickname> BadNicknames { get; set; }
         public DbSet<ServerModerators> ServerModerators { get; set; }
+
+        public DbSet<ServerUserCount> ServerUserCounts { get; set; }
     }
 }
