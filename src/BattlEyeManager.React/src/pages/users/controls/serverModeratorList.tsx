@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns } from 'src/controls';
 import { IServerModeratorItem, IUser } from 'src/models';
-import { serverModeratorService, userService } from 'src/services';
+import { history, serverModeratorService, userService } from 'src/services';
 import { Error } from '../../../controls';
 
 interface IServerModeratorListState {
@@ -20,10 +20,12 @@ export class ServerModeratorList extends Component<any, IServerModeratorListStat
         this.saveCallback = this.saveCallback.bind(this);
     }
 
-    public saveCallback() {
+    public async saveCallback() {
         const { match: { params: { id } } } = (this.props as any);
         const { data } = this.state;
-        serverModeratorService.updateItems(id, data);
+        serverModeratorService.updateItems(id, data).then(
+            () => history.push("/users"),
+            (error: any) => this.setState({ error }))
     }
 
     public componentDidMount() {

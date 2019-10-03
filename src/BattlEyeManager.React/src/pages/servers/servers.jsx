@@ -9,7 +9,7 @@ export class Servers extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="my-3 p-3 bg-white rounded box-shadow  col-12 col-lg-6 col-md-8">
+                <div className="my-3 p-3 bg-white rounded box-shadow  col-12 col-lg-10 col-md-10">
                     <Switch>
                         <Route exact path="/servers" component={List} />
                         <Route exact path="/servers/create" component={Create} />

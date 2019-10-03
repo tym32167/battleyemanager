@@ -4,6 +4,7 @@ using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Infrastructure.Extensions;
 
 namespace BattlEyeManager.Spa.Api
 {
@@ -24,8 +25,9 @@ namespace BattlEyeManager.Spa.Api
         public async Task<IActionResult> Get()
         {
             var set = _moderatorService.GetServersByUser(User);
+            var admin = User.IsAdmin();
             var servers = await _onlineServerService.GetOnlineServers();
-            var ret = servers.Where(x => set.Contains(x.Id)).ToArray();
+            var ret = servers.Where(x => set.Contains(x.Id) || admin).ToArray();
             return Ok(ret);
         }
 

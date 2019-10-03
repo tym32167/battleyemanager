@@ -16,7 +16,7 @@ export class Create extends Component<any, ICreateState> {
     }
 
     public async Create(item: IUser) {
-        await userService.updateItem(item).then(
+        await userService.addItem(item).then(
             () => history.push("/users"),
             (error: any) => this.setState({ error }))
     }

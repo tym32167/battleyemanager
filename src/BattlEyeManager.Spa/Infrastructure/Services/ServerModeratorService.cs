@@ -1,15 +1,14 @@
 ﻿using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.Spa.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Infrastructure.Extensions;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
@@ -50,10 +49,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
         public HashSet<int> GetServersByUser(ClaimsPrincipal user)
         {
-            var userId = ((ClaimsIdentity)user.Identity).Claims
-                .Where(c => c.Type == "id")
-                .Select(x => x.Value)
-                .Single();
+            var userId = user.GetUserId();
 
             if (_privilidges.TryGetValue(userId, out var v))
                 return new HashSet<int>(v);
@@ -85,18 +81,13 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             }
         }
 
+
+
         public void CheckAccess(ClaimsPrincipal user, int serverId)
         {
-            var isAdmin = ((ClaimsIdentity)user.Identity).Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Any(x => String.Compare(RoleConstants.Administrator, x.Value, StringComparison.Ordinal) == 0);
+            if (user.IsAdmin()) return;
 
-            if (isAdmin) return;
-
-            var userId = ((ClaimsIdentity)user.Identity).Claims
-                .Where(c => c.Type == "id")
-                .Select(x => x.Value)
-                .Single();
+            var userId = user.GetUserId();
 
             var ret = false;
 
