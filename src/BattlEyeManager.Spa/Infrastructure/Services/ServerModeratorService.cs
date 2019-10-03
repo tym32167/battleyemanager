@@ -1,5 +1,6 @@
 ﻿using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Spa.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
@@ -8,23 +9,22 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Infrastructure.Extensions;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
     public class ServerModeratorService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private ConcurrentDictionary<string, HashSet<int>> _privilidges = new ConcurrentDictionary<string, HashSet<int>>();
+        private readonly ConcurrentDictionary<string, HashSet<int>> _priviledges = new ConcurrentDictionary<string, HashSet<int>>();
 
         public ServerModeratorService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
         }
 
-
         public async Task Init()
         {
+            _priviledges.Clear();
             using (var scope = _scopeFactory.CreateScope())
             {
                 using (var dc = scope.ServiceProvider.GetService<AppDbContext>())
@@ -34,7 +34,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                     foreach (var group in data.GroupBy(x => x.UserId))
                     {
                         var set = new HashSet<int>(group.Select(x => x.ServerId));
-                        _privilidges.AddOrUpdate(group.Key, key => set, (key, value) => set);
+                        _priviledges.AddOrUpdate(group.Key, key => set, (key, value) => set);
                     }
                 }
             }
@@ -42,7 +42,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
         public HashSet<int> GetServersByUserId(string userId)
         {
-            if (_privilidges.TryGetValue(userId, out var v))
+            if (_priviledges.TryGetValue(userId, out var v))
                 return new HashSet<int>(v);
             return new HashSet<int>();
         }
@@ -51,7 +51,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             var userId = user.GetUserId();
 
-            if (_privilidges.TryGetValue(userId, out var v))
+            if (_priviledges.TryGetValue(userId, out var v))
                 return new HashSet<int>(v);
             return new HashSet<int>();
         }
@@ -75,13 +75,11 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                             }));
 
                     await dc.SaveChangesAsync();
-                    _privilidges.AddOrUpdate(userId, key => new HashSet<int>(update),
+                    _priviledges.AddOrUpdate(userId, key => new HashSet<int>(update),
                         (key, value) => new HashSet<int>(update));
                 }
             }
         }
-
-
 
         public void CheckAccess(ClaimsPrincipal user, int serverId)
         {
@@ -91,7 +89,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             var ret = false;
 
-            if (_privilidges.TryGetValue(userId, out var v))
+            if (_priviledges.TryGetValue(userId, out var v))
                 ret = v.Contains(serverId);
 
             if (!ret)
