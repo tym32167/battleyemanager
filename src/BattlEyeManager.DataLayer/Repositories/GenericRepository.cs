@@ -1,11 +1,12 @@
 ﻿using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class GenericRepository<T, TKey> : IGenericRepository<T, TKey> where T : class
+    public class GenericRepository<T, TKey> : IDisposable, IGenericRepository<T, TKey> where T : class
     {
         private readonly AppDbContext _context;
 
@@ -46,6 +47,11 @@ namespace BattlEyeManager.DataLayer.Repositories
             var item = await _context.Set<T>().FindAsync(id);
             _context.Set<T>().Remove(item);
             await _context.SaveChangesAsync();
+        }
+
+        public virtual void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 }

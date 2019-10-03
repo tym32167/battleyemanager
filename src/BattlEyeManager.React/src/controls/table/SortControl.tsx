@@ -2,6 +2,8 @@ import React, { ReactNode } from "react";
 
 export interface ISortControlProps<T> {
     data: T[],
+    sortField?: string,
+    sortDirection?: boolean,
     children: (props: any) => ReactNode
 }
 
@@ -13,7 +15,9 @@ interface ISortControlState {
 export class SortControl<T> extends React.Component<ISortControlProps<T>, ISortControlState>{
     constructor(props: ISortControlProps<T>) {
         super(props);
-        this.state = {};
+
+        const { sortField, sortDirection } = this.props;
+        this.state = { sortField, sortDirection };
 
         this.handleSort = this.handleSort.bind(this);
     }
@@ -40,11 +44,11 @@ export class SortControl<T> extends React.Component<ISortControlProps<T>, ISortC
 
         if (sortField !== undefined) {
             if (sortDirection === true) {
-                sorted = sorted.sort((a, b) => a[sortField] > b[sortField] ? 1 : (a[sortField] < b[sortField] ? -1 : 0));
+                sorted = sorted.sort((a, b) => this.compare(a[sortField], b[sortField]));
             }
 
             if (sortDirection === false) {
-                sorted = sorted.sort((a, b) => a[sortField] > b[sortField] ? -1 : (a[sortField] < b[sortField] ? 1 : 0));
+                sorted = sorted.sort((a, b) => - this.compare(a[sortField], b[sortField]));
             }
         }
 
@@ -53,6 +57,22 @@ export class SortControl<T> extends React.Component<ISortControlProps<T>, ISortC
                 {children({ ...this.props, data: sorted, handleSort: this.handleSort })}
             </React.Fragment>
         )
+    }
+
+    private compare(left: any, right: any) {
+        if (typeof (left) === "string" && typeof (right) === "string") {
+            return this.compareString(left, right);
+        }
+
+        if (left > right) { return 1; }
+        if (left < right) { return -1; }
+        return 0;
+    }
+
+    private compareString(left: string, right: string) {
+        const l1 = left.toLocaleLowerCase();
+        const l2 = right.toLocaleLowerCase();
+        return l1.localeCompare(l2);
     }
 }
 

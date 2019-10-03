@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { IOnlineBan, IOnlineServer } from 'src/models';
+import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
 import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../../controls';
 import { ServerHeader } from '../onlineServerHeader';
@@ -111,7 +111,7 @@ class BanListTable extends Component<IBanListProps> {
                 const filterProps: IFilterControlProps<IOnlineBan> = {
                     ...props2,
                     children: (props) => {
-                        const pagerProps: IPagerControlProps<IOnlineServer> = {
+                        const pagerProps: IPagerControlProps<IOnlineBan> = {
                             ...props,
                             children: (p) => <BootstrapTable columns={columns} {...p} />,
                             pageSize: 50,
@@ -125,6 +125,8 @@ class BanListTable extends Component<IBanListProps> {
                 );
             },
             data: items,
+            sortDirection: false,
+            sortField: "num"
         };
 
         return (

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { serverActions } from "../../store/actions";
 import { EditForm } from './controls';
-import {Error} from '../../controls';
+import { Error } from '../../controls';
 import PropTypes from 'prop-types';
 
 class Edit extends Component {
@@ -18,15 +18,15 @@ class Edit extends Component {
             <React.Fragment>
                 <h2>Edit Server</h2>
                 <Error error={error} />
-                {item && <EditForm onSubmit={onSubmit} initialValues={item} edit={true} />}                
+                {item && <EditForm onSubmit={onSubmit} initialValues={item} edit={true} />}
             </React.Fragment>
         );
     }
 }
 
 Edit.propTypes = {
-    onLoad : PropTypes.func.isRequired,
-    id:PropTypes.string.isRequired,
+    onLoad: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
     item: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
     error: PropTypes.object

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -66,6 +67,17 @@ namespace BattlEyeManager.Spa.Api
                 if (check)
                 {
                     var principal = await _signInManager.CreateUserPrincipalAsync(user);
+
+
+                    var claims = new List<Claim>
+                    {
+                        new Claim("id", user.Id)
+                    };
+
+                    var appIdentity = new ClaimsIdentity(claims);
+                    principal.AddIdentity(appIdentity);
+
+
                     return principal;
                 }
             }

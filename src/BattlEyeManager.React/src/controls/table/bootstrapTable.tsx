@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'reactstrap';
+import { isBoolean } from 'util';
 
 
 export interface IBootstrapTableColumn<T> {
@@ -54,7 +55,13 @@ const rowRrenderer = <T extends any>(column: IBootstrapTableColumn<T>, row: T) =
     if (renderer === undefined) {
         if (column.name !== undefined) {
             const name = column.name;
-            renderer = (r: T) => r[name];
+
+            if (isBoolean(row[name])) {
+                renderer = (r: T) => <input type="checkbox" disabled={true} checked={r[name]} />;
+            }
+            else {
+                renderer = (r: T) => r[name];
+            }
         }
     }
 

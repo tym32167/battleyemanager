@@ -11,5 +11,7 @@ namespace BattlEyeManager.DataLayer.Models
         public ICollection<PlayerSession> PlayerSessions { get; set; }
         public ICollection<ServerBan> ServerBans { get; set; }
         public ICollection<Admin> Admins { get; set; }
+
+        public ICollection<ServerModerators> Servers { get; set; }
     }
 }
