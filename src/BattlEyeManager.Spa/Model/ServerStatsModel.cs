@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BattlEyeManager.Spa.Model
 {
@@ -11,7 +10,7 @@ namespace BattlEyeManager.Spa.Model
 
     public class DataSet
     {
-        public string Name { get; set; }
-        public List<int> Values { get; set; } = new List<int>();
+        public string Label { get; set; }
+        public List<int> Data { get; set; } = new List<int>();
     }
 }

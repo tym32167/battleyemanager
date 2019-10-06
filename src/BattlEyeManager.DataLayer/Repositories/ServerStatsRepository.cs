@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BattlEyeManager.DataLayer.Context;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.DataLayer.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
@@ -18,11 +18,11 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         public async Task<ServerStatsResult> GetServersStats(DateTime start, DateTime end)
         {
-            var ret = new ServerStatsResult() {Start = start, End = end};
+            var ret = new ServerStatsResult() { Start = start, End = end };
 
             var servers = await _context.Servers
-                    .Where(x=>x.Active)
-                    .Select(x=>new ServerStatInfo(){Id = x.Id, Name = x.Name})
+                    .Where(x => x.Active)
+                    .Select(x => new ServerStatInfo() { Id = x.Id, Name = x.Name })
                     .ToArrayAsync();
 
             ret.Servers.AddRange(servers);
@@ -34,11 +34,11 @@ namespace BattlEyeManager.DataLayer.Repositories
                     || (x.StartDate < end && x.EndDate == null)
                 ).ToArrayAsync();
 
-            var step = TimeSpan.FromMinutes(10);
+            var step = TimeSpan.FromHours(1);
 
             for (var curr = start; curr < end; curr = curr += step)
             {
-                
+
                 foreach (var s in servers)
                 {
                     var cnt = sessions
