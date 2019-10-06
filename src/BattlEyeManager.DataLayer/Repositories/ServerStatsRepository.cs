@@ -16,29 +16,32 @@ namespace BattlEyeManager.DataLayer.Repositories
             _context = context;
         }
 
-        public async Task<ServerStatsResult> GetServersStats(DateTime start, DateTime end)
+        public async Task<ServerStatsResult> GetServersStats(int[] serverIds, DateTime start, DateTime end)
         {
             var ret = new ServerStatsResult() { Start = start, End = end };
 
             var servers = await _context.Servers
-                    .Where(x => x.Active)
+                    .Where(x => serverIds.Contains(x.Id))
                     .Select(x => new ServerStatInfo() { Id = x.Id, Name = x.Name })
                     .ToArrayAsync();
 
             ret.Servers.AddRange(servers);
             var sessions = await _context.PlayerSessions
                 .Where(x =>
+                    serverIds.Contains(x.ServerId)
+                    &&
+                    (
                     (x.StartDate > start && x.StartDate < end)
                     || (x.EndDate != null && x.EndDate > start && x.EndDate < end)
                     || (x.StartDate < start && x.EndDate != null && x.EndDate > end)
                     || (x.StartDate < end && x.EndDate == null)
+                    )
                 ).ToArrayAsync();
 
             var step = TimeSpan.FromHours(1);
 
             for (var curr = start; curr < end; curr = curr += step)
             {
-
                 foreach (var s in servers)
                 {
                     var cnt = sessions
