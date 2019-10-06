@@ -16,7 +16,7 @@ namespace BattlEyeManager.DataLayer.Repositories
             _context = context;
         }
 
-        public async Task<ServerStatsResult> GetServersStats(int[] serverIds, DateTime start, DateTime end)
+        public async Task<ServerStatsResult> GetServersStats(int[] serverIds, DateTime start, DateTime end, TimeSpan step)
         {
             var ret = new ServerStatsResult() { Start = start, End = end };
 
@@ -37,8 +37,6 @@ namespace BattlEyeManager.DataLayer.Repositories
                     || (x.StartDate < end && x.EndDate == null)
                     )
                 ).ToArrayAsync();
-
-            var step = TimeSpan.FromHours(1);
 
             for (var curr = start; curr < end; curr = curr += step)
             {

@@ -2,7 +2,7 @@
 
 namespace BattlEyeManager.Spa.Model
 {
-    public class ServerStatsModel
+    public class LineGraphModel
     {
         public string[] Labels { get; set; }
         public List<DataSet> DataSets { get; set; } = new List<DataSet>();

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container, Row } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
 import { IOnlineServer } from 'src/models';
-import { onlineServerService } from 'src/services';
+import { onlineServerService, serverStatsService } from 'src/services';
 import { ServerStats } from './serverStats/serverStats';
 
 export class List extends Component<any, IGridParentProps<IOnlineServer>> {
@@ -44,7 +44,8 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
                         </ClientGrid>
                     </Row>
 
-                    <ServerStats />
+                    <ServerStats loader={serverStatsService.getStatsLastDay} header={"Servers last 24 hours (UTC)"} />
+                    <ServerStats loader={serverStatsService.getStatsLastWeek} header={"Servers last 7 days (UTC)"} />
 
                 </Container>
             </React.Fragment>

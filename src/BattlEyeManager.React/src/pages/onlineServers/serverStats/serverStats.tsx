@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Col, Row } from 'reactstrap';
-import { IServerStatsModel } from 'src/models';
-import { serverStatsService } from 'src/services';
+import { ILineGraphModel } from 'src/models';
 import { Error } from '../../../controls';
 
 
 interface IServerStatsState {
-    data: IServerStatsModel,
+    data: ILineGraphModel,
     error: any
 }
 
-export class ServerStats extends Component<any, IServerStatsState> {
+interface IServerStatsProps {
+    loader: () => Promise<ILineGraphModel>,
+    header: string
+}
+
+export class ServerStats extends Component<IServerStatsProps, IServerStatsState> {
     constructor(props: any) {
         super(props);
         this.state = { data: { dataSets: [] }, error: undefined };
@@ -22,8 +26,9 @@ export class ServerStats extends Component<any, IServerStatsState> {
     }
 
     public async Load() {
-        await serverStatsService.getStats().then(
-            (stats: IServerStatsModel) => {
+        const { loader } = this.props;
+        await loader().then(
+            (stats: ILineGraphModel) => {
                 this.setState({ data: stats, error: undefined });
             },
             (error: any) => this.setState({ data: { dataSets: [] }, error }));
@@ -39,6 +44,7 @@ export class ServerStats extends Component<any, IServerStatsState> {
 
     public render() {
         const { data, error } = this.state;
+        const { header } = this.props;
 
         if (!data.dataSets) {
             data.dataSets = [];
@@ -53,7 +59,9 @@ export class ServerStats extends Component<any, IServerStatsState> {
                     fill: false,
                     lineTension: 0.1,
                     // tslint:disable-next-line: object-literal-sort-keys
-                    backgroundColor: this.RandomColor(),
+                    // borderCapStyle: 'butt',
+                    // backgroundColor: this.RandomColor(),
+                    // tslint:disable-next-line: object-literal-sort-keys
                     borderColor: this.RandomColor(),
                     pointRadius: 1,
                     pointHitRadius: 10,
@@ -71,7 +79,7 @@ export class ServerStats extends Component<any, IServerStatsState> {
                 <Row>
                     <Col xs={12}>
                         <Error error={error} />
-                        <h2>Servers Stats</h2>
+                        <h2>{header}</h2>
                     </Col>
                 </Row>
 

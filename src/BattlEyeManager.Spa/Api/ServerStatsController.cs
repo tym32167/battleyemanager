@@ -26,8 +26,28 @@ namespace BattlEyeManager.Spa.Api
             _onlineServerService = onlineServerService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetServersStats()
+        [HttpGet("lastday")]
+        public async Task<IActionResult> GetServersStatsLastDay()
+        {
+            var cur = DateTime.UtcNow;
+            cur = new DateTime(cur.Year, cur.Month, cur.Day, cur.Hour, cur.Minute - cur.Minute % 10, 0, DateTimeKind.Utc);
+
+            var end = cur;
+            var start = end.AddDays(-1);
+            var ret = await GetServersStats(start, end, TimeSpan.FromMinutes(10));
+            return Ok(ret);
+        }
+
+        [HttpGet("lastweek")]
+        public async Task<IActionResult> GetServersStatsLastWeek()
+        {
+            var end = DateTime.UtcNow.Date;
+            var start = end.AddDays(-7);
+            var ret = await GetServersStats(start, end, TimeSpan.FromHours(1));
+            return Ok(ret);
+        }
+
+        private async Task<LineGraphModel> GetServersStats(DateTime start, DateTime end, TimeSpan step)
         {
             var set = _moderatorService.GetServersByUser(User);
             var admin = User.IsAdmin();
@@ -36,11 +56,8 @@ namespace BattlEyeManager.Spa.Api
                 .Select(s => s.Id)
                 .ToArray();
 
-            var end = DateTime.UtcNow.Date;
-            var start = end.AddDays(-14);
 
-
-            var data = await _repository.GetServersStats(onlineServers, start, end);
+            var data = await _repository.GetServersStats(onlineServers, start, end, step);
             var labels = data.Data.Select(x => x.Date).Distinct().OrderBy(x => x).Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray();
             var servers = data.Servers.ToDictionary(x => x.Id, x => x.Name);
 
@@ -52,13 +69,13 @@ namespace BattlEyeManager.Spa.Api
                     Data = x.OrderBy(z => z.Date).Select(z => z.PlayerCount).ToList()
                 }).ToList();
 
-            var ret = new ServerStatsModel()
+            var ret = new LineGraphModel()
             {
                 Labels = labels,
                 DataSets = dataset
             };
 
-            return Ok(ret);
+            return ret;
         }
     }
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IServerStatsModel } from "src/models";
+import { ILineGraphModel } from "src/models";
 
 const baseUrl = '/api/ServerStats/';
 
@@ -9,8 +9,14 @@ const getError = (error: any) => {
 }
 
 export const serverStatsService = {
-    getStats: () => {
-        return axios.get<IServerStatsModel>(baseUrl)
+    getStatsLastWeek: () => {
+        return axios.get<ILineGraphModel>(baseUrl + 'LastWeek/')
+            .then(response => response.data)
+            .catch(error => Promise.reject(getError(error)));
+    },
+
+    getStatsLastDay: () => {
+        return axios.get<ILineGraphModel>(baseUrl + 'LastDay/')
             .then(response => response.data)
             .catch(error => Promise.reject(getError(error)));
     },
