@@ -43,10 +43,9 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
                             </ClientGridColumns>
                         </ClientGrid>
                     </Row>
-                    <Row>
-                        <div id="chart" />
-                        <ServerStats />
-                    </Row>
+
+                    <ServerStats />
+
                 </Container>
             </React.Fragment>
         );
