@@ -154,7 +154,7 @@ namespace BattlEyeManager.Spa
             services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
             services.AddTransient<IServerRepository, ServerRepository>();
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
-
+            services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
 
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();

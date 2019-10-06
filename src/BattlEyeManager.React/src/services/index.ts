@@ -11,6 +11,7 @@ export * from './onlineChat.service';
 export * from './currentUser.service';
 export * from './kickReasons.service';
 export * from './banReasons.service';
+export * from './serverstats.service';
 export * from './serverModerator.service';
 export * from './core';
 
