@@ -1,4 +1,5 @@
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
@@ -17,10 +18,12 @@ namespace BattlEyeManager.Spa.Api.Admin
     public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserRepository _userRepository;
 
-        public UserController(UserManager<ApplicationUser> userManager)
+        public UserController(UserManager<ApplicationUser> userManager, UserRepository userRepository)
         {
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         protected UserController()
@@ -50,6 +53,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 Email = usr.Email,
                 LastName = usr.LastName,
                 FirstName = usr.FirstName,
+                DisplayName = usr.DisplayName,
                 IsAdmin = await _userManager.IsInRoleAsync(usr, RoleConstants.Administrator)
             };
 
@@ -112,6 +116,11 @@ namespace BattlEyeManager.Spa.Api.Admin
             else
                 await _userManager.RemoveFromRoleAsync(user, RoleConstants.Administrator);
 
+            if (user.DisplayName != model.DisplayName)
+            {
+                await _userRepository.UpdateUserDisaplyName(user.Id, model.DisplayName);
+            }
+
             return NoContent();
         }
 
@@ -128,7 +137,8 @@ namespace BattlEyeManager.Spa.Api.Admin
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 UserName = model.UserName,
-                Password = model.Password
+                Password = model.Password,
+                DisplayName = model.DisplayName
             };
 
 

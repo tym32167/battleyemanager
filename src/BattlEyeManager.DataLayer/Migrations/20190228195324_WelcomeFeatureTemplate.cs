@@ -8,7 +8,7 @@ namespace BattlEyeManager.DataLayer.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "WelcomeFeatureTemplate",
-                table: "Servers",
+                table: "Servers", maxLength: 255,
                 nullable: true);
         }
 

@@ -16,6 +16,8 @@ const EditUserForm = (props: any) => {
                 validate={[requiredValidator]} />
             <Field name="userName" component={FormInputField} type="text" label="User Name" readOnly={!!edit}
                 validate={[requiredValidator]} />
+            <Field name="displayName" component={FormInputField} type="text" label="Display Name"
+                validate={[requiredValidator]} />
             <Field name="email" component={FormInputField} type="email" className="form-control" label="Email"
                 validate={[requiredValidator]} />
             <Field name="password" component={FormInputField} type="password" className="form-control" label="Password" />

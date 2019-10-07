@@ -156,6 +156,8 @@ namespace BattlEyeManager.Spa
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
             services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
 
+            services.AddTransient<UserRepository, UserRepository>();
+
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();
 

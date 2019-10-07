@@ -72,7 +72,11 @@ namespace BattlEyeManager.DataLayer.Repositories
         public int SteamPort { get; set; }
 
         public bool WelcomeFeatureEnabled { get; set; }
+
+        [MaxLength(255)]
         public string WelcomeFeatureTemplate { get; set; }
+
+        [MaxLength(255)]
         public string WelcomeFeatureEmptyTemplate { get; set; }
     }
 }

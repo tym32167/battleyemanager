@@ -5,4 +5,5 @@ export interface IUser {
     isAdmin: boolean
     lastName: string,
     userName: string,
+    displayName: string,
 }

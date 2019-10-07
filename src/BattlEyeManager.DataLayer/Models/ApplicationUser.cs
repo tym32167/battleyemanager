@@ -27,6 +27,11 @@ namespace BattlEyeManager.DataLayer.Models
         [Required(ErrorMessage = "EmailRequired"), DataType(DataType.EmailAddress)]
         public override string Email { get; set; }
 
+        [Display(Name = "Display name")]
+        [Required]
+        [MaxLength(255)]
+        public string DisplayName { get; set; }
+
         public ICollection<ServerModerators> Servers { get; set; }
     }
 }

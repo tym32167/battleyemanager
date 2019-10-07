@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Api
 {
@@ -12,11 +15,15 @@ namespace BattlEyeManager.Spa.Api
     {
         private readonly OnlineChatService _onlineChatService;
         private readonly ServerModeratorService _moderatorService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OnlineChatController(OnlineChatService onlineChatService, ServerModeratorService moderatorService)
+        public OnlineChatController(OnlineChatService onlineChatService,
+            ServerModeratorService moderatorService,
+            UserManager<ApplicationUser> userManager)
         {
             _onlineChatService = onlineChatService;
             _moderatorService = moderatorService;
+            _userManager = userManager;
         }
 
         [HttpGet("api/onlineserver/{serverId}/chat")]
@@ -31,15 +38,19 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpPut("api/onlineserver/{serverId}/chat")]
-        public IActionResult Put(int serverId, [FromBody] ChatModel model)
+        public async Task<IActionResult> Put(int serverId, [FromBody] ChatModel model)
         {
             _moderatorService.CheckAccess(User, serverId);
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            _onlineChatService.PostChat(serverId, User.Identity.Name, model.Audience, model.Message);
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (user == null)
+                return BadRequest();
+
+            _onlineChatService.PostChat(serverId, user.DisplayName, model.Audience, model.Message);
             return Ok();
         }
     }
