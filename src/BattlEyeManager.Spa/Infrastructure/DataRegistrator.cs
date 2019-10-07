@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using BattlEyeManager.BE.Services;
+﻿using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.Spa.Infrastructure
 {
@@ -74,7 +74,7 @@ namespace BattlEyeManager.Spa.Infrastructure
 
             joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
 
-            _logger.LogInformation($"Register JOINED:{joined.Length}");
+            _logger.LogInformation($"Server {server.Id}:{server.Name} Register JOINED:{joined.Length}");
 
             try
             {
@@ -160,7 +160,7 @@ namespace BattlEyeManager.Spa.Infrastructure
 
             leaved = leaved.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
 
-            _logger.LogInformation($"Register LEAVED:{leaved.Length}");
+            _logger.LogInformation($"Server {server.Id}:{server.Name} Register LEAVED:{leaved.Length}");
 
             try
             {

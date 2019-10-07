@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BattlEyeManager.BE.Models;
+using BattlEyeManager.BE.Services;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using BattlEyeManager.BE.Models;
-using BattlEyeManager.BE.Services;
 
 namespace BattlEyeManager.Spa.Infrastructure.State
 {
@@ -42,7 +42,11 @@ namespace BattlEyeManager.Spa.Infrastructure.State
             Player[] leaved = null;
 
             _playerState.AddOrUpdate(e.Server.Id,
-                guid => e.Data, (guid, players) =>
+                guid =>
+                {
+                    joined = e.Data.ToArray();
+                    return e.Data;
+                }, (guid, players) =>
                 {
                     var ret = e.Data;
                     joined = ret.Where(r => players.All(p => p.Guid != r.Guid)).ToArray();

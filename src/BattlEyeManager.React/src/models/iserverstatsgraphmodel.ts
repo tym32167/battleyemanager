@@ -1,5 +1,5 @@
-export interface ILineGraphModel {
-    labels?: string[]
+export interface IServerStatsGraphModel {
+    dates?: Date[]
     dataSets: IDataSet[]
 }
 

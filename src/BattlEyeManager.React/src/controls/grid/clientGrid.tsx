@@ -4,6 +4,7 @@ import { BootstrapTable, Error, FilterControl, IFilterControlProps, IPagerContro
 
 export interface IClientGridColumn<T> {
     header: string,
+    className?: string,
     name: string,
     headerStyle?: any,
     rowStyle?: any,

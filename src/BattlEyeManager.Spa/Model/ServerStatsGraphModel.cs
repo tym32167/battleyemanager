@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BattlEyeManager.Spa.Model
 {
-    public class LineGraphModel
+    public class ServerStatsGraphModel
     {
-        public string[] Labels { get; set; }
+        public DateTime[] Dates { get; set; }
         public List<DataSet> DataSets { get; set; } = new List<DataSet>();
     }
 

@@ -6,7 +6,7 @@ import { isBoolean } from 'util';
 export interface IBootstrapTableColumn<T> {
     header: string,
     name?: string,
-
+    className?: string,
     headerStyle?: any,
     rowStyle?: any,
     renderer?: (row: T) => any
@@ -73,7 +73,7 @@ const rowRrenderer = <T extends any>(column: IBootstrapTableColumn<T>, row: T) =
 }
 
 const BootstrapColumn = <T extends any>(key: number, props: IBootstrapTableColumn<T>, handleSort: ((name: string) => void) | any) => {
-    const { header, headerStyle, name } = props;
+    const { header, headerStyle, name, className } = props;
 
     const invokator = () => {
         if (handleSort !== undefined) {
@@ -82,6 +82,6 @@ const BootstrapColumn = <T extends any>(key: number, props: IBootstrapTableColum
     }
 
     return (
-        <th key={key} onClick={invokator} style={{ ...headerStyle }}>{header}</th>
+        <th key={key} onClick={invokator} style={{ ...headerStyle }} className={className} >{header}</th>
     );
 }

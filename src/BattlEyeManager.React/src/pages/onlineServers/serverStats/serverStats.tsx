@@ -1,17 +1,18 @@
+import moment from 'moment';
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Col, Row } from 'reactstrap';
-import { ILineGraphModel } from 'src/models';
+import { IServerStatsGraphModel } from 'src/models';
 import { Error } from '../../../controls';
 
 
 interface IServerStatsState {
-    data: ILineGraphModel,
+    data: IServerStatsGraphModel,
     error: any
 }
 
 interface IServerStatsProps {
-    loader: () => Promise<ILineGraphModel>,
+    loader: () => Promise<IServerStatsGraphModel>,
     header: string
 }
 
@@ -28,7 +29,7 @@ export class ServerStats extends Component<IServerStatsProps, IServerStatsState>
     public async Load() {
         const { loader } = this.props;
         await loader().then(
-            (stats: ILineGraphModel) => {
+            (stats: IServerStatsGraphModel) => {
                 this.setState({ data: stats, error: undefined });
             },
             (error: any) => this.setState({ data: { dataSets: [] }, error }));
@@ -56,22 +57,28 @@ export class ServerStats extends Component<IServerStatsProps, IServerStatsState>
             datasets: data.dataSets!.map(x => {
                 return {
                     ...x,
+                    borderColor: this.RandomColor(),
                     fill: false,
                     lineTension: 0.1,
-                    // tslint:disable-next-line: object-literal-sort-keys
-                    // borderCapStyle: 'butt',
-                    // backgroundColor: this.RandomColor(),
-                    // tslint:disable-next-line: object-literal-sort-keys
-                    borderColor: this.RandomColor(),
-                    pointRadius: 1,
                     pointHitRadius: 10,
+                    pointRadius: 1,
                 }
-            })
+            }),
+            labels: (data.dates || [])!.map(x => moment.utc(x).local().format('YYYY-MM-DD HH:mm:ss')),
         };
 
-        const options = {
+        const options: Chart.ChartOptions = {
             //  responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 30,
+                        // minRotation: 90,
+                    }
+                }]
+            }
         }
 
         return (

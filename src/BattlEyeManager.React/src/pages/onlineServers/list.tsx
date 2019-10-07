@@ -44,8 +44,8 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
                         </ClientGrid>
                     </Row>
 
-                    <ServerStats loader={serverStatsService.getStatsLastDay} header={"Servers last 24 hours (UTC)"} />
-                    <ServerStats loader={serverStatsService.getStatsLastWeek} header={"Servers last 7 days (UTC)"} />
+                    <ServerStats loader={serverStatsService.getStatsLastDay} header={"Servers last 24 hours"} />
+                    <ServerStats loader={serverStatsService.getStatsLastWeek} header={"Servers last 7 days"} />
 
                 </Container>
             </React.Fragment>
