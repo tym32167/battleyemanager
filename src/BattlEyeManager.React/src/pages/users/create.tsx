@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { IUser } from 'src/models';
 import { history, userService } from 'src/services';
 import { Error } from '../../controls';
@@ -29,7 +30,7 @@ export class Create extends Component<any, ICreateState> {
 
         return (
             <React.Fragment>
-                <h2>Create User</h2>
+                <h2><Trans>Create User</Trans></h2>
                 <Error error={error} />
                 <EditUserForm onSubmit={onSubmit} />
             </React.Fragment>

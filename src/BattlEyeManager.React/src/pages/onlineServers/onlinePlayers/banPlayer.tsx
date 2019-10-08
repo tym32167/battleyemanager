@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { Action, Dispatch } from 'redux';
@@ -49,9 +50,9 @@ class BanPlayer extends React.Component<IBanPlayerProps> {
 
         return (
             <React.Fragment>
-                <Button color="danger" size="sm" onClick={this.toggle} >Ban</Button>
+                <Button color="danger" size="sm" onClick={this.toggle} ><Trans>Ban</Trans></Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Ban player {player.name}</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><Trans>Ban player</Trans> {player.name}</ModalHeader>
                     <ModalBody>
                         <BanPlayerForm {...p} />
                     </ModalBody>

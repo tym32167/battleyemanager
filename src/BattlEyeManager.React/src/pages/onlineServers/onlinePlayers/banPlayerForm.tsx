@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Trans } from 'react-i18next';
 import { Button, Form } from 'reactstrap';
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { FormInputField } from '../../../controls';
@@ -18,9 +18,9 @@ const BanPlayerForm = ({ handleSubmit, onCancel }: IBanPlayerFormProps) =>
         <Field name="minutes" component={FormInputField} type="text" placeholder="Minutes"
             validate={[requiredValidator]} className="col-sm" />
 
-        <Button color="primary" type="submit">Ban</Button>
+        <Button color="primary" type="submit"><Trans>Ban</Trans></Button>
         {' '}
-        <Button color="secondary" onClick={onCancel}>Cancel</Button>
+        <Button color="secondary" onClick={onCancel}><Trans>Cancel</Trans></Button>
     </Form>);
 
 const BanPlayerFormRedux = reduxForm({

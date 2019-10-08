@@ -1,4 +1,7 @@
+import i18next from 'i18next';
 import React from 'react';
+import { Trans } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { Action, Dispatch } from 'redux';
@@ -9,23 +12,25 @@ import { onlineBanActions } from 'src/store/actions';
 interface IRemoveBanProps {
     ban: IOnlineBan,
     onRemove: (ban: IOnlineBan) => void;
+
+    t: i18next.TFunction
 }
 
 class RemoveBan extends React.Component<IRemoveBanProps> {
     public render() {
-        const { ban, onRemove } = this.props;
+        const { ban, onRemove, t } = this.props;
         const submit = () => {
             onRemove(ban);
         };
 
-        const renderer = (toggle: () => void) => <Button color="danger" size="sm" onClick={toggle} >Remove</Button>;
+        const renderer = (toggle: () => void) => <Button color="danger" size="sm" onClick={toggle}><Trans>Remove</Trans></Button>;
 
         return (
             <React.Fragment>
                 <ConfirmWindow
                     submit={submit}
-                    text={'Remove ban #' + ban.num + '?'}
-                    title="Remove Ban"
+                    text={t("Remove Ban") + ' #' + ban.num + '?'}
+                    title={t("Remove Ban")}
                     buttonRenderer={renderer}
                 />
             </React.Fragment>
@@ -52,4 +57,6 @@ const ConnectedRemoveBan = connect(
     mapDispatchToProps
 )(RemoveBan);
 
-export { ConnectedRemoveBan as RemoveBan };
+const Translated = withTranslation()(ConnectedRemoveBan);
+
+export { Translated as RemoveBan };

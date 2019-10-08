@@ -1,4 +1,6 @@
+import i18next from 'i18next';
 import React, { Component } from 'react';
+import { Trans, withTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button, Input } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns } from 'src/controls';
@@ -13,7 +15,13 @@ interface IServerModeratorListState {
     error: any
 }
 
-export class ServerModeratorList extends Component<any, IServerModeratorListState> {
+interface IServerModeratorListProps {
+    t: i18next.TFunction
+}
+
+// i18next.TFunction
+
+class ServerModeratorList extends Component<IServerModeratorListProps, IServerModeratorListState> {
     constructor(props: any) {
         super(props);
         this.state = { data: undefined, error: undefined, user: undefined };
@@ -48,11 +56,12 @@ export class ServerModeratorList extends Component<any, IServerModeratorListStat
 
     public render() {
         const { user, data, error } = this.state;
+        const { t } = this.props;
 
-        let header = "Visible servers";
+        let header = t("Visible servers");
 
         if (user) {
-            header = "Visible servers for user: " + user.userName;
+            header = t("Visible servers for user") + ": " + user.userName;
         }
 
         const print = (item: IServerModeratorItem) => {
@@ -74,10 +83,14 @@ export class ServerModeratorList extends Component<any, IServerModeratorListStat
                         <ClientGridColumn header="Visible" name="isChecked" renderer={isCheckedRender} />
                     </ClientGridColumns>
                 </ClientGrid>
-                <Button color="primary" onClick={this.saveCallback} >Save</Button>
+                <Button color="primary" onClick={this.saveCallback}><Trans>Save</Trans></Button>
                 {' '}
-                <Button tag={Link} to="/users" color="secondary">Cancel</Button>
+                <Button tag={Link} to="/users" color="secondary"><Trans>Cancel</Trans></Button>
             </React.Fragment>
         );
     }
 }
+
+
+const ServerModeratorListTranslated = withTranslation()(ServerModeratorList)
+export { ServerModeratorListTranslated as ServerModeratorList };

@@ -4,6 +4,7 @@ import { serverActions } from "../../store/actions";
 import { Error } from '../../controls';
 import { EditForm } from './controls';
 import PropTypes from 'prop-types';
+import { Trans } from 'react-i18next';
 
 class Create extends Component {
     render() {
@@ -11,7 +12,7 @@ class Create extends Component {
 
         return (
             <React.Fragment>
-                <h2>Create Server</h2>
+                <h2><Trans>Create Server</Trans></h2>
                 <Error error={error} />
                 <EditForm onSubmit={onSubmit} />
             </React.Fragment>

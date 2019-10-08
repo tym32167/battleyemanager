@@ -10,7 +10,7 @@ const mapStateToProps = ({ banReasons }: { banReasons: any }) => {
         editUrl: "/banReasons/",
         error: banReasons.error,
         items: banReasons.items || [],
-        title: "Ban reasons:",
+        title: "Ban reasons",
     }
 }
 

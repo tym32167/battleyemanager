@@ -6,6 +6,7 @@ import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterCon
 import { onlinePlayerActions } from "../../../store/actions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans } from 'react-i18next';
 import { Action, Dispatch } from 'redux';
 import { IOnlinePlayer } from 'src/models';
 import { BanPlayer } from './banPlayer';
@@ -120,7 +121,7 @@ class List extends React.Component<IListProps> {
 
         return (
             <React.Fragment>
-                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> Players ({len}) {busy && <small>loading....</small>}</h4>
+                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Players</Trans> ({len}) {busy && <small>loading....</small>}</h4>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>

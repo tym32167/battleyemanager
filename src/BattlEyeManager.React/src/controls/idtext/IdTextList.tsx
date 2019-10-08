@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { Button } from "reactstrap";
@@ -39,9 +40,9 @@ export class IdTextList extends Component<IListProps<IIdTextItem>>{
 
         return (
             <React.Fragment>
-                <h2>{title} ({len})</h2>
+                <h2><Trans>{title}</Trans>: ({len})</h2>
                 <Error error={error} />
-                <Button tag={Link} to={createUrl} color="primary">Create</Button>
+                <Button tag={Link} to={createUrl} color="primary"><Trans>Create</Trans></Button>
                 {items && <IdTextTable items={items} deleteItem={this.deleteCallback} editUrl={editUrl} />}
             </React.Fragment>
         );
@@ -59,8 +60,8 @@ const IdTextTable = ({ items, deleteItem, editUrl }: IItemsTableProps<IIdTextIte
     <Table size="sm" responsive={true}>
         <thead>
             <tr>
-                <th style={{ width: '1%' }} >Id</th>
-                <th>Text</th>
+                <th style={{ width: '1%' }} ><Trans>Id</Trans></th>
+                <th><Trans>Text</Trans></th>
                 <th colSpan={2} className="table-fit" style={{ width: '1%' }} />
             </tr>
         </thead>
@@ -82,10 +83,10 @@ const IdTextItem = ({ item, deleteItem, editUrl }: IItemProps<IKickReason>) => {
             <td>{item.id}</td>
             <td>{item.text}</td>
             <td>
-                <Button color="success" to={editUrl + item.id} tag={Link} size="sm">Edit</Button>
+                <Button color="success" to={editUrl + item.id} tag={Link} size="sm"><Trans>Edit</Trans></Button>
             </td>
             <td>
-                <Button color="danger" size="sm" onClick={click}>Delete</Button>
+                <Button color="danger" size="sm" onClick={click}><Trans>Delete</Trans></Button>
             </td>
         </tr>);
 }

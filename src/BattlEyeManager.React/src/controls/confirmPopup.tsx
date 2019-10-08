@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { Button, Form, Modal, ModalBody, ModalHeader } from 'reactstrap';
 
 interface IConfirmWindowProps {
@@ -43,13 +44,13 @@ export class ConfirmWindow extends React.Component<IConfirmWindowProps> {
             <React.Fragment>
                 {buttonRenderer(this.toggle)}
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>{title}</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><Trans>{title}</Trans></ModalHeader>
                     <ModalBody>
                         {text}
                         <Form onSubmit={realSubmit} className="mt-1">
-                            <Button color="primary" type="submit">OK</Button>
+                            <Button color="primary" type="submit"><Trans>OK</Trans></Button>
                             {' '}
-                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                            <Button color="secondary" onClick={this.toggle}><Trans>Cancel</Trans></Button>
                         </Form>
                     </ModalBody>
                 </Modal>

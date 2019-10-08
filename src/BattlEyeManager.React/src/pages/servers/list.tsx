@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
@@ -31,10 +32,10 @@ export class List extends Component<any, IGridParentProps<IServer>> {
     public render() {
         const { data, error } = this.state;
 
-        const editRender = (item: IServer) => <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm">Edit</Button>;
-        const deleteRender = (item: IServer) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, item)}>Delete</Button>;
+        const editRender = (item: IServer) => <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm"><Trans>Edit</Trans></Button>;
+        const deleteRender = (item: IServer) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, item)}><Trans>Delete</Trans></Button>;
 
-        const header = () => <Button tag={Link} to="/servers/create" color="primary">Create</Button>;
+        const header = () => <Button tag={Link} to="/servers/create" color="primary"><Trans>Create</Trans></Button>;
 
         return (
             <React.Fragment>

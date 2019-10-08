@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button, Container, Row } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
@@ -23,7 +24,7 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
     }
     public render() {
         const { data, error } = this.state;
-        const dashRender = (row: IOnlineServer) => (<Button color="success" to={'/online/' + row.id} tag={Link} size="sm">Dashboard</Button>);
+        const dashRender = (row: IOnlineServer) => (<Button color="success" to={'/online/' + row.id} tag={Link} size="sm"><Trans>Dashboard</Trans></Button>);
 
         return (
             <React.Fragment>

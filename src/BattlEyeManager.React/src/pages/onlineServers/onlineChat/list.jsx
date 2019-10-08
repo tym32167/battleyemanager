@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Error, Chat } from '../../../controls';
 import PropTypes from 'prop-types';
 import * as SignalR from '@aspnet/signalr';
+import { Trans } from 'react-i18next';
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -67,7 +68,7 @@ class List extends Component {
 
         return (
             <React.Fragment>
-                <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> Chat ({len}) {busy && <small>loading....</small>} </h4>
+                <h4> <small><FontAwesomeIcon icon="sync" onClick={(e) => this.refresh()} /></small> <Trans>Chat</Trans> ({len}) {busy && <small>loading....</small>} </h4>
                 <Error error={error} />
                 {items && <Chat items={items} newMessage={newMessage} />}
             </React.Fragment>
