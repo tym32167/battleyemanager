@@ -1,4 +1,4 @@
-import { Dispatch } from "redux";
+import { Action, Dispatch } from "redux";
 import { IIdentity } from "src/models/iidentity";
 import { IReadonlyService, IService } from "../../services";
 import { ActionConstants, combineConstants, ResultConstants, SubjectConstants } from "../constants";
@@ -22,7 +22,7 @@ function failureAction(error: any, subject: SubjectConstants, action: ActionCons
 
 export class CommonActions {
     public deleteItem<T extends IIdentity>(element: T, subject: SubjectConstants, service: IService<T>, callback: any) {
-        return (dispatch: Dispatch<T>) => {
+        return (dispatch: Dispatch<Action<string>>) => {
             dispatch(requestAction(element, subject, ActionConstants.DELETE_ITEM));
             service.deleteItem(element.id)
                 .then(
@@ -38,7 +38,7 @@ export class CommonActions {
     }
 
     public addItem<T extends IIdentity>(element: T, subject: SubjectConstants, service: IService<T>, callback: any) {
-        return (dispatch: Dispatch<T>) => {
+        return (dispatch: Dispatch<Action<string>>) => {
             dispatch(requestAction(element, subject, ActionConstants.CREATE_ITEM));
             service.addItem(element)
                 .then(
@@ -54,7 +54,7 @@ export class CommonActions {
     }
 
     public updateItem<T extends IIdentity>(element: T, subject: SubjectConstants, service: IService<T>, callback: any) {
-        return (dispatch: Dispatch<T>) => {
+        return (dispatch: Dispatch<Action<string>>) => {
             dispatch(requestAction(element, subject, ActionConstants.UPDATE_ITEM));
             service.updateItem(element)
                 .then(
@@ -70,7 +70,7 @@ export class CommonActions {
     }
 
     public getItems<T>(subject: SubjectConstants, service: IReadonlyService<T>) {
-        return (dispatch: Dispatch<T>) => {
+        return (dispatch: Dispatch<Action<string>>) => {
             dispatch(requestAction([], subject, ActionConstants.GET_ITEMS));
             this.getPromise(service, (s: any) => s.getItems())
                 .then(
@@ -85,7 +85,7 @@ export class CommonActions {
     }
 
     public getItem<T>(id: string | number, subject: SubjectConstants, service: IReadonlyService<T>) {
-        return (dispatch: Dispatch<T>) => {
+        return (dispatch: Dispatch<Action<string>>) => {
             dispatch(requestAction({ id }, subject, ActionConstants.GET_ITEM));
             service.getItem(id)
                 .then(

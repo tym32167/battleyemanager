@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { IUser } from 'src/models';
 import { history, userService } from 'src/services';
 import { Error } from '../../controls';
@@ -41,7 +42,7 @@ export class Edit extends Component<any, IEditState> {
 
         return (
             <React.Fragment>
-                <h2>Edit User</h2>
+                <h2><Trans>Edit User</Trans></h2>
                 <Error error={error} />
                 {item && <EditUserForm onSubmit={onSubmit} initialValues={item} {...{ edit: true }} />}
             </React.Fragment>

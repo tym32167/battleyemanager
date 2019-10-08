@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form'
 import { Form, Button } from "reactstrap";
+import { Trans } from 'react-i18next';
 
 import { requiredValidator } from "../../formValidators";
 import { FormInputField } from '../../../controls';
@@ -30,9 +31,9 @@ const EditForm = props => {
 
             <Field name="active" component={FormInputField} type="checkbox" label="Active" />
 
-            <Button color="primary" type="submit">Save</Button>
+            <Button color="primary" type="submit"><Trans>Save</Trans></Button>
             {' '}
-            <Button tag={Link} to="/servers" color="secondary">Cancel</Button>
+            <Button tag={Link} to="/servers" color="secondary"><Trans>Cancel</Trans></Button>
         </Form>
     );
 }

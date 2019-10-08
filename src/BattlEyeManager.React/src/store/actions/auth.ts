@@ -1,4 +1,4 @@
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IAuthUserInfo } from 'src/models';
 import { authService, history } from '../../services';
 import { authConstants } from '../constants';
@@ -9,7 +9,7 @@ export const authActions = {
 };
 
 function login(username: string, password: string) {
-    return (dispatch: Dispatch<void>) => {
+    return (dispatch: Dispatch<Action<string>>) => {
         dispatch(request({ username }));
 
         authService.login(username, password)

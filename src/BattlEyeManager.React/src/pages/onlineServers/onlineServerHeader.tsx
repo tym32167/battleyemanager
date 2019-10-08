@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IOnlineServer } from 'src/models';
@@ -11,11 +12,11 @@ interface IServerHeaderProps {
 const ServerHeader = ({ id, title }: IServerHeaderProps) => (
     <React.Fragment>
         <h4 className="p-0 m-0">{title}</h4>
-        <Link to={'/online/' + id}>Dashboard</Link>
+        <Link to={'/online/' + id}> <Trans>Dashboard</Trans></Link>
         {' '}
-        <Link to={'/online/' + id + '/bans'}>Bans</Link>
+        <Link to={'/online/' + id + '/bans'}><Trans>Bans</Trans></Link>
         {' '}
-        <Link to={'/online/' + id + '/manage'}>Manage</Link>
+        <Link to={'/online/' + id + '/manage'}><Trans>Manage</Trans></Link>
     </React.Fragment>
 );
 

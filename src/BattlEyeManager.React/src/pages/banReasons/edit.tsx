@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { InjectedFormProps } from 'redux-form';
 import { IdTextEdit } from "src/controls";
 import { IBanReason, IIdTextItem } from 'src/models';
@@ -43,11 +43,11 @@ const mapStateToProps = ({ banReasons }: { banReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>,
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>,
     { match: { params: { id } } }: { match: { params: { id: string } } }) => {
     return {
-        onLoad: () => dispatch(banReasonActions.getItem(id)),
-        onSubmit: (item: IBanReason) => dispatch(banReasonActions.updateItem(item))
+        onLoad: () => banReasonActions.getItem(id)(dispatch),
+        onSubmit: (item: IBanReason) => banReasonActions.updateItem(item)(dispatch)
     }
 }
 

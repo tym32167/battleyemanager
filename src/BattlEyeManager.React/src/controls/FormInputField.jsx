@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormGroup, Label, Input, FormFeedback, FormText } from "reactstrap";
 import PropTypes from 'prop-types';
+import { Trans } from 'react-i18next';
 
 export const FormInputField = (props) => {
     if (props.type === 'checkbox') return (<FormCheckBox {...props} />)
@@ -20,11 +21,11 @@ const FormCheckBox = ({
                 invalid={!!error}
                 valid={!error} />
 
-            {label && <Label for={name} check>{label}</Label>}
+            {label && <Label for={name} check><Trans>{label}</Trans></Label>}
 
             {touched &&
-                ((error && <FormFeedback>{error}</FormFeedback>) ||
-                    (warning && <FormText>{warning}</FormText>))}
+                ((error && <FormFeedback><Trans>{error}</Trans></FormFeedback>) ||
+                    (warning && <FormText><Trans>{warning}</Trans></FormText>))}
         </FormGroup>);
 
 const FormInput = ({
@@ -35,15 +36,15 @@ const FormInput = ({
     type,
     meta: { touched, error, warning }
 }) => (
-        <FormGroup>            
-            {label && <Label for={name} check>{label}</Label>}
+        <FormGroup>
+            {label && <Label for={name} check><Trans>{label}</Trans></Label>}
             <Input {...input} placeholder={label} type={type} readOnly={readOnly}
                 invalid={!!error}
                 valid={!error} />
 
             {touched &&
-                ((error && <FormFeedback>{error}</FormFeedback>) ||
-                    (warning && <FormText>{warning}</FormText>))}
+                ((error && <FormFeedback><Trans>{error}</Trans></FormFeedback>) ||
+                    (warning && <FormText><Trans>{warning}</Trans></FormText>))}
         </FormGroup>);
 
 const propTypes = {

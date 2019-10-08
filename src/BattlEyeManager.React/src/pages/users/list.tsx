@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns, IGridParentProps } from 'src/controls';
@@ -32,11 +33,11 @@ export class List extends Component<any, IGridParentProps<IUser>> {
     public render() {
         const { data, error } = this.state;
 
-        const editRender = (user: IUser) => <Button color="success" to={'/users/' + user.id} tag={Link} size="sm">Edit</Button>;
-        const editVisibleRender = (user: IUser) => <Button color="success" to={'/users/visibleServers/' + user.id} tag={Link} size="sm">Edit Servers</Button>;
-        const deleteRender = (user: IUser) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, user)}>Delete</Button>;
+        const editRender = (user: IUser) => <Button color="success" to={'/users/' + user.id} tag={Link} size="sm"><Trans>Edit</Trans></Button>;
+        const editVisibleRender = (user: IUser) => <Button color="success" to={'/users/visibleServers/' + user.id} tag={Link} size="sm"><Trans>Edit Servers</Trans></Button>;
+        const deleteRender = (user: IUser) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, user)}><Trans>Delete</Trans></Button>;
 
-        const header = () => <Button tag={Link} to="/users/create" color="primary">Create</Button>;
+        const header = () => <Button tag={Link} to="/users/create" color="primary"><Trans>Create</Trans></Button>;
 
         return (
             <React.Fragment>

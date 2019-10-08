@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IdTextList } from 'src/controls';
 import { IKickReason } from 'src/models';
 import { kickReasonActions } from "../../store/actions";
@@ -10,14 +10,14 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
         editUrl: "/kickReasons/",
         error: kickReasons.error,
         items: kickReasons.items || [],
-        title: "Kick reasons:",
+        title: "Kick reasons",
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
-        deleteItem: (item: IKickReason) => dispatch(kickReasonActions.deleteItem(item)),
-        onLoad: () => dispatch(kickReasonActions.getItems()),
+        deleteItem: (item: IKickReason) => kickReasonActions.deleteItem(item)(dispatch),
+        onLoad: () => kickReasonActions.getItems()(dispatch),
     }
 }
 

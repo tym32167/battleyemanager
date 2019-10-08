@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { InjectedFormProps } from 'redux-form';
 import { IdTextEdit } from "src/controls";
 import { IIdTextItem, IKickReason } from 'src/models';
@@ -43,11 +43,11 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>,
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>,
     { match: { params: { id } } }: { match: { params: { id: string } } }) => {
     return {
-        onLoad: () => dispatch(kickReasonActions.getItem(id)),
-        onSubmit: (item: IKickReason) => dispatch(kickReasonActions.updateItem(item))
+        onLoad: () => kickReasonActions.getItem(id)(dispatch),
+        onSubmit: (item: IKickReason) => kickReasonActions.updateItem(item)(dispatch)
     }
 }
 

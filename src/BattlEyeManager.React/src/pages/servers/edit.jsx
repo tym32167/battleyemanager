@@ -4,6 +4,7 @@ import { serverActions } from "../../store/actions";
 import { EditForm } from './controls';
 import { Error } from '../../controls';
 import PropTypes from 'prop-types';
+import { Trans } from 'react-i18next';
 
 class Edit extends Component {
 
@@ -16,7 +17,7 @@ class Edit extends Component {
 
         return (
             <React.Fragment>
-                <h2>Edit Server</h2>
+                <h2><Trans>Edit Server</Trans></h2>
                 <Error error={error} />
                 {item && <EditForm onSubmit={onSubmit} initialValues={item} edit={true} />}
             </React.Fragment>

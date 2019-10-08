@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
+import { Trans } from "react-i18next";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
-
 
 export interface IPagerControlProps<T> {
     data: T[],
@@ -79,7 +79,7 @@ export class PagerControl<T> extends React.Component<IPagerControlProps<T>, IPag
                         <PaginationLink next={true} href="#" onClick={e => this.setPage(e, maxPage)} />
                     </PaginationItem>
                 </Pagination>
-                {'Pages: ' + maxPage}
+                <Trans>Pages</Trans>: {maxPage}
 
             </React.Fragment>
         )

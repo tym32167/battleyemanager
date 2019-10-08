@@ -1,4 +1,5 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { BootstrapTable, Error, FilterControl, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from "../index";
 
 
@@ -120,7 +121,7 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
             <React.Fragment>
                 <Error error={error} />
 
-                <h2>{header}  {lenHeader}</h2>
+                <h2>{<Trans>{header}</Trans>}  {lenHeader}</h2>
                 {beforeGrid && beforeGrid()}
 
                 {data &&

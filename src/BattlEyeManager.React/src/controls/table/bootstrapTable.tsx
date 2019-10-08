@@ -1,7 +1,7 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { Table } from 'reactstrap';
 import { isBoolean } from 'util';
-
 
 export interface IBootstrapTableColumn<T> {
     header: string,
@@ -82,6 +82,6 @@ const BootstrapColumn = <T extends any>(key: number, props: IBootstrapTableColum
     }
 
     return (
-        <th key={key} onClick={invokator} style={{ ...headerStyle }} className={className} >{header}</th>
+        <th key={key} onClick={invokator} style={{ ...headerStyle }} className={className} ><Trans>{header}</Trans></th>
     );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button, Form } from "reactstrap";
 import { Field, reduxForm } from 'redux-form'
@@ -22,9 +23,9 @@ const EditUserForm = (props: any) => {
                 validate={[requiredValidator]} />
             <Field name="password" component={FormInputField} type="password" className="form-control" label="Password" />
             <Field name="isAdmin" component={FormInputField} type="checkbox" className="form-control" label="Is Admin" />
-            <Button color="primary" type="submit">Save</Button>
+            <Button color="primary" type="submit"><Trans>Save</Trans></Button>
             {' '}
-            <Button tag={Link} to="/users" color="secondary">Cancel</Button>
+            <Button tag={Link} to="/users" color="secondary"><Trans>Cancel</Trans></Button>
         </Form>
     );
 }

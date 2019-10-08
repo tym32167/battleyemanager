@@ -4,12 +4,13 @@ import { Form, Button } from "reactstrap";
 import { requiredValidator } from '../../pages/formValidators';
 import PropTypes from 'prop-types';
 import { FormInput } from '../FormInput';
+import { Trans } from 'react-i18next';
 
 const InputMessage = ({ handleSubmit }) =>
     (<Form onSubmit={handleSubmit} inline className="mt-1">
         <Field name="message" component={FormInput} type="text" placeholder="Chat Message"
             validate={[requiredValidator]} className="col-sm" />
-        <Button color="primary" type="submit">Send</Button>
+        <Button color="primary" type="submit"><Trans>Send</Trans></Button>
     </Form>);
 
 
@@ -18,7 +19,7 @@ InputMessage.propTypes = {
 }
 
 const afterSubmit = (result, dispatch) =>
-  dispatch(reset('ChatMessageForm'));
+    dispatch(reset('ChatMessageForm'));
 
 const InputMessageRedux = reduxForm({
     // a unique name for the form

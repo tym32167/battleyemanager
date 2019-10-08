@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IdTextList } from 'src/controls';
 import { IBanReason } from 'src/models';
 import { banReasonActions } from "../../store/actions";
@@ -10,14 +10,14 @@ const mapStateToProps = ({ banReasons }: { banReasons: any }) => {
         editUrl: "/banReasons/",
         error: banReasons.error,
         items: banReasons.items || [],
-        title: "Ban reasons:",
+        title: "Ban reasons",
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
-        deleteItem: (item: IBanReason) => dispatch(banReasonActions.deleteItem(item)),
-        onLoad: () => dispatch(banReasonActions.getItems()),
+        deleteItem: (item: IBanReason) => banReasonActions.deleteItem(item)(dispatch),
+        onLoad: () => banReasonActions.getItems()(dispatch),
     }
 }
 

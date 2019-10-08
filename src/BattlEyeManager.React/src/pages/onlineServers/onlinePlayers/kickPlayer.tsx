@@ -1,17 +1,16 @@
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IKickReason, IOnlinePlayer } from 'src/models';
 import { kickReasonActions } from '../../../store/actions';
 import { KickPlayerForm } from './kickPlayerForm';
-
 
 interface IKickPlayerProps {
     player: IOnlinePlayer;
     items: IKickReason[];
     onLoad: () => void;
-
     onKick: (player: IOnlinePlayer, { kickReason }: { kickReason: string }) => void;
 }
 
@@ -19,12 +18,8 @@ interface IKickPlayerState {
     modal: boolean;
 }
 
-
-
 class KickPlayer extends React.Component<IKickPlayerProps> {
-
     public state: IKickPlayerState;
-
     constructor(props: IKickPlayerProps) {
         super(props);
         this.state = {
@@ -59,9 +54,9 @@ class KickPlayer extends React.Component<IKickPlayerProps> {
 
         return (
             <React.Fragment>
-                <Button color="warning" size="sm" onClick={this.toggle} >Kick</Button>
+                <Button color="warning" size="sm" onClick={this.toggle}><Trans>Kick</Trans></Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Kick player {player.name}</ModalHeader>
+                    <ModalHeader toggle={this.toggle}><Trans>Kick player</Trans> {player.name}</ModalHeader>
                     <ModalBody>
                         <KickPlayerForm {...p} />
                     </ModalBody>
@@ -78,9 +73,9 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
-        onLoad: () => dispatch(kickReasonActions.getItems())
+        onLoad: () => kickReasonActions.getItems()(dispatch)
     }
 }
 

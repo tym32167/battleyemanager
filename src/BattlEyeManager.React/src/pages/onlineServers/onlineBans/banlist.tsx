@@ -1,8 +1,9 @@
 import * as SignalR from '@aspnet/signalr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
 import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../../controls';
@@ -131,7 +132,7 @@ class BanListTable extends Component<IBanListProps> {
 
         return (
             <React.Fragment>
-                <h2><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> Online Bans ({len})</h2>
+                <h2><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Online Bans</Trans> ({len})</h2>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
@@ -160,10 +161,10 @@ const mapStateToProps = ({ onlineBans }: { onlineBans: any }, ownProps: any) => 
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
         onLoad: (serverId: number) => {
-            dispatch(onlineBanActions.getItems(serverId));
+            onlineBanActions.getItems(serverId)(dispatch);
         }
     }
 }

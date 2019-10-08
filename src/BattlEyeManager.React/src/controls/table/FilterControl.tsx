@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { Trans } from "react-i18next";
 import { Button, Form, FormGroup, Input } from "reactstrap";
 
 
@@ -60,7 +61,7 @@ export class FilterControl<T> extends React.Component<IFilterControlProps<T>, IF
                         <Input type="text" name="filter" id="filter" placeholder="filter..."
                             onChange={this.handleChange} />
                     </FormGroup>
-                    <Button>Filter</Button>
+                    <Button><Trans>Filter</Trans></Button>
                 </Form>
                 {children({ ...this.props, data: filtered })}
             </React.Fragment>

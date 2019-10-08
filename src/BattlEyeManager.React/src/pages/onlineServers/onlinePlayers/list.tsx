@@ -6,7 +6,8 @@ import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterCon
 import { onlinePlayerActions } from "../../../store/actions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dispatch } from 'redux';
+import { Trans } from 'react-i18next';
+import { Action, Dispatch } from 'redux';
 import { IOnlinePlayer } from 'src/models';
 import { BanPlayer } from './banPlayer';
 import { KickPlayer } from './kickPlayer';
@@ -120,7 +121,7 @@ class List extends React.Component<IListProps> {
 
         return (
             <React.Fragment>
-                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> Players ({len}) {busy && <small>loading....</small>}</h4>
+                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Players</Trans> ({len}) {busy && <small>loading....</small>}</h4>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
@@ -150,18 +151,18 @@ const mapStateToProps = ({ onlinePlayers }: { onlinePlayers: any }, ownProps: an
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
         onLoad: (serverId: number) => {
-            dispatch(onlinePlayerActions.getItems(serverId));
+            onlinePlayerActions.getItems(serverId)(dispatch);
         },
 
         onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => {
-            dispatch(onlinePlayerActions.kickPlayer(serverId, player, kickReason))
+            onlinePlayerActions.kickPlayer(serverId, player, kickReason)(dispatch)
         },
 
         onBan: (serverId: number, player: IOnlinePlayer, reason: string, minutes: number) => {
-            dispatch(onlinePlayerActions.banPlayerOnline(serverId, minutes, player, reason))
+            onlinePlayerActions.banPlayerOnline(serverId, minutes, player, reason)(dispatch)
         },
     }
 }
