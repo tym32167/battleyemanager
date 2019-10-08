@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IAuthUserState } from 'src/store/models/IAuthUserState';
 import { Error } from '../../controls';
 import { authActions } from '../../store/actions';
@@ -81,9 +81,9 @@ const mapStateToProps = ({ auth }: { auth: IAuthUserState }) => {
     }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<void>) {
+function mapDispatchToProps(dispatch: Dispatch<Action<string>>) {
     return {
-        login: (username: any, password: any) => dispatch(authActions.login(username, password))
+        login: (username: any, password: any) => authActions.login(username, password)(dispatch)
     }
 }
 

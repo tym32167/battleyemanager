@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IdTextEdit } from "src/controls";
 import { IBanReason } from 'src/models';
 import { banReasonActions } from "../../store/actions";
@@ -13,9 +13,9 @@ const mapStateToProps = ({ banReasons }: { banReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
     return {
-        onSubmit: (item: IBanReason) => dispatch(banReasonActions.addItem(item))
+        onSubmit: (item: IBanReason) => banReasonActions.addItem(item)(dispatch)
     }
 }
 

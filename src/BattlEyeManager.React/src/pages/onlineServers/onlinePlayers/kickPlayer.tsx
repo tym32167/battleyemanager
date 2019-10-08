@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IKickReason, IOnlinePlayer } from 'src/models';
 import { kickReasonActions } from '../../../store/actions';
 import { KickPlayerForm } from './kickPlayerForm';
@@ -78,9 +78,9 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
-        onLoad: () => dispatch(kickReasonActions.getItems())
+        onLoad: () => kickReasonActions.getItems()(dispatch)
     }
 }
 

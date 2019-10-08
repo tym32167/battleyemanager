@@ -6,7 +6,7 @@ import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterCon
 import { onlinePlayerActions } from "../../../store/actions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IOnlinePlayer } from 'src/models';
 import { BanPlayer } from './banPlayer';
 import { KickPlayer } from './kickPlayer';
@@ -150,18 +150,18 @@ const mapStateToProps = ({ onlinePlayers }: { onlinePlayers: any }, ownProps: an
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
         onLoad: (serverId: number) => {
-            dispatch(onlinePlayerActions.getItems(serverId));
+            onlinePlayerActions.getItems(serverId)(dispatch);
         },
 
         onKick: (serverId: number, player: IOnlinePlayer, kickReason: string) => {
-            dispatch(onlinePlayerActions.kickPlayer(serverId, player, kickReason))
+            onlinePlayerActions.kickPlayer(serverId, player, kickReason)(dispatch)
         },
 
         onBan: (serverId: number, player: IOnlinePlayer, reason: string, minutes: number) => {
-            dispatch(onlinePlayerActions.banPlayerOnline(serverId, minutes, player, reason))
+            onlinePlayerActions.banPlayerOnline(serverId, minutes, player, reason)(dispatch)
         },
     }
 }

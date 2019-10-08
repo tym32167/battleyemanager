@@ -2,7 +2,7 @@ import * as SignalR from '@aspnet/signalr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
 import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../../controls';
@@ -160,10 +160,10 @@ const mapStateToProps = ({ onlineBans }: { onlineBans: any }, ownProps: any) => 
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
         onLoad: (serverId: number) => {
-            dispatch(onlineBanActions.getItems(serverId));
+            onlineBanActions.getItems(serverId)(dispatch);
         }
     }
 }

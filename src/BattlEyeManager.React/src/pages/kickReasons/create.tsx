@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IdTextEdit } from "src/controls";
 import { IKickReason } from 'src/models';
 import { kickReasonActions } from "../../store/actions";
@@ -13,9 +13,9 @@ const mapStateToProps = ({ kickReasons }: { kickReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
-        onSubmit: (item: IKickReason) => dispatch(kickReasonActions.addItem(item))
+        onSubmit: (item: IKickReason) => kickReasonActions.addItem(item)(dispatch)
     }
 }
 

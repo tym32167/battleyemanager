@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { ConfirmWindow } from 'src/controls';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
@@ -39,10 +39,10 @@ const mapStateToProps = () => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>, props: any) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>, props: any) => {
     return {
         onRemove: (ban: IOnlineBan) => {
-            dispatch(onlineBanActions.removeBan(ban.serverId, ban.num));
+            onlineBanActions.removeBan(ban.serverId, ban.num)(dispatch);
         }
     }
 }

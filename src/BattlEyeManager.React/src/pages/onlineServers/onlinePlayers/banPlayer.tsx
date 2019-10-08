@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { IOnlinePlayer } from 'src/models';
 import { BanPlayerForm } from './banPlayerForm';
 
@@ -68,7 +68,7 @@ const mapStateToProps = ({ banReasons }: { banReasons: any }) => {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
     }
 }

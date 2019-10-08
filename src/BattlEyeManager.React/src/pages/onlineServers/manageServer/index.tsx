@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Col, Container, Input, Row } from "reactstrap";
-import { Dispatch } from "redux";
+import { Action, Dispatch } from "redux";
 import { ConfirmWindow } from "src/controls";
 import { IOnlineMission } from "src/models";
 import { onlineMissionsService, onlineServerService } from "src/services";
@@ -203,10 +203,10 @@ const mapStateToProps = ({ onlineMissions }: { onlineMissions: any }, ownProps: 
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<Action<string>>) => {
     return {
         onLoad: (serverId: number) => {
-            dispatch(onlineMissionActions.getItems(serverId));
+            onlineMissionActions.getItems(serverId)(dispatch);
         },
 
         commandCallback: (serverId: number, command: string) => {
