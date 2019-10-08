@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { IAuthUserState } from 'src/store/models/IAuthUserState';
@@ -55,7 +56,7 @@ class Login extends Component<ILoginProps, ILoginState> {
         return (
             <div className="text-center body">
                 <form className="form-signin" onSubmit={this.handleSubmit}>
-                    <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+                    <h1 className="h3 mb-3 font-weight-normal"><Trans>Please sign in</Trans></h1>
                     <div className="form-group">
                         <input type="text" className="form-control" name="username" placeholder="User Name"
                             value={username} onChange={this.handleChange} required={true} />
@@ -65,10 +66,10 @@ class Login extends Component<ILoginProps, ILoginState> {
                             value={password} onChange={this.handleChange} required={true} />
                     </div>
                     <Error error={error} />
-                    <button className="btn btn-lg btn-primary btn-block">Sign in</button>
+                    <button className="btn btn-lg btn-primary btn-block"><Trans>Sign in</Trans></button>
                     <hr />
                     <footer>
-                        <p>&copy; 2018 - BattlEye Manager</p>
+                        <p>&copy; 2019 - BattlEye Manager</p>
                     </footer>
                 </form>
             </div>);
