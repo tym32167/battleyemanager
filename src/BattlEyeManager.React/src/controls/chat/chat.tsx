@@ -1,22 +1,28 @@
+import moment from 'moment';
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { IChatMessage } from 'src/models';
 import './chat.css';
 import { InputMessage } from './inputMessage';
-import moment from 'moment';
 
-export class Chat extends Component {
-    constructor(props) {
+export interface IChatProps {
+    newMessage: (e: React.FormEvent<HTMLFormElement>) => void,
+    items: IChatMessage[]
+}
+
+export class Chat extends Component<IChatProps> {
+    private chatBox: React.RefObject<HTMLDivElement>;
+
+    constructor(props: IChatProps) {
         super(props);
-
         this.chatBox = React.createRef();
     }
 
-    componentDidUpdate() {
-        var height = this.chatBox.current.scrollHeight;
-        this.chatBox.current.scrollTop = height;
+    public componentDidUpdate() {
+        const height = this.chatBox.current!.scrollHeight;
+        this.chatBox.current!.scrollTop = height;
     }
 
-    render() {
+    public render() {
         const { items, newMessage } = this.props;
         return (
             <div>
@@ -31,8 +37,7 @@ export class Chat extends Component {
     }
 }
 
-
-function getClassname(messageType) {
+function getClassname(messageType: string) {
     switch (messageType) {
         case 'Vehicle':
         case 'Command':
@@ -52,7 +57,7 @@ function getClassname(messageType) {
     }
 }
 
-const ChatItem = ({ item }) => (
+const ChatItem = ({ item }: { item: IChatMessage }) => (
     <div className="media text-muted @GetClass(item)">
         <p className={'media-body mb-0 small lh-125 ' + getClassname(item.type)}
             style={{ wordBreak: 'break-all' }}>
@@ -60,14 +65,4 @@ const ChatItem = ({ item }) => (
             {item.message}
         </p>
     </div>
-)
-
-
-Chat.propTypes = {
-    items: PropTypes.array,
-    newMessage: PropTypes.func
-}
-
-ChatItem.propTypes = {
-    item: PropTypes.object
-}
+);

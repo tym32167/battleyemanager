@@ -1,24 +1,24 @@
-import React from 'react';
-import { Field, reset, reduxForm } from 'redux-form'
-import { Form, Button } from "reactstrap";
-import { requiredValidator } from '../../pages/formValidators';
-import PropTypes from 'prop-types';
-import { FormInput } from '../FormInput';
+import React, { Dispatch } from 'react';
 import { Trans } from 'react-i18next';
+import { Button, Form } from "reactstrap";
+import { Field, reduxForm, reset } from 'redux-form'
+import { requiredValidator } from '../../pages/formValidators';
+import { FormInput } from '../FormInput';
 
-const InputMessage = ({ handleSubmit }) =>
-    (<Form onSubmit={handleSubmit} inline className="mt-1">
+export interface IInputMessageProps {
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+}
+
+const InputMessage = (props: IInputMessageProps) => {
+    const { handleSubmit } = props;
+    return (<Form onSubmit={handleSubmit} inline={true} className="mt-1">
         <Field name="message" component={FormInput} type="text" placeholder="Chat Message"
             validate={[requiredValidator]} className="col-sm" />
         <Button color="primary" type="submit"><Trans>Send</Trans></Button>
-    </Form>);
+    </Form>)
+};
 
-
-InputMessage.propTypes = {
-    handleSubmit: PropTypes.func
-}
-
-const afterSubmit = (result, dispatch) =>
+const afterSubmit = (result: any, dispatch: Dispatch<any>) =>
     dispatch(reset('ChatMessageForm'));
 
 const InputMessageRedux = reduxForm({
