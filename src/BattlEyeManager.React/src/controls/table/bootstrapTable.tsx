@@ -33,7 +33,7 @@ export const BootstrapTable = <T extends any>(props: IBootstrapTableProps<T>) =>
         <Table size="sm" responsive={true}>
             <thead>
                 <tr>
-                    {columns && columns.map((item, i) => BootstrapColumn(i, item, handleSort))}
+                    {columns && columns.filter(c => c.visible !== false).map((item, i) => BootstrapColumn(i, item, handleSort))}
                 </tr>
             </thead>
             <tbody>
@@ -77,9 +77,7 @@ const rowRrenderer = <T extends any>(column: IBootstrapTableColumn<T>, row: T) =
 }
 
 const BootstrapColumn = <T extends any>(key: number, props: IBootstrapTableColumn<T>, handleSort: ((name: string) => void) | any) => {
-    const { header, headerStyle, name, className, visible } = props;
-
-    if (visible === false) { return ""; }
+    const { header, headerStyle, name, className } = props;
 
     const invokator = () => {
         if (handleSort !== undefined) {
