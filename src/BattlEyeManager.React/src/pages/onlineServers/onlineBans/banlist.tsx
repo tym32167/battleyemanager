@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { Trans } from 'react-i18next';
 import { connect } from 'react-redux';
+import { Container, Row } from 'reactstrap';
 import { Action, Dispatch } from 'redux';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
@@ -103,23 +104,31 @@ class BanListTable extends Component<IBanListProps> {
 
         return (
             <React.Fragment>
-                <h2><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Online Bans</Trans> ({len})</h2>
-                <Error error={error} />
-                {items &&
-                    <React.Fragment>
-                        <ClientGrid data={items} error={error} enableSort={true} enablePager={true} enableFilter={true}
-                            sortProps={{ sortField: "num", sortDirection: false }}
-                            enableColumnManager={true}
-                            pageSize={50}>
-                            <ClientGridColumns>
-                                <ClientGridColumn header="Num" name="num" visible={true} hidable={true} />
-                                <ClientGridColumn header="Minutes left" name="minutesleft" visible={true} hidable={true} />
-                                <ClientGridColumn header="Reason" name="reason" visible={true} hidable={true} />
-                                <ClientGridColumn header="Guid or IP" name="guidIp" visible={false} hidable={true} />
-                                <ClientGridColumn header="" name="" renderer={removeBanRenderer} />
-                            </ClientGridColumns>
-                        </ClientGrid>
-                    </React.Fragment>}
+                <Container fluid={true}>
+                    <Row>
+                        <h2><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Online Bans</Trans> ({len})</h2>
+                    </Row>
+                    <Row>
+                        <Error error={error} />
+                    </Row>
+                    <Row>
+                        {items &&
+                            <React.Fragment>
+                                <ClientGrid data={items} error={error} enableSort={true} enablePager={true} enableFilter={true}
+                                    sortProps={{ sortField: "num", sortDirection: false }}
+                                    enableColumnManager={true}
+                                    pageSize={50}>
+                                    <ClientGridColumns>
+                                        <ClientGridColumn header="Num" name="num" visible={true} hidable={true} />
+                                        <ClientGridColumn header="Minutes left" name="minutesleft" visible={true} hidable={true} />
+                                        <ClientGridColumn header="Reason" name="reason" visible={true} hidable={true} />
+                                        <ClientGridColumn header="Guid or IP" name="guidIp" visible={false} hidable={true} />
+                                        <ClientGridColumn header="" name="" renderer={removeBanRenderer} />
+                                    </ClientGridColumns>
+                                </ClientGrid>
+                            </React.Fragment>}
+                    </Row>
+                </Container>
             </React.Fragment>
         );
     }

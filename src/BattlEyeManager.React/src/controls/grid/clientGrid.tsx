@@ -141,7 +141,7 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
 
         return (
             <React.Fragment>
-                <Container>
+                <Container fluid={true}>
                     <Row>
                         <Error error={error} />
                     </Row>

@@ -56,7 +56,7 @@ export class FilterControl<T> extends React.Component<IFilterControlProps<T>, IF
 
         return (
             <React.Fragment>
-                <Container>
+                <Container fluid={true}>
                     <Row>
                         <Form inline={true} onSubmit={this.handleSubmit}>
                             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">

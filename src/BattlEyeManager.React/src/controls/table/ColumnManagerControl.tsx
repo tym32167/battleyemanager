@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Trans } from "react-i18next";
-import { Button, Container, Row } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
 import { IBootstrapTableColumn } from "..";
 
 export interface IColumnManagerControlProps<T> {
@@ -50,9 +50,11 @@ export class ColumnManagerControl<T> extends React.Component<IColumnManagerContr
 
         return (
             <React.Fragment>
-                <Container>
+                <Container fluid={true}>
                     <Row>
-                        {columns.filter(c => c.hidable === true).map((c, i) => columnRender(i, c, toggleColumn))}
+                        <Col>
+                            {columns.filter(c => c.hidable === true).map((c, i) => columnRender(i, c, toggleColumn))}
+                        </Col>
                     </Row>
                     <Row>
                         {children({ ...this.props, columns })}
