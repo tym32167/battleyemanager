@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Trans } from "react-i18next";
-import { Button, Form, FormGroup, Input } from "reactstrap";
+import { Button, Container, Form, FormGroup, Input, Row } from "reactstrap";
 
 
 export interface IFilterControlProps<T> {
@@ -56,14 +56,20 @@ export class FilterControl<T> extends React.Component<IFilterControlProps<T>, IF
 
         return (
             <React.Fragment>
-                <Form inline={true} onSubmit={this.handleSubmit}>
-                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                        <Input type="text" name="filter" id="filter" placeholder="filter..."
-                            onChange={this.handleChange} />
-                    </FormGroup>
-                    <Button><Trans>Filter</Trans></Button>
-                </Form>
-                {children({ ...this.props, data: filtered })}
+                <Container>
+                    <Row>
+                        <Form inline={true} onSubmit={this.handleSubmit}>
+                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                                <Input type="text" name="filter" id="filter" placeholder="filter..."
+                                    onChange={this.handleChange} />
+                            </FormGroup>
+                            <Button><Trans>Filter</Trans></Button>
+                        </Form>
+                    </Row>
+                    <Row>
+                        {children({ ...this.props, data: filtered })}
+                    </Row>
+                </Container>
             </React.Fragment>
         )
     }

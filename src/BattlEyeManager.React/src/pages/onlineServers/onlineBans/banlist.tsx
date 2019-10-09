@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { IOnlineBan } from 'src/models';
 import { onlineBanActions } from 'src/store/actions';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from '../../../controls';
+import { ClientGrid, ClientGridColumn, ClientGridColumns, Error } from '../../../controls';
 import { ServerHeader } from '../onlineServerHeader';
 import { RemoveBan } from './removeBan';
 
@@ -99,36 +99,7 @@ class BanListTable extends Component<IBanListProps> {
         const { items, error } = this.props;
         const len = items ? items.length : 0;
 
-        const columns: Array<IBootstrapTableColumn<IOnlineBan>> = [
-            { header: "Num", name: "num" },
-            { header: "Minutes left", name: "minutesleft" },
-            { header: "Reason", name: "reason" },
-            { header: "Guid or IP", name: "guidIp" },
-            { header: "", renderer: (ban) => <RemoveBan ban={ban} /> },
-        ];
-
-        const sortProps: ISortControlProps<IOnlineBan> = {
-            children: (props2) => {
-                const filterProps: IFilterControlProps<IOnlineBan> = {
-                    ...props2,
-                    children: (props) => {
-                        const pagerProps: IPagerControlProps<IOnlineBan> = {
-                            ...props,
-                            children: (p) => <BootstrapTable columns={columns} {...p} />,
-                            pageSize: 50,
-                        }
-                        return (<PagerControl {...pagerProps} />);
-                    }
-                };
-
-                return (
-                    <FilterControl {...filterProps} />
-                );
-            },
-            data: items,
-            sortDirection: false,
-            sortField: "num"
-        };
+        const removeBanRenderer = (ban: IOnlineBan) => <RemoveBan ban={ban} />
 
         return (
             <React.Fragment>
@@ -136,7 +107,18 @@ class BanListTable extends Component<IBanListProps> {
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
-                        <SortControl {...sortProps} />
+                        <ClientGrid data={items} error={error} enableSort={true} enablePager={true} enableFilter={true}
+                            sortProps={{ sortField: "num", sortDirection: false }}
+                            enableColumnManager={true}
+                            pageSize={50}>
+                            <ClientGridColumns>
+                                <ClientGridColumn header="Num" name="num" visible={true} hidable={true} />
+                                <ClientGridColumn header="Minutes left" name="minutesleft" visible={true} hidable={true} />
+                                <ClientGridColumn header="Reason" name="reason" visible={true} hidable={true} />
+                                <ClientGridColumn header="Guid or IP" name="guidIp" visible={false} hidable={true} />
+                                <ClientGridColumn header="" name="" renderer={removeBanRenderer} />
+                            </ClientGridColumns>
+                        </ClientGrid>
                     </React.Fragment>}
             </React.Fragment>
         );

@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Trans } from 'react-i18next';
-import { Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { IServerStatsGraphModel } from 'src/models';
 import { Error } from '../../../controls';
 
@@ -84,18 +84,20 @@ export class ServerStats extends Component<IServerStatsProps, IServerStatsState>
 
         return (
             <React.Fragment>
-                <Row>
-                    <Col xs={12}>
-                        <Error error={error} />
-                        <h2><Trans>{header}</Trans></h2>
-                    </Col>
-                </Row>
+                <Container>
+                    <Row>
+                        <Col xs={12}>
+                            <Error error={error} />
+                            <h2><Trans>{header}</Trans></h2>
+                        </Col>
+                    </Row>
 
-                <Row className="chartContainer">
-                    <Col xs={12}>
-                        <Line data={forGraph} options={options} />
-                    </Col>
-                </Row>
+                    <Row className="chartContainer">
+                        <Col xs={12}>
+                            <Line data={forGraph} options={options} />
+                        </Col>
+                    </Row>
+                </Container>
             </React.Fragment>
         );
     }

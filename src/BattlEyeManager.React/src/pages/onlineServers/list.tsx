@@ -30,12 +30,12 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
             <React.Fragment>
                 <Container>
                     <Row>
-                        <ClientGrid data={data} error={error} header="Online Servers" enableSort={true}>
+                        <ClientGrid data={data} error={error} header="Online Servers" enableSort={true} enableColumnManager={true}>
                             <ClientGridColumns>
                                 <ClientGridColumn header="Name" name="name" rowStyle={{ whiteSpace: "nowrap" }} />
-                                <ClientGridColumn header="Host" name="host" headerStyle={{ width: "1%" }} />
-                                <ClientGridColumn header="Port" name="port" headerStyle={{ width: "1%" }} />
-                                <ClientGridColumn header="Active" name="active" headerStyle={{ width: "1%" }} />
+                                <ClientGridColumn header="Host" name="host" headerStyle={{ width: "1%" }} hidable={true} visible={false} />
+                                <ClientGridColumn header="Port" name="port" headerStyle={{ width: "1%" }} hidable={true} visible={false} />
+                                <ClientGridColumn header="Active" name="active" headerStyle={{ width: "1%" }} hidable={true} visible={false} />
                                 <ClientGridColumn header="Connected" name="isConnected" headerStyle={{ width: "1%" }} />
                                 <ClientGridColumn header="Players" name="playersCount" headerStyle={{ width: "1%" }} />
                                 <ClientGridColumn header="Bans" name="bansCount" headerStyle={{ width: "1%" }} />
@@ -44,10 +44,12 @@ export class List extends Component<any, IGridParentProps<IOnlineServer>> {
                             </ClientGridColumns>
                         </ClientGrid>
                     </Row>
-
-                    <ServerStats loader={serverStatsService.getStatsLastDay} header={"Servers last 24 hours"} />
-                    <ServerStats loader={serverStatsService.getStatsLastWeek} header={"Servers last 7 days"} />
-
+                    <Row>
+                        <ServerStats loader={serverStatsService.getStatsLastDay} header={"Servers last 24 hours"} />
+                    </Row>
+                    <Row>
+                        <ServerStats loader={serverStatsService.getStatsLastWeek} header={"Servers last 7 days"} />
+                    </Row>
                 </Container>
             </React.Fragment>
         );

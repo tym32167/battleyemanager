@@ -1,7 +1,8 @@
 import React from "react";
 import { Trans } from "react-i18next";
-import { BootstrapTable, Error, FilterControl, IFilterControlProps, IPagerControlProps, ISortControlProps, PagerControl, SortControl } from "../index";
-
+import { Container, Row } from "reactstrap";
+import { BootstrapTable, Error, FilterControl, IFilterControlProps, IPagerControlProps, ISortControlProps, ISortProps, PagerControl, SortControl } from "../index";
+import { ColumnManagerControl, IColumnManagerControlProps } from "../table/ColumnManagerControl";
 
 export interface IClientGridColumn<T> {
     header: string,
@@ -9,6 +10,8 @@ export interface IClientGridColumn<T> {
     name: string,
     headerStyle?: any,
     rowStyle?: any,
+    visible?: boolean,
+    hidable?: boolean,
     renderer?: (row: T) => any
 }
 
@@ -19,13 +22,17 @@ export interface IGridParentProps<T> {
 
 export interface IClientGridProps<T> {
     beforeGrid?: () => any,
-    header: string,
+    header?: string,
     showLen?: boolean,
     enableFilter?: boolean,
+    enableColumnManager?: boolean,
     enableSort?: boolean,
     enablePager?: boolean,
+    pageSize?: number,
     data?: T[],
     error?: any,
+
+    sortProps?: ISortProps<T>
 }
 
 export interface IClientGridState<T> {
@@ -68,7 +75,7 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
 
     public render() {
         const { columns } = this.state;
-        const { data, error, header, showLen, beforeGrid, enableFilter, enableSort, enablePager } = this.props;
+        const { data, error, header, showLen, beforeGrid, enableFilter, enableSort, enablePager, pageSize, enableColumnManager, sortProps } = this.props;
 
         const len = data ? data.length : 0;
 
@@ -80,9 +87,22 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
                 const pagerProps: IPagerControlProps<T> = {
                     ...props,
                     children: prev,
-                    pageSize: 50,
+                    pageSize: pageSize || 50,
                 }
                 return (<PagerControl {...pagerProps} />);
+            };
+        }
+
+        if (enableColumnManager === true) {
+            const prev = renderer;
+            renderer = (props: any) => {
+                const columnManagerProps: IColumnManagerControlProps<T> = {
+                    ...props,
+                    columns,
+                    // tslint:disable-next-line: object-literal-sort-keys
+                    children: prev
+                };
+                return (<ColumnManagerControl {...columnManagerProps} />);
             };
         }
 
@@ -97,14 +117,16 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
             };
         }
 
+
         if (enableSort === true) {
             const prev = renderer;
             renderer = (props: any) => {
-                const sortProps: ISortControlProps<T> = {
+                const sortControlProps: ISortControlProps<T> = {
                     children: prev,
-                    ...props
+                    ...props,
+                    ...sortProps
                 };
-                return (<SortControl {...sortProps} />);
+                return (<SortControl {...sortControlProps} />);
             };
         }
 
@@ -119,15 +141,23 @@ export class ClientGrid<T> extends React.Component<IClientGridProps<T>, IClientG
 
         return (
             <React.Fragment>
-                <Error error={error} />
-
-                <h2>{<Trans>{header}</Trans>}  {lenHeader}</h2>
-                {beforeGrid && beforeGrid()}
-
-                {data &&
-                    <React.Fragment>
-                        {renderer(tableProps)}
-                    </React.Fragment>}
+                <Container>
+                    <Row>
+                        <Error error={error} />
+                    </Row>
+                    <Row>
+                        {header && <h2>{<Trans>{header}</Trans>}  {lenHeader}</h2>}
+                    </Row>
+                    <Row>
+                        {beforeGrid && beforeGrid()}
+                    </Row>
+                    {data &&
+                        <React.Fragment>
+                            <Row>
+                                {renderer(tableProps)}
+                            </Row>
+                        </React.Fragment>}
+                </Container>
             </React.Fragment>);
     }
 }

@@ -9,6 +9,8 @@ export interface IBootstrapTableColumn<T> {
     className?: string,
     headerStyle?: any,
     rowStyle?: any,
+    visible?: boolean,
+    hidable?: boolean,
     renderer?: (row: T) => any
 }
 
@@ -45,7 +47,9 @@ const BootstrapItem = <T extends any>(props: IBootstrapItemProps<T>) => {
     const { item, columns } = props;
     return (
         <tr>
-            {columns && columns.map((column, i) => <td key={i} style={{ ...column.rowStyle }}>{rowRrenderer(column, item)}</td>)}
+            {columns && columns
+                .filter(c => c.visible !== false)
+                .map((column, i) => <td key={i} style={{ ...column.rowStyle }}>{rowRrenderer(column, item)}</td>)}
         </tr>
     );
 }
@@ -73,15 +77,16 @@ const rowRrenderer = <T extends any>(column: IBootstrapTableColumn<T>, row: T) =
 }
 
 const BootstrapColumn = <T extends any>(key: number, props: IBootstrapTableColumn<T>, handleSort: ((name: string) => void) | any) => {
-    const { header, headerStyle, name, className } = props;
+    const { header, headerStyle, name, className, visible } = props;
+
+    if (visible === false) { return ""; }
 
     const invokator = () => {
         if (handleSort !== undefined) {
             handleSort(name);
         }
     }
-
     return (
-        <th key={key} onClick={invokator} style={{ ...headerStyle }} className={className} ><Trans>{header}</Trans></th>
+        <th key={key} onClick={invokator} style={{ ...headerStyle }} className={className}><Trans>{header}</Trans></th>
     );
 }

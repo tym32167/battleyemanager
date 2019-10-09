@@ -1,8 +1,7 @@
 import * as SignalR from '@aspnet/signalr';
 import React from 'react';
 import { connect } from 'react-redux';
-// import { Table } from 'reactstrap';
-import { BootstrapTable, Error, FilterControl, IBootstrapTableColumn, IFilterControlProps, ISortControlProps, SortControl } from '../../../controls';
+import { ClientGrid, ClientGridColumn, ClientGridColumns, Error } from '../../../controls';
 import { onlinePlayerActions } from "../../../store/actions";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -93,41 +92,29 @@ class List extends React.Component<IListProps> {
         const { items, error, busy } = this.props;
         const len = items.length;
 
-        const columns: Array<IBootstrapTableColumn<IOnlinePlayer>> = [
-            { header: "Num", name: "num" },
-            { header: "Name", name: "name" },
-            { header: "IP", name: "ip" },
-            { header: "Port", name: "port" },
-            { header: "Ping", name: "ping" },
-            { header: "", renderer: row => (<KickPlayer player={row} onKick={this.kickPlayerCallback} />), headerStyle: { width: '1%' } },
-            { header: "", renderer: row => (<BanPlayer player={row} onBan={this.banPlayerCallback} />), headerStyle: { width: '1%' } },
-        ];
-
-        const sortProps: ISortControlProps<IOnlinePlayer> = {
-            children: (props2) => {
-                const filterProps: IFilterControlProps<IOnlinePlayer> = {
-                    ...props2,
-                    children: (props) => <BootstrapTable columns={columns} {...props} />,
-                };
-
-                return (
-                    <FilterControl {...filterProps} />
-                );
-            },
-            data: items,
-            sortDirection: true,
-            sortField: "name"
-        };
+        const kickRender = (row: IOnlinePlayer) => <KickPlayer player={row} onKick={this.kickPlayerCallback} />;
+        const banRender = (row: IOnlinePlayer) => <BanPlayer player={row} onBan={this.banPlayerCallback} />;
 
         return (
             <React.Fragment>
-                <h4> <small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small> <Trans>Players</Trans> ({len}) {busy && <small>loading....</small>}</h4>
+                <h4><small><FontAwesomeIcon icon="sync" {...{ onClick: this.refresh }} /></small><Trans>Players</Trans> ({len}) {busy && <small>loading....</small>}</h4>
                 <Error error={error} />
                 {items &&
                     <React.Fragment>
-                        <SortControl {...sortProps} />
-                    </React.Fragment>
-                }
+                        <ClientGrid data={items} error={error} enableSort={true} enableFilter={true}
+                            sortProps={{ sortField: "name", sortDirection: true }}
+                            enableColumnManager={true}>
+                            <ClientGridColumns>
+                                <ClientGridColumn header="Num" name="num" />
+                                <ClientGridColumn header="Name" name="name" />
+                                <ClientGridColumn header="IP" name="ip" hidable={true} visible={true} />
+                                <ClientGridColumn header="Port" name="port" hidable={true} visible={false} />
+                                <ClientGridColumn header="Ping" name="ping" hidable={true} visible={false} />
+                                <ClientGridColumn header="" name="" headerStyle={{ width: '1%' }} renderer={kickRender} />
+                                <ClientGridColumn header="" name="" headerStyle={{ width: '1%' }} renderer={banRender} />
+                            </ClientGridColumns>
+                        </ClientGrid>
+                    </React.Fragment>}
             </React.Fragment>
         );
     }

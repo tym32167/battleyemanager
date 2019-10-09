@@ -1,11 +1,19 @@
 import React, { ReactNode } from "react";
 
-export interface ISortControlProps<T> {
+
+export interface ISortProps<T> {
+    sortField?: string,
+    sortDirection?: boolean,
+}
+
+export interface ISortControlProps<T> extends ISortProps<T> {
     data: T[],
     sortField?: string,
     sortDirection?: boolean,
     children: (props: any) => ReactNode
 }
+
+
 
 interface ISortControlState {
     sortField?: string,
