@@ -107,7 +107,8 @@ class List extends React.Component<IListProps> {
                             <ClientGridColumns>
                                 <ClientGridColumn header="Num" name="num" />
                                 <ClientGridColumn header="Name" name="name" />
-                                <ClientGridColumn header="IP" name="ip" hidable={true} visible={true} />
+                                <ClientGridColumn header="Country" name="country" />
+                                <ClientGridColumn header="IP" name="ip" hidable={true} visible={false} />
                                 <ClientGridColumn header="Port" name="port" hidable={true} visible={false} />
                                 <ClientGridColumn header="Ping" name="ping" hidable={true} visible={false} />
                                 <ClientGridColumn header="" name="" headerStyle={{ width: '1%' }} renderer={kickRender} />

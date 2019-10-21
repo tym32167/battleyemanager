@@ -28,6 +28,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -118,9 +119,19 @@ namespace BattlEyeManager.Spa
                 });
 
 
+
             services.AddTransient<ILog, LogImpl>();
 
-            services.AddSingleton<IIpService, IpService>();
+
+            services.AddSingleton<IIpService, IpService>((sp) =>
+            {
+                var he = sp.GetService<IHostingEnvironment>();
+                var logger = sp.GetService<ILog>();
+                var path = Path.Combine(he.ContentRootPath, "Data", "GeoLite2-Country.mmdb");
+                var ipservice = new IpService(path, logger);
+                return ipservice;
+            });
+
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
             services.AddSingleton<IBeServerAggregator, BeServerAggregator>();
 
@@ -325,7 +336,9 @@ namespace BattlEyeManager.Spa
 
                 config.CreateMap<Ban, OnlineBanViewModel>();
 
-                config.CreateMap<Player, OnlinePlayerModel>();
+                config
+                    .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
+                    .ForMember(x => x.Country, opt => opt.Ignore());
 
                 config.CreateMap<Mission, OnlineMissionModel>();
 

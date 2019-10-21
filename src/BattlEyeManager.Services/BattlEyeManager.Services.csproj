@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MaxMind.Db" Version="2.4.0" />
+    <PackageReference Include="MaxMind.GeoIP2" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BattlEyeManager.Core\BattlEyeManager.Core.csproj" />
   </ItemGroup>
 

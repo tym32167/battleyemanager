@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
@@ -19,25 +20,36 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly MessageHelper _messageHelper;
         private readonly OnlinePlayerStateService _onlinePlayerStateService;
+        private readonly IIpService _ipService;
 
         public OnlinePlayerService(IBeServerAggregator serverAggregator,
             IServiceScopeFactory scopeFactory,
             MessageHelper messageHelper,
-            OnlinePlayerStateService onlinePlayerStateService)
+            OnlinePlayerStateService onlinePlayerStateService,
+            IIpService ipService)
         {
             _serverAggregator = serverAggregator;
             _scopeFactory = scopeFactory;
             _messageHelper = messageHelper;
             _onlinePlayerStateService = onlinePlayerStateService;
+            _ipService = ipService;
         }
 
         public Task<OnlinePlayerModel[]> GetOnlinePlayers(int serverId)
         {
             var players = _onlinePlayerStateService.GetPlayers(serverId);
             var ret =
-                players.Select(Mapper.Map<Player, OnlinePlayerModel>)
+                players.Select(p => Mapper.Map<Player, OnlinePlayerModel>(p,
+                        options => options.ConfigureMap(MemberList.None)
+                            .ForMember(x => x.Country, o => o.Ignore())))
                     .OrderBy(x => x.Num)
                     .ToArray();
+
+            foreach (var p in ret)
+            {
+                p.Country = _ipService.GetCountry(p.IP);
+            }
+
             return Task.FromResult(ret);
         }
 
