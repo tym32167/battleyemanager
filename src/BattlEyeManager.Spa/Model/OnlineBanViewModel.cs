@@ -11,5 +11,8 @@
         public string Reason { get; set; }
 
         public int ServerId { get; set; }
+
+        public string PlayerName { get; set; }
+        public string PlayerComment { get; set; }
     }
 }

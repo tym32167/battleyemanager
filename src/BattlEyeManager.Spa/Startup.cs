@@ -7,6 +7,7 @@ using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
+using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Services;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
@@ -155,6 +156,11 @@ namespace BattlEyeManager.Spa
             services.AddTransient<IServerRepository, ServerRepository>();
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
             services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
+            services.AddTransient<PlayerRepository, PlayerRepository>();
+
+            services.AddSingleton<PlayersCache, PlayersCache>();
+
+
 
             services.AddTransient<UserRepository, UserRepository>();
 
@@ -197,7 +203,8 @@ namespace BattlEyeManager.Spa
             DataRegistrator dataRegistrator,
             BELogic beLogic,
             ServerModeratorService moderatorService,
-            ServerStatsService serverStatsService
+            ServerStatsService serverStatsService,
+            PlayersCache playersCache
         )
         {
             store.Database.Migrate();
@@ -236,6 +243,7 @@ namespace BattlEyeManager.Spa
 
             moderatorService.Init().Wait();
             dataRegistrator.Init().Wait();
+            playersCache.Reload().Wait();
             beLogic.Init();
 
             CheckAdminUser(userManager, roleManager).Wait();

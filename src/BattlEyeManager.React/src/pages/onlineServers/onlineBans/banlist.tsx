@@ -120,6 +120,8 @@ class BanListTable extends Component<IBanListProps> {
                                     pageSize={50}>
                                     <ClientGridColumns>
                                         <ClientGridColumn header="Num" name="num" visible={true} hidable={true} />
+                                        <ClientGridColumn header="Name" name="playerName" visible={true} hidable={true} />
+                                        <ClientGridColumn header="Comment" name="playerComment" visible={false} hidable={true} />
                                         <ClientGridColumn header="Minutes left" name="minutesleft" visible={true} hidable={true} />
                                         <ClientGridColumn header="Reason" name="reason" visible={true} hidable={true} />
                                         <ClientGridColumn header="Guid or IP" name="guidIp" visible={false} hidable={true} />

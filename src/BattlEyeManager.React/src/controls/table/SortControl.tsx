@@ -68,9 +68,16 @@ export class SortControl<T> extends React.Component<ISortControlProps<T>, ISortC
     }
 
     private compare(left: any, right: any) {
+
         if (typeof (left) === "string" && typeof (right) === "string") {
             return this.compareString(left, right);
         }
+
+        if (left === undefined || left === null) { return -1; }
+        if (right === undefined || right === null) { return 1; }
+
+        if (left === right) { return 1; }
+
 
         if (left > right) { return 1; }
         if (left < right) { return -1; }

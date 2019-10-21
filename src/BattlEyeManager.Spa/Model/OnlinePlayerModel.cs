@@ -16,6 +16,8 @@ namespace BattlEyeManager.Spa.Model
 
         public string Name { get; set; }
 
+        public string Country { get; set; }
+
         public Player.PlayerState State { get; set; }
     }
 }

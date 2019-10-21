@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using BattleNET;
 using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
 using BattlEyeManager.Spa.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -52,22 +50,10 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
                 {
-                    var player = await ctx.Players.Include(p => p.Notes).FirstOrDefaultAsync(x => x.GUID == playerGuid);
-
-                    if (player != null)
-                    {
-                        player.Notes.Add(new PlayerNote()
-                        {
-                            Author = currentUser,
-                            Date = DateTime.UtcNow,
-                            PlayerId = player.Id,
-                            Text = $"Kicked with reason: {reason}"
-                        });
-                    }
-
-                    await ctx.SaveChangesAsync();
+                    var note = $"Kicked with reason: {reason}";
+                    await repo.AddNoteToPlayer(playerGuid, currentUser, note);
                 }
             }
         }
@@ -82,24 +68,10 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
                 {
-                    var player = await ctx.Players.Include(p => p.Notes).FirstOrDefaultAsync(x => x.GUID == playerGuid);
-
-                    if (player != null)
-                    {
-                        player.Notes.Add(new PlayerNote()
-                        {
-                            Author = currentUser,
-                            Date = DateTime.UtcNow,
-                            PlayerId = player.Id,
-                            Text = $"Baned with reason: {reason}"
-                        });
-
-                        player.Comment = $"{player.Comment} | {reason}";
-                    }
-
-                    await ctx.SaveChangesAsync();
+                    var note = $"Banned with reason: {reason}";
+                    await repo.AddNoteToPlayer(playerGuid, currentUser, note, note);
                 }
             }
         }

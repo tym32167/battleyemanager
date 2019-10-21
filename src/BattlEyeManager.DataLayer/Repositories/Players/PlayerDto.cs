@@ -9,6 +9,22 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             LastSeen = DateTime.UtcNow;
         }
 
+        public static PlayerDto Copy(PlayerDto inner)
+        {
+            var copy = new PlayerDto()
+            {
+                Id = inner.Id,
+                GUID = inner.GUID,
+                Name = inner.Name,
+                Comment = inner.Comment,
+                IP = inner.IP,
+                LastSeen = inner.LastSeen,
+                SteamId = inner.SteamId
+            };
+
+            return copy;
+        }
+
         public int Id { get; set; }
 
         public string SteamId { get; set; }

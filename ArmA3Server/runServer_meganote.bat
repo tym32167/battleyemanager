@@ -1,0 +1,1 @@
+"D:\Games\Steam\steamapps\common\Arma 3 Server\arma3server.exe" -port=2302 "-bepath=D:\Games\Steam\steamapps\common\Arma 3 Server\battleye" -config=CONFIG_server.cfg -name=debugserver -world=empty

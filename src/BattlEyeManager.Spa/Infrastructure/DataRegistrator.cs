@@ -1,6 +1,7 @@
 ﻿using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories.Players;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -144,6 +145,9 @@ namespace BattlEyeManager.Spa.Infrastructure
                             await ctx.PlayerSessions.AddRangeAsync(sessions);
 
                             await ctx.SaveChangesAsync();
+
+                            var cache = scope.ServiceProvider.GetService<PlayersCache>();
+                            await cache.Reload(guidIds);
                         }
                     }
                 }
