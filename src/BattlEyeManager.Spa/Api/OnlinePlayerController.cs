@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace BattlEyeManager.Spa.Api
 {
     [ApiController]
+    [Produces("application/json")]
     public class OnlinePlayerController : BaseController
     {
         private readonly OnlinePlayerService _onlinePlayerService;

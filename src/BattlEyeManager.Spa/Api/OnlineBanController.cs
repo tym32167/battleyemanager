@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace BattlEyeManager.Spa.Api
 {
     [ApiController]
+    [Produces("application/json")]
     public class OnlineBanController : BaseController
     {
         private readonly OnlineBanService _onlineBanService;

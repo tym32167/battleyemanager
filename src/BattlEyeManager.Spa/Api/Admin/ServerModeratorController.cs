@@ -14,6 +14,7 @@ namespace BattlEyeManager.Spa.Api.Admin
     [ApiController]
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ServerModeratorController : BaseController
     {
         private readonly IServerRepository _serverRepository;

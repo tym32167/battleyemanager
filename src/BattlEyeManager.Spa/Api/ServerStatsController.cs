@@ -12,6 +12,7 @@ namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class ServerStatsController : BaseController
     {
         private readonly ServerStatsRepository _repository;

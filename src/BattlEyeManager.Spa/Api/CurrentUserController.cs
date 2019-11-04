@@ -11,6 +11,7 @@ namespace BattlEyeManager.Spa.Api
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class CurrentUserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;

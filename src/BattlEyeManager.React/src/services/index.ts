@@ -13,5 +13,6 @@ export * from './kickReasons.service';
 export * from './banReasons.service';
 export * from './serverstats.service';
 export * from './serverModerator.service';
+export * from './serverScript.service';
 export * from './core';
 

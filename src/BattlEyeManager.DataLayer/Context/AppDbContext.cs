@@ -70,5 +70,7 @@ namespace BattlEyeManager.DataLayer.Context
         public DbSet<ServerModerators> ServerModerators { get; set; }
 
         public DbSet<ServerUserCount> ServerUserCounts { get; set; }
+
+        public DbSet<ServerScript> ServerScripts { get; set; }
     }
 }

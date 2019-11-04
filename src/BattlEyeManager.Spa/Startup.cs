@@ -164,10 +164,14 @@ namespace BattlEyeManager.Spa
             services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
 
             services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
+            services.AddTransient<ServerScriptRepository, ServerScriptRepository>();
+
+
             services.AddTransient<IServerRepository, ServerRepository>();
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
             services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
             services.AddTransient<PlayerRepository, PlayerRepository>();
+
 
             services.AddSingleton<PlayersCache, PlayersCache>();
 
@@ -332,6 +336,9 @@ namespace BattlEyeManager.Spa
                 config.CreateMap<ServerModel, ServerInfo>();
                 config.CreateMap<ServerModel, ServerInfoDto>();
 
+                config.CreateMap<ServerScript, ServerScriptModel>();
+                config.CreateMap<ServerScriptModel, ServerScript>();
+
                 config.CreateMap<Server, OnlineServerModel>();
 
                 config.CreateMap<Ban, OnlineBanViewModel>();
@@ -341,8 +348,6 @@ namespace BattlEyeManager.Spa
                     .ForMember(x => x.Country, opt => opt.Ignore());
 
                 config.CreateMap<Mission, OnlineMissionModel>();
-
-
 
                 config.CreateMap<ChatMessage, ChatMessageModel>()
                     .AfterMap((message, messageModel) =>

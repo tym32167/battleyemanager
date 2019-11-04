@@ -34,6 +34,7 @@ export class List extends Component<any, IGridParentProps<IServer>> {
 
         const editRender = (item: IServer) => <Button color="success" to={'/servers/' + item.id} tag={Link} size="sm"><Trans>Edit</Trans></Button>;
         const deleteRender = (item: IServer) => <Button color="danger" size="sm" onClick={this.deleteCallback.bind(this, item)}><Trans>Delete</Trans></Button>;
+        const scriptsRender = (item: IServer) => <Button color="success" to={'/servers/' + item.id + '/scripts'} tag={Link} size="sm"><Trans>Scripts</Trans></Button>;
 
         const header = () => <Button tag={Link} to="/servers/create" color="primary"><Trans>Create</Trans></Button>;
 
@@ -46,6 +47,7 @@ export class List extends Component<any, IGridParentProps<IServer>> {
                         <ClientGridColumn header="Port" name="port" />
                         <ClientGridColumn header="Active" name="active" />
                         <ClientGridColumn header="Welcome feature" name="welcomeFeatureEnabled" />
+                        <ClientGridColumn header="" name="" renderer={scriptsRender} />
                         <ClientGridColumn header="" name="" renderer={editRender} />
                         <ClientGridColumn header="" name="" renderer={deleteRender} />
                     </ClientGridColumns>

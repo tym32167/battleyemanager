@@ -9,6 +9,7 @@ using BattlEyeManager.Spa.Infrastructure.Extensions;
 namespace BattlEyeManager.Spa.Api
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class OnlineServerController : BaseController
     {

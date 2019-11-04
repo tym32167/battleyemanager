@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace BattlEyeManager.Spa.Api
 {
     [ApiController]
+    [Produces("application/json")]
     public class OnlineChatController : BaseController
     {
         private readonly OnlineChatService _onlineChatService;

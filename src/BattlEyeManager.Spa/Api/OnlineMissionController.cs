@@ -8,6 +8,7 @@ namespace BattlEyeManager.Spa.Api
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class OnlineMissionController : BaseController
     {
         private readonly OnlineMissionService _onlineMissionService;
