@@ -324,6 +324,7 @@ namespace BattlEyeManager.Spa
             Mapper.Initialize(config =>
             {
                 config.CreateMap<Server, ServerModel>();
+                config.CreateMap<Server, ServerSimpleModel>();
                 config.CreateMap<ServerModel, Server>();
 
                 config.CreateMap<KickReason, KickReasonModel>();

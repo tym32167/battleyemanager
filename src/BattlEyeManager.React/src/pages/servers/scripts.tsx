@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { Trans, withTranslation } from 'react-i18next';
 import { Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { ClientGrid, ClientGridColumn, ClientGridColumns } from 'src/controls';
-import { IServerScriptItem } from 'src/models';
-import { serverScriptService } from 'src/services';
+import { IServer, IServerScriptItem } from 'src/models';
+import { serverScriptService, serverSimpleService } from 'src/services';
 import { Error } from '../../controls';
 
 interface IServerScriptListProps {
@@ -13,6 +13,7 @@ interface IServerScriptListProps {
 
 interface IServerScriptListState {
     data?: IServerScriptItem[],
+    server?: IServer,
     error: any
 }
 
@@ -27,6 +28,12 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
     }
 
     public componentDidMount() {
+        const { match: { params: { serverId } } } = (this.props as any);
+
+        serverSimpleService.getItem(serverId).then(server => {
+            this.setState({ ...this.state, server });
+        });
+
         this.Load();
     }
 
@@ -83,9 +90,13 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
     }
 
     public render() {
-        const { data, error } = this.state;
+        const { data, error, server } = this.state;
         const { t } = this.props;
-        const header = t("Server scripts");
+        let header = t("Server scripts");
+
+        if (server) {
+            header = t("Server scripts for ") + server.name;
+        }
 
         const { match: { params: { serverId } } } = (this.props as any);
 

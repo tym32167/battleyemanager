@@ -26,4 +26,15 @@ namespace BattlEyeManager.Spa.Model
         public string WelcomeFeatureTemplate { get; set; }
         public string WelcomeFeatureEmptyTemplate { get; set; }
     }
+
+    public class ServerSimpleModel
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public bool Active { get; set; }
+    }
 }
