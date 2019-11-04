@@ -14,8 +14,8 @@ namespace BattlEyeManager.DataLayer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ServerId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Path = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true, maxLength: 255),
+                    Path = table.Column<string>(nullable: true, maxLength: 255)
                 },
                 constraints: table =>
                 {
