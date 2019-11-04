@@ -106,6 +106,7 @@ class List extends React.Component<IListProps> {
                             enableColumnManager={true}>
                             <ClientGridColumns>
                                 <ClientGridColumn header="Num" name="num" />
+                                <ClientGridColumn header="Guid" name="guid" hidable={true} visible={false} />
                                 <ClientGridColumn header="Name" name="name" />
                                 <ClientGridColumn header="Country" name="country" />
                                 <ClientGridColumn header="IP" name="ip" hidable={true} visible={false} />

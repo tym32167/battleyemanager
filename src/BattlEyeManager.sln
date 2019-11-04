@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.BE", "BattlEyeManager.BE\BattlEyeManager.BE.csproj", "{93B22071-10B8-43DB-AFAE-22A0B1C093D7}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Core", "BattlEyeManager.Core\BattlEyeManager.Core.csproj", "{079C2048-62C1-45D2-B116-0E73B5F06584}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattlEyeManager.Services", "BattlEyeManager.Services\BattlEyeManager.Services.csproj", "{017A3A84-F274-493B-AD68-D7FCA53ED29D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlEyeManager.Steam", "BattlEyeManager.Steam\BattlEyeManager.Steam.csproj", "{AF4A8D74-3072-4455-8627-4C24F7653FB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{017A3A84-F274-493B-AD68-D7FCA53ED29D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF4A8D74-3072-4455-8627-4C24F7653FB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF4A8D74-3072-4455-8627-4C24F7653FB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF4A8D74-3072-4455-8627-4C24F7653FB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF4A8D74-3072-4455-8627-4C24F7653FB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

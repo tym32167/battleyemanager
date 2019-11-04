@@ -18,6 +18,7 @@ using BattlEyeManager.Spa.Infrastructure.Featues;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Steam;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -140,6 +141,11 @@ namespace BattlEyeManager.Spa
 
             services.AddSingleton<OnlinePlayerStateService, OnlinePlayerStateService>();
             services.AddSingleton<OnlineChatStateService, OnlineChatStateService>();
+
+
+
+            services.AddSingleton<GetServerInfoSettings>(new GetServerInfoSettings());
+            services.AddSingleton<ISteamService, SteamService>();
 
             services.AddSingleton<ServerStatsService, ServerStatsService>();
 

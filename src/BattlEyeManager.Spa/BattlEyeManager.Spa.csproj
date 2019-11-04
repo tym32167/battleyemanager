@@ -38,6 +38,7 @@
     <ProjectReference Include="..\BattlEyeManager.BE\BattlEyeManager.BE.csproj" />
     <ProjectReference Include="..\BattlEyeManager.DataLayer\BattlEyeManager.DataLayer.csproj" />
     <ProjectReference Include="..\BattlEyeManager.Services\BattlEyeManager.Services.csproj" />
+    <ProjectReference Include="..\BattlEyeManager.Steam\BattlEyeManager.Steam.csproj" />
   </ItemGroup>
 
   <ItemGroup>
