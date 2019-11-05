@@ -70,27 +70,31 @@ namespace BattlEyeManager.Spa.Api.Admin
             return Ok();
         }
 
+        public static string Bash(string cmd)
+        {
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = cmd,
+                    Arguments = "",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            };
+            process.Start();
+            string result = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            return result;
+        }
+
         [HttpPost("{id}/run")]
         public async Task<IActionResult> Post(int id)
         {
             var item = await _repository.GetByIdAsync(id);
-
-            await Task.Run(() =>
-            {
-
-                var process = new System.Diagnostics.Process()
-                {
-                    StartInfo = new ProcessStartInfo(item.Path)
-                    {
-                        UseShellExecute = true,
-                    },
-                };
-
-                process.Start();
-
-            });
-
-            return Ok();
+            var ret = await Task.Run(() => Bash(item.Path));
+            return Ok(ret);
         }
     }
 }

@@ -14,17 +14,29 @@ interface IServerScriptListProps {
 interface IServerScriptListState {
     data?: IServerScriptItem[],
     server?: IServer,
-    error: any
+    error: any,
+    modal: boolean,
+    runResponse?: string
 }
 
 class ServerScriptList extends Component<IServerScriptListProps, IServerScriptListState>{
     constructor(props: any) {
         super(props);
-        this.state = { data: undefined, error: undefined };
+        this.state = { data: undefined, error: undefined, modal: false };
         this.Load = this.Load.bind(this);
         this.Update = this.Update.bind(this);
         this.Add = this.Add.bind(this);
         this.Delete = this.Delete.bind(this);
+        this.toggle = this.toggle.bind(this);
+    }
+
+
+
+    public toggle() {
+        const mod = !this.state.modal;
+        this.setState({
+            modal: mod
+        });
     }
 
     public componentDidMount() {
@@ -82,15 +94,19 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
             return;
         }
 
+        this.setState({ ...this.state, runResponse: undefined })
+
         await serverScriptService.runItem(item).then(
-            () => {
-                window.alert(item.name + ' executed.');
+            (data) => {
+                // window.alert(item.name + ' executed.' + '\r\n' + data.data);
+                this.setState({ ...this.state, runResponse: data.data });
+                this.toggle();
             },
             (error: any) => this.setState({ ...this.state, data: undefined, error }));
     }
 
     public render() {
-        const { data, error, server } = this.state;
+        const { data, error, server, modal, runResponse } = this.state;
         const { t } = this.props;
         let header = t("Server scripts");
 
@@ -121,6 +137,17 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
                         <ClientGridColumn header="Run" name="id" renderer={runRender} headerStyle={{ width: '1%' }} />
                     </ClientGridColumns>
                 </ClientGrid>
+
+                <Modal isOpen={modal} toggle={this.toggle} className="modal-lg">
+                    <ModalHeader toggle={this.toggle}><Trans>Script execution result</Trans></ModalHeader>
+                    <ModalBody>
+                        <Label>
+                            {runResponse && runResponse.split("\n").map((i, key) => {
+                                return <div key={key}>{i}</div>;
+                            })}
+                        </Label>
+                    </ModalBody>
+                </Modal>
             </React.Fragment>
         );
     }
@@ -188,7 +215,8 @@ class EditServerScript extends Component<IEditServerScriptProps, IEditServerScri
                 {this.props.isCreate && <Button color="primary" size="sm" onClick={this.toggle} ><Trans>Create</Trans></Button>}
 
                 <Modal isOpen={modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}><Trans>Edit script</Trans> {item.name}</ModalHeader>
+                    {this.props.isEdit && <ModalHeader toggle={this.toggle}><Trans>Edit script</Trans> {item.name}</ModalHeader>}
+                    {this.props.isCreate && <ModalHeader toggle={this.toggle}><Trans>Create script</Trans> {item.name}</ModalHeader>}
                     <ModalBody>
                         <Form onSubmit={this.handleSubmit} >
                             <FormGroup>
