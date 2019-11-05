@@ -16,7 +16,8 @@ interface IServerScriptListState {
     server?: IServer,
     error: any,
     modal: boolean,
-    runResponse?: string
+    runResponse?: string,
+    runName?: string,
 }
 
 class ServerScriptList extends Component<IServerScriptListProps, IServerScriptListState>{
@@ -94,19 +95,19 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
             return;
         }
 
-        this.setState({ ...this.state, runResponse: undefined })
+        this.setState({ ...this.state, runResponse: undefined, runName: undefined })
 
         await serverScriptService.runItem(item).then(
             (data) => {
                 // window.alert(item.name + ' executed.' + '\r\n' + data.data);
-                this.setState({ ...this.state, runResponse: data.data });
+                this.setState({ ...this.state, runResponse: data.data, runName: item.name });
                 this.toggle();
             },
             (error: any) => this.setState({ ...this.state, data: undefined, error }));
     }
 
     public render() {
-        const { data, error, server, modal, runResponse } = this.state;
+        const { data, error, server, modal, runResponse, runName } = this.state;
         const { t } = this.props;
         let header = t("Server scripts");
 
@@ -139,7 +140,8 @@ class ServerScriptList extends Component<IServerScriptListProps, IServerScriptLi
                 </ClientGrid>
 
                 <Modal isOpen={modal} toggle={this.toggle} className="modal-lg">
-                    <ModalHeader toggle={this.toggle}><Trans>Script execution result</Trans></ModalHeader>
+                    <ModalHeader toggle={this.toggle}><Trans>Script execution result:</Trans>{' ' + runName}</ModalHeader>
+
                     <ModalBody>
                         <Label>
                             {runResponse && runResponse.split("\n").map((i, key) => {
