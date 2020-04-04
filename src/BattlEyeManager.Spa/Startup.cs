@@ -9,6 +9,7 @@ using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Services;
+using BattlEyeManager.Spa.Api.Sync;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
@@ -158,6 +159,8 @@ namespace BattlEyeManager.Spa
             services.AddScoped<OnlineMissionService, OnlineMissionService>();
             services.AddScoped<OnlineServerService, OnlineServerService>();
             services.AddScoped<OnlineChatService, OnlineChatService>();
+
+            services.AddScoped<PlayerSyncService, PlayerSyncService>();
 
             // features
 
@@ -353,6 +356,8 @@ namespace BattlEyeManager.Spa
                 config
                     .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
                     .ForMember(x => x.Country, opt => opt.Ignore());
+
+                config.CreateMap<Player, PlayerSyncDto>();
 
                 config.CreateMap<Mission, OnlineMissionModel>();
 
