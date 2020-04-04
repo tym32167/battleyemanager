@@ -29,18 +29,29 @@ namespace BattlEyeManager.Spa.Api.Sync
 
             var resp = new PlayerSyncResponse()
             {
-                Count = cnt, 
+                Count = cnt,
                 Players = players
             };
 
-
-
             return Ok(resp);
+        }
+
+        [HttpPost("api/sync/players")]
+        public async Task<IActionResult> Post([FromBody] PlayerSyncRequest request)
+        {
+            await _playerSyncService.Import(request.Players);
+            return Ok();
         }
 
     }
 
     public class PlayerSyncResponse
+    {
+        public int Count { get; set; }
+        public PlayerSyncDto[] Players { get; set; }
+    }
+
+    public class PlayerSyncRequest
     {
         public int Count { get; set; }
         public PlayerSyncDto[] Players { get; set; }
