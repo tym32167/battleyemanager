@@ -304,8 +304,8 @@ namespace BattlEyeManager.Spa
             var admin = await userManager.FindByNameAsync("admin");
             if (admin == null)
             {
-                var adminModel = new ApplicationUser { UserName = "admin", DisplayName = "admin", Password = "12qw!@QW", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
-                await userManager.CreateAsync(adminModel, adminModel.Password);
+                var adminModel = new ApplicationUser { UserName = "admin", DisplayName = "admin", LastName = "admin", FirstName = "admin", Email = "admin@admin.sample" };
+                await userManager.CreateAsync(adminModel, "12qw!@QW");
                 await userManager.AddToRoleAsync(adminModel, adminRole);
             }
         }

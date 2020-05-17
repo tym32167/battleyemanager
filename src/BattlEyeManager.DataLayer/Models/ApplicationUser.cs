@@ -14,10 +14,6 @@ namespace BattlEyeManager.DataLayer.Models
         [Required(ErrorMessage = "LastNameRequired")]
         public string LastName { get; set; }
 
-        [Display(Name = "Password")]
-        [Required(ErrorMessage = "PasswordRequired"), DataType(DataType.Password)]
-        public string Password { get; set; }
-
         [Display(Name = "UserName")]
         [Required(ErrorMessage = "UserNameRequired")]
         public override string UserName { get; set; }

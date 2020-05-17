@@ -138,12 +138,11 @@ namespace BattlEyeManager.Spa.Api.Admin
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 UserName = model.UserName,
-                Password = model.Password,
                 DisplayName = model.DisplayName
             };
 
 
-            var result = await _userManager.CreateAsync(user, user.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 if (model.IsAdmin) await _userManager.AddToRoleAsync(user, RoleConstants.Administrator);
