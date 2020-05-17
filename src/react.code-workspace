@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "BattlEyeManager.React"
+		},
+		{
+			"path": "BattlEyeManager.Spa"
+		}
+	],
+	"settings": {
+		"emmet.includeLanguages": {
+			"javascript": "javascriptreact"
+		},
+		"typescript.referencesCodeLens.enabled": true,
+		"editor.formatOnSave": true
+	}
+}

@@ -1,0 +1,11 @@
+
+
+in order to release: 
+
+git pull
+
+backend:
+dotnet publish -c Release
+
+fe:
+npm run build

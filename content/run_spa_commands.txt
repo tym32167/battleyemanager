@@ -1,0 +1,5 @@
+run mysql note D:\Tools\mariadb-10.2.13-winx64\bin\mysqld.exe
+
+ng build --watch
+dotnet watch run
+cd .\src\BattlEyeManager.Spa\
