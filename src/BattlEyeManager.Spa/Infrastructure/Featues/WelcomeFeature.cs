@@ -16,6 +16,8 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private Dictionary<int, ServerInfoDto> _enabledServers = new Dictionary<int, ServerInfoDto>();
 
+        private Dictionary<int, HashSet<string>> _welcomeFeatureBlackLists = new Dictionary<int, HashSet<string>>();
+
         private static string WelcomeMessageTemplate = "Welcome, {name}! {sessions} sessions and {hours} hours on server!";
         private static string WelcomeEmptyMessageTemplate = "Welcome, {name}! First time on server!";
 
@@ -40,8 +42,30 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         public void SetEnabled(ServerInfoDto server)
         {
-            if (server.WelcomeFeatureEnabled) _enabledServers[server.Id] = server;
-            else _enabledServers.Remove(server.Id);
+            if (server.WelcomeFeatureEnabled)
+            {
+                _enabledServers[server.Id] = server;
+
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    {
+                        var blackList =
+                            ctx.WelcomeFeatureBlackList
+                                .Where(x => x.ServerId == server.Id)
+                                .Select(x => x.Guid)
+                                .Distinct();
+
+                        _welcomeFeatureBlackLists[server.Id] = new HashSet<string>(blackList);
+                    }
+                }
+            }
+
+            else
+            {
+                _enabledServers.Remove(server.Id);
+                _welcomeFeatureBlackLists.Remove(server.Id);
+            }
         }
 
         private async void _playerStateService_PlayersJoined(object sender, BEServerEventArgs<IEnumerable<BE.Models.Player>> e)
@@ -49,16 +73,22 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             if (!_enabledServers.ContainsKey(e.Server.Id)) return;
 
             var server = _enabledServers[e.Server.Id];
+            var blackList = _welcomeFeatureBlackLists[server.Id];
 
             var players = e.Data.ToArray();
             if (players.Length > 5) return;
+
             var serverId = e.Server.Id;
+
+            var whitelistedPlayers = players.Where(p => !blackList.Contains(p.Guid)).ToArray();
+
+            if (!whitelistedPlayers.Any()) return;
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
                 {
-                    foreach (var player in players)
+                    foreach (var player in whitelistedPlayers)
                     {
                         var sessions = await ctx.PlayerSessions
                             .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
