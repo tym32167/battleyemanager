@@ -1,29 +1,27 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Main purpose of this software is to manage Arma3 game server via Battleye protocol. 
 
-### What is this repository for? ###
+Its built on top of asp.net core 2.2 and MySQL database. 
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## Features:
 
-### How do I get set up? ###
+### Server dashboards
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+![Server dashboards](content/img/home_page.png)
 
-### Contribution guidelines ###
+### Server main page
 
-* Writing tests
-* Code review
-* Other guidelines
+![Server main page](content/img/Server_Main.png)
 
-### Who do I talk to? ###
+### Server managing
 
-* Repo owner or admin
-* Other community or team contact
+![Server managing](content/img/Server_Manager.png)
+
+### Server Ban List
+
+![Server Ban List](content/img/Server_BanList.png)
+
+### Steam query support
+
+![Steam query support](content/img/Server_SteamQuery.png)
