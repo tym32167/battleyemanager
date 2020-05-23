@@ -1,12 +1,15 @@
 ﻿using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Player = BattlEyeManager.BE.Models.Player;
 
 namespace BattlEyeManager.Spa.Infrastructure.Featues
 {
@@ -18,6 +21,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         private Dictionary<int, HashSet<string>> _welcomeFeatureBlackLists = new Dictionary<int, HashSet<string>>();
 
+        private static string WelcomeGreater50MessageTemplate = "Welcome, {name}! More than 50 hours on server!";
         private static string WelcomeMessageTemplate = "Welcome, {name}! {sessions} sessions and {hours} hours on server!";
         private static string WelcomeEmptyMessageTemplate = "Welcome, {name}! First time on server!";
 
@@ -68,6 +72,29 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
+        private string GetMesage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        {
+            if (sessions.Length != 0)
+            {
+                int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
+                if (hours > 50)
+                {
+                    var message = GetMessageString(WelcomeGreater50MessageTemplate, player.Name, sessions.Length, hours);
+                    return message;
+                }
+                else
+                {
+                    var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours);
+                    return message;
+                }
+            }
+            else
+            {
+                var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0);
+                return message;
+            }
+        }
+
         private async void _playerStateService_PlayersJoined(object sender, BEServerEventArgs<IEnumerable<BE.Models.Player>> e)
         {
             if (!_enabledServers.ContainsKey(e.Server.Id)) return;
@@ -94,17 +121,8 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                             .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
                             .ToArrayAsync();
 
-                        if (sessions.Length != 0)
-                        {
-                            int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-                            var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours);
-                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
-                        }
-                        else
-                        {
-                            var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0);
-                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
-                        }
+                        String message = GetMesage(server, player, sessions);
+                        _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
                     }
                 }
             }

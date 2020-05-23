@@ -28,6 +28,7 @@ const EditForm = props => {
             <Field name="welcomeFeatureEnabled" component={FormInputField} type="checkbox" label="Welcome Feature Enabled" />
             <Field name="welcomeFeatureTemplate" component={FormInputField} type="text" label="Welcome Feature Template (Welcome, {name}! {sessions} sessions and {hours} hours on server!)" />
             <Field name="welcomeFeatureEmptyTemplate" component={FormInputField} type="text" label="Welcome Feature Empty Template (Welcome, {name}! First time on server!)" />
+            <Field name="welcomeGreater50MessageTemplate" component={FormInputField} type="text" label="Welcome, {name}! More than 50 hours on server!" />
 
             <Field name="active" component={FormInputField} type="checkbox" label="Active" />
 
