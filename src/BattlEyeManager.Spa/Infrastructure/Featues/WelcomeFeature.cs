@@ -79,7 +79,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                 int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
                 if (hours > 50)
                 {
-                    var message = GetMessageString(WelcomeGreater50MessageTemplate, player.Name, sessions.Length, hours);
+                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater50MessageTemplate), player.Name, sessions.Length, hours);
                     return message;
                 }
                 else
