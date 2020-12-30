@@ -36,13 +36,14 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             }
         }
 
-        public async Task Reload(params PlayerDto[] players)
+        public Task Reload(params PlayerDto[] players)
         {
             foreach (var player in players)
             {
                 var copy = PlayerDto.Copy(player);
                 _guidCache.AddOrUpdate(copy.GUID, g => copy, (g, p) => copy);
             }
+            return Task.FromResult(true);
         }
 
         public async Task Reload()

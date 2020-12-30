@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BattlEyeManager.DataLayer.Models;
+﻿using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api
 {
@@ -17,14 +17,17 @@ namespace BattlEyeManager.Spa.Api
         private readonly OnlineChatService _onlineChatService;
         private readonly ServerModeratorService _moderatorService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
         public OnlineChatController(OnlineChatService onlineChatService,
             ServerModeratorService moderatorService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IMapper mapper)
         {
             _onlineChatService = onlineChatService;
             _moderatorService = moderatorService;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpGet("api/onlineserver/{serverId}/chat")]
@@ -32,7 +35,7 @@ namespace BattlEyeManager.Spa.Api
         {
             _moderatorService.CheckAccess(User, serverId);
             var chatMessages = _onlineChatService.GetChat(serverId)
-                .Select(Mapper.Map<ChatMessageModel>)
+                .Select(_mapper.Map<ChatMessageModel>)
                 .OrderBy(x => x.Date)
                 .ToArray();
             return Ok(chatMessages);

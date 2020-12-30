@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using BattleNET;
+﻿using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
@@ -19,16 +19,19 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IBeServerAggregator _beServerAggregator;
         private readonly OnlinePlayerStateService _onlinePlayerStateService;
+        private readonly IMapper _mapper;
 
         public OnlineServerService(ServerStateService serverStateService,
             IServiceScopeFactory scopeFactory,
             IBeServerAggregator beServerAggregator,
-            OnlinePlayerStateService onlinePlayerStateService)
+            OnlinePlayerStateService onlinePlayerStateService,
+            IMapper mapper)
         {
             _serverStateService = serverStateService;
             _scopeFactory = scopeFactory;
             _beServerAggregator = beServerAggregator;
             _onlinePlayerStateService = onlinePlayerStateService;
+            _mapper = mapper;
         }
 
 
@@ -44,7 +47,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                         .ToArrayAsync();
 
                     var items = dbItems
-                        .Select(x => Update(Mapper.Map<OnlineServerModel>(x)))
+                        .Select(x => Update(_mapper.Map<OnlineServerModel>(x)))
                         .ToArray();
 
                     return items;
@@ -61,7 +64,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                     var item = await ctx.Servers.FindAsync(serverId);
                     if (item == null) return null;
 
-                    var ret = Mapper.Map<OnlineServerModel>(item);
+                    var ret = _mapper.Map<OnlineServerModel>(item);
                     ret = Update(ret);
 
                     return ret;

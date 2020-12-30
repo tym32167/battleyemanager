@@ -1,4 +1,3 @@
-using AutoMapper;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -23,12 +23,14 @@ namespace BattlEyeManager.Spa.Api.Admin
         private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
         private readonly WelcomeFeature _welcomeFeature;
+        private readonly IMapper _mapper;
 
-        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator, WelcomeFeature welcomeFeature) : base(repository)
+        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator, WelcomeFeature welcomeFeature, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _beServerAggregator = beServerAggregator;
             _welcomeFeature = welcomeFeature;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -39,7 +41,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 .ToArrayAsync();
 
             var items = dbItems
-                .Select(Mapper.Map<ServerModel>)
+                .Select(_mapper.Map<ServerModel>)
                 .ToArray();
 
             return Ok(items);
@@ -59,11 +61,11 @@ namespace BattlEyeManager.Spa.Api.Admin
             var ret = await base.Post(id, model);
 
             if (isActive)
-                _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
+                _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
             else
                 _beServerAggregator.RemoveServer(model.Id);
 
-            _welcomeFeature.SetEnabled(Mapper.Map<ServerInfoDto>(model));
+            _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
 
             return ret;
         }
@@ -79,14 +81,14 @@ namespace BattlEyeManager.Spa.Api.Admin
                 return BadRequest(ModelState);
             }
 
-            var item = Mapper.Map<Server>(model);
+            var item = _mapper.Map<Server>(model);
 
             await base.Put(model);
 
             if (item.Active)
-                _beServerAggregator.AddServer(Mapper.Map<ServerInfo>(model));
+                _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
 
-            _welcomeFeature.SetEnabled(Mapper.Map<ServerInfoDto>(model));
+            _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
 
             return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }

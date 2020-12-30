@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaxMind.Db" Version="2.4.0" />
-    <PackageReference Include="MaxMind.GeoIP2" Version="3.0.0" />
+    <PackageReference Include="MaxMind.Db" Version="3.0.0" />
+    <PackageReference Include="MaxMind.GeoIP2" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>

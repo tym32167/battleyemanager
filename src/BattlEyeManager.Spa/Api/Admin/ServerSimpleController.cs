@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using BattlEyeManager.DataLayer.Repositories;
+﻿using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -16,10 +16,12 @@ namespace BattlEyeManager.Spa.Api.Admin
     public class ServerSimpleController : BaseController
     {
         private readonly IServerRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ServerSimpleController(IServerRepository repository)
+        public ServerSimpleController(IServerRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet("{id}")]
@@ -31,7 +33,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 return NotFound();
             }
 
-            var ret = Mapper.Map<ServerSimpleModel>(item);
+            var ret = _mapper.Map<ServerSimpleModel>(item);
             return Ok(ret);
         }
     }

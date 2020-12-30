@@ -1,6 +1,4 @@
-using AutoMapper;
 using BattlEyeManager.BE.Abstract;
-using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
@@ -9,16 +7,15 @@ using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Services;
-using BattlEyeManager.Spa.Api.Sync;
 using BattlEyeManager.Spa.Auth;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Hubs;
 using BattlEyeManager.Spa.Infrastructure;
 using BattlEyeManager.Spa.Infrastructure.Featues;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Infrastructure.State;
-using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Steam;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,15 +25,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ChatMessage = BattlEyeManager.BE.Models.ChatMessage;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
-using Player = BattlEyeManager.DataLayer.Models.Player;
 
 namespace BattlEyeManager.Spa
 {
@@ -47,7 +44,7 @@ namespace BattlEyeManager.Spa
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -58,8 +55,11 @@ namespace BattlEyeManager.Spa
             // Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
             // Console.WriteLine("--------------------------------------------------");
 
-            services.AddDbContext<AppDbContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContextPool<AppDbContext>(opt =>
+                opt.UseMySQL(connectionString));
+
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -116,8 +116,8 @@ namespace BattlEyeManager.Spa
             services.AddMvc()
                 .AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
                 });
 
 
@@ -125,13 +125,14 @@ namespace BattlEyeManager.Spa
             services.AddTransient<ILog, LogImpl>();
 
 
-            services.AddSingleton<IIpService, IpService>((sp) =>
+            services.AddSingleton<IIpService, IpService>(sp =>
             {
-                var he = sp.GetService<IHostingEnvironment>();
+                var he = sp.GetService<IWebHostEnvironment>();
                 var logger = sp.GetService<ILog>();
+                // ReSharper disable once PossibleNullReferenceException
                 var path = Path.Combine(he.ContentRootPath, "Data", "GeoLite2-Country.mmdb");
-                var ipservice = new IpService(path, logger);
-                return ipservice;
+                var ipService = new IpService(path, logger);
+                return ipService;
             });
 
             services.AddSingleton<IBattlEyeServerFactory, WatcherBEServerFactory>();
@@ -143,9 +144,7 @@ namespace BattlEyeManager.Spa
             services.AddSingleton<OnlinePlayerStateService, OnlinePlayerStateService>();
             services.AddSingleton<OnlineChatStateService, OnlineChatStateService>();
 
-
-
-            services.AddSingleton<GetServerInfoSettings>(new GetServerInfoSettings());
+            services.AddSingleton(new GetServerInfoSettings());
             services.AddSingleton<ISteamService, SteamService>();
 
             services.AddSingleton<ServerStatsService, ServerStatsService>();
@@ -171,11 +170,8 @@ namespace BattlEyeManager.Spa
 
             services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
             services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
-
             services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
             services.AddTransient<ServerScriptRepository, ServerScriptRepository>();
-
-
             services.AddTransient<IServerRepository, ServerRepository>();
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
             services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
@@ -184,7 +180,7 @@ namespace BattlEyeManager.Spa
 
             services.AddSingleton<PlayersCache, PlayersCache>();
 
-
+            services.AddInternalMapper();
 
             services.AddTransient<UserRepository, UserRepository>();
 
@@ -218,7 +214,7 @@ namespace BattlEyeManager.Spa
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IBeServerAggregator beServerAggregator,
@@ -242,28 +238,22 @@ namespace BattlEyeManager.Spa
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<FallbackHub>("/api/serverfallback");
-            });
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endPoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "api/{controller}/{action}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                endPoints.MapControllers();
+                endPoints.MapHub<FallbackHub>("/api/serverfallback");
+                endPoints.MapFallbackToController("Index", "Home");
             });
 
-            SetupMappings();
 
             moderatorService.Init().Wait();
             dataRegistrator.Init().Wait();
@@ -285,7 +275,7 @@ namespace BattlEyeManager.Spa
             var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
             foreach (var server in servers)
             {
-                welcomeFeature.SetEnabled(server);
+                welcomeFeature?.SetEnabled(server);
             }
         }
 
@@ -328,45 +318,6 @@ namespace BattlEyeManager.Spa
             }
         }
 
-        private void SetupMappings()
-        {
-            Mapper.Initialize(config =>
-            {
-                config.CreateMap<Server, ServerModel>();
-                config.CreateMap<Server, ServerSimpleModel>();
-                config.CreateMap<ServerModel, Server>();
 
-                config.CreateMap<KickReason, KickReasonModel>();
-                config.CreateMap<KickReasonModel, KickReason>();
-
-                config.CreateMap<BanReason, BanReasonModel>();
-                config.CreateMap<BanReasonModel, BanReason>();
-
-                config.CreateMap<Server, ServerInfo>();
-                config.CreateMap<ServerModel, ServerInfo>();
-                config.CreateMap<ServerModel, ServerInfoDto>();
-
-                config.CreateMap<ServerScript, ServerScriptModel>();
-                config.CreateMap<ServerScriptModel, ServerScript>();
-
-                config.CreateMap<Server, OnlineServerModel>();
-
-                config.CreateMap<Ban, OnlineBanViewModel>();
-
-                config
-                    .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
-                    .ForMember(x => x.Country, opt => opt.Ignore());
-
-                config.CreateMap<Player, PlayerSyncDto>();
-
-                config.CreateMap<Mission, OnlineMissionModel>();
-
-                config.CreateMap<ChatMessage, ChatMessageModel>()
-                    .AfterMap((message, messageModel) =>
-                        {
-                            messageModel.Date = DateTime.SpecifyKind(messageModel.Date, DateTimeKind.Utc);
-                        });
-            });
-        }
     }
 }

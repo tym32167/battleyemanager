@@ -1,4 +1,3 @@
-using AutoMapper;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -19,10 +19,12 @@ namespace BattlEyeManager.Spa.Api.Admin
     public class ServerScriptController : BaseController
     {
         private readonly ServerScriptRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ServerScriptController(ServerScriptRepository repository)
+        public ServerScriptController(ServerScriptRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -31,7 +33,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             var dbItems = await _repository.GetByServerAsync(serverId);
 
             var items =
-                dbItems.Select(Mapper.Map<ServerScript, ServerScriptModel>)
+                dbItems.Select(_mapper.Map<ServerScript, ServerScriptModel>)
                 .OrderBy(x => x.Name)
                 .ToArray();
 
@@ -44,10 +46,10 @@ namespace BattlEyeManager.Spa.Api.Admin
         {
             item.Id = id;
             item.ServerId = serverId;
-            var db = Mapper.Map<ServerScriptModel, ServerScript>(item);
+            var db = _mapper.Map<ServerScriptModel, ServerScript>(item);
             await _repository.UpdateAsync(db);
             var refreshed = await _repository.GetByIdAsync(db.Id);
-            var ret = Mapper.Map<ServerScript, ServerScriptModel>(refreshed);
+            var ret = _mapper.Map<ServerScript, ServerScriptModel>(refreshed);
             return Ok(ret);
         }
 
@@ -56,10 +58,10 @@ namespace BattlEyeManager.Spa.Api.Admin
         public async Task<IActionResult> Put(int serverId, [FromBody] ServerScriptModel item)
         {
             item.ServerId = serverId;
-            var db = Mapper.Map<ServerScriptModel, ServerScript>(item);
+            var db = _mapper.Map<ServerScriptModel, ServerScript>(item);
             await _repository.AddAsync(db);
             var refreshed = await _repository.GetByIdAsync(db.Id);
-            var ret = Mapper.Map<ServerScript, ServerScriptModel>(refreshed);
+            var ret = _mapper.Map<ServerScript, ServerScriptModel>(refreshed);
             return Ok(ret);
         }
 

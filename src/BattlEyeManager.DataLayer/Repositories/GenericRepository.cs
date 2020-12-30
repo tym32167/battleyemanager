@@ -25,9 +25,9 @@ namespace BattlEyeManager.DataLayer.Repositories
             return _context.Set<T>().ToArrayAsync();
         }
 
-        public Task<T> GetItemByIdAsync(TKey id)
+        public async Task<T> GetItemByIdAsync(TKey id)
         {
-            return _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public Task UpdateItemAsync(T item)
