@@ -12,10 +12,10 @@ namespace BattlEyeManager.DataLayer.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(nullable: false, maxLength: 127),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(maxLength: 255, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 255, nullable: true)
+                    Name = table.Column<string>(maxLength: 127, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 127, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -26,24 +26,24 @@ namespace BattlEyeManager.DataLayer.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(nullable: false, maxLength: 127),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(maxLength: 255, nullable: false),
+                    Email = table.Column<string>(maxLength: 127, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 255, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 255, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 127, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 127, nullable: true),
                     Password = table.Column<string>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 255, nullable: false)
+                    UserName = table.Column<string>(maxLength: 127, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,9 +179,9 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    ClaimType = table.Column<string>(nullable: true, maxLength: 255),
+                    ClaimValue = table.Column<string>(nullable: true, maxLength: 255),
+                    UserId = table.Column<string>(nullable: false, maxLength: 127)
                 },
                 constraints: table =>
                 {
@@ -198,10 +198,10 @@ namespace BattlEyeManager.DataLayer.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false, maxLength: 255),
+                    ProviderKey = table.Column<string>(nullable: false, maxLength: 255),
                     ProviderDisplayName = table.Column<string>(nullable: true, maxLength: 255),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(nullable: false, maxLength: 255)
                 },
                 constraints: table =>
                 {
@@ -218,8 +218,8 @@ namespace BattlEyeManager.DataLayer.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(nullable: false, maxLength: 255),
+                    RoleId = table.Column<string>(nullable: false, maxLength: 255)
                 },
                 constraints: table =>
                 {
@@ -242,10 +242,10 @@ namespace BattlEyeManager.DataLayer.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false, maxLength: 255),
+                    LoginProvider = table.Column<string>(nullable: false, maxLength: 255),
+                    Name = table.Column<string>(nullable: false, maxLength: 255),
+                    Value = table.Column<string>(nullable: true, maxLength: 255)
                 },
                 constraints: table =>
                 {
