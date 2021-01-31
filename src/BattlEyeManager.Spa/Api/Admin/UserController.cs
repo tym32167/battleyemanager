@@ -36,7 +36,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         {
             var users = new List<ApplicationUserModel>();
 
-            foreach (var user in _userManager.Users) users.Add(await ToModel(user));
+            foreach (var user in _userManager.Users.ToArray()) users.Add(await ToModel(user));
 
             var result = users
                 .OrderBy(x => x.UserName)

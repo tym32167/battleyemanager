@@ -57,7 +57,7 @@ namespace BattlEyeManager.Spa
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContextPool<AppDbContext>(opt =>
+            services.AddDbContext<AppDbContext>(opt =>
                 opt.UseMySQL(connectionString));
 
 
