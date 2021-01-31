@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using BattlEyeManager.DataLayer.Repositories;
+﻿using BattlEyeManager.DataLayer.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Core
 {
@@ -10,10 +10,12 @@ namespace BattlEyeManager.Spa.Core
             where T : class, new()
     {
         private readonly IGenericRepository<T, TKey> _repository;
+        private readonly IMapper _mapper;
 
-        public GenericController(IGenericRepository<T, TKey> repository)
+        public GenericController(IGenericRepository<T, TKey> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,7 +24,7 @@ namespace BattlEyeManager.Spa.Core
             var dbItems = await _repository.GetItemsAsync();
 
             var items = dbItems
-                .Select(Mapper.Map<TModel>)
+                .Select(_mapper.Map<TModel>)
                 .ToArray();
             return Ok(items);
         }
@@ -36,7 +38,7 @@ namespace BattlEyeManager.Spa.Core
                 return NotFound();
             }
 
-            var ret = Mapper.Map<TModel>(item);
+            var ret = _mapper.Map<TModel>(item);
             return Ok(ret);
         }
 
@@ -50,7 +52,7 @@ namespace BattlEyeManager.Spa.Core
 
             var item = new T();
 
-            Mapper.Map(model, item);
+            _mapper.Map(model, item);
 
             await _repository.UpdateItemAsync(item);
 
@@ -68,7 +70,7 @@ namespace BattlEyeManager.Spa.Core
                 return BadRequest(ModelState);
             }
 
-            var item = Mapper.Map<T>(model);
+            var item = _mapper.Map<T>(model);
 
             await _repository.AddItemAsync(item);
 

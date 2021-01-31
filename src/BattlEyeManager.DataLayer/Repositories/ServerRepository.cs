@@ -78,5 +78,8 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         [MaxLength(255)]
         public string WelcomeFeatureEmptyTemplate { get; set; }
+
+        [MaxLength(255)]
+        public string WelcomeGreater50MessageTemplate { get; set; }
     }
 }

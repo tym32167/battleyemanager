@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BattlEyeManager.DataLayer.Context;
+﻿using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.Spa.Api.Sync;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
     public class PlayerSyncService
     {
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IMapper _mapper;
 
-        public PlayerSyncService(IServiceScopeFactory scopeFactory)
+        public PlayerSyncService(IServiceScopeFactory scopeFactory, IMapper mapper)
         {
             _scopeFactory = scopeFactory;
+            _mapper = mapper;
         }
 
         public async Task<int> GetPlayersCount()
@@ -44,7 +46,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                         .ToArrayAsync();
 
                     var items = dbItems
-                        .Select(x => Mapper.Map<PlayerSyncDto>(x))
+                        .Select(x => _mapper.Map<PlayerSyncDto>(x))
                         .ToArray();
 
                     return items;

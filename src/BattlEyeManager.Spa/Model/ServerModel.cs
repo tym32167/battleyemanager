@@ -25,6 +25,7 @@ namespace BattlEyeManager.Spa.Model
         public bool WelcomeFeatureEnabled { get; set; }
         public string WelcomeFeatureTemplate { get; set; }
         public string WelcomeFeatureEmptyTemplate { get; set; }
+        public string WelcomeGreater50MessageTemplate { get; set; }
     }
 
     public class ServerSimpleModel

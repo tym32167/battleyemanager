@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BattleNET;
+﻿using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Repositories.Players;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BattlEyeManager.Spa.Core.Mapping;
 using Player = BattlEyeManager.BE.Models.Player;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
@@ -21,27 +21,28 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         private readonly MessageHelper _messageHelper;
         private readonly OnlinePlayerStateService _onlinePlayerStateService;
         private readonly IIpService _ipService;
+        private readonly IMapper _mapper;
 
         public OnlinePlayerService(IBeServerAggregator serverAggregator,
             IServiceScopeFactory scopeFactory,
             MessageHelper messageHelper,
             OnlinePlayerStateService onlinePlayerStateService,
-            IIpService ipService)
+            IIpService ipService,
+            IMapper mapper)
         {
             _serverAggregator = serverAggregator;
             _scopeFactory = scopeFactory;
             _messageHelper = messageHelper;
             _onlinePlayerStateService = onlinePlayerStateService;
             _ipService = ipService;
+            _mapper = mapper;
         }
 
         public Task<OnlinePlayerModel[]> GetOnlinePlayers(int serverId)
         {
             var players = _onlinePlayerStateService.GetPlayers(serverId);
             var ret =
-                players.Select(p => Mapper.Map<Player, OnlinePlayerModel>(p,
-                        options => options.ConfigureMap(MemberList.None)
-                            .ForMember(x => x.Country, o => o.Ignore())))
+                players.Select(p => _mapper.Map<Player, OnlinePlayerModel>(p))
                     .OrderBy(x => x.Num)
                     .ToArray();
 
