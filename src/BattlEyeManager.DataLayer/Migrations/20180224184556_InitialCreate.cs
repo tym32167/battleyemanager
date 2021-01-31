@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace BattlEyeManager.DataLayer.Migrations
 {
@@ -201,7 +198,7 @@ namespace BattlEyeManager.DataLayer.Migrations
                 {
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    ProviderDisplayName = table.Column<string>(nullable: true, maxLength: 255),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
