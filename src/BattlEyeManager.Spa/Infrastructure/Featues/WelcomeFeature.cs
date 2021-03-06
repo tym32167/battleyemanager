@@ -25,12 +25,23 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
         private static string WelcomeMessageTemplate = "Welcome, {name}! {sessions} sessions and {hours} hours on server!";
         private static string WelcomeEmptyMessageTemplate = "Welcome, {name}! First time on server!";
 
+        private static string WelcomeNewNicknameTemplate = "Внимание! Игрок {newName} сменил ник. Его прошлый ник {oldName}!";
+
         private static string GetMessageString(string template, string name, int sessions, int hours)
         {
             var templater = new StringTemplater();
             templater.AddParameter("name", name);
             templater.AddParameter("sessions", sessions.ToString());
             templater.AddParameter("hours", hours.ToString());
+
+            return templater.Template(template);
+        }
+
+        private static string GetNewNameMessageString(string template, string newName, string oldName)
+        {
+            var templater = new StringTemplater();
+            templater.AddParameter("newName", newName);
+            templater.AddParameter("oldName", oldName);
 
             return templater.Template(template);
         }
@@ -72,7 +83,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
-        private string GetMesage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string GetWelcomeMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
         {
             if (sessions.Length != 0)
             {
@@ -93,6 +104,23 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                 var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0);
                 return message;
             }
+        }
+
+        private string? GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        {
+
+            var newName = player.Name;
+            var oldName = sessions.OrderByDescending(x => x.StartDate).FirstOrDefault()?.Name;
+
+            if (!string.IsNullOrEmpty(oldName) &&
+                string.Compare(newName, oldName, StringComparison.InvariantCultureIgnoreCase) != 0)
+            {
+                var message = GetNewNameMessageString(WelcomeNewNicknameTemplate, newName, oldName);
+                return message;
+            }
+
+
+            return null;
         }
 
         private async void _playerStateService_PlayersJoined(object sender, BEServerEventArgs<IEnumerable<BE.Models.Player>> e)
@@ -121,8 +149,11 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                             .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
                             .ToArrayAsync();
 
-                        String message = GetMesage(server, player, sessions);
+                        var message = GetWelcomeMessage(server, player, sessions);
                         _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
+
+                        var newNameMessage = GetNewNickameMessage(server, player, sessions);
+                        if (!string.IsNullOrWhiteSpace(newNameMessage)) _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
                     }
                 }
             }
