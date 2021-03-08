@@ -29,13 +29,17 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
             if (string.IsNullOrWhiteSpace(telegramBotAccessToken)) return;
 
-            _serverToChatIdMap = options.Value.ServerToChatMap.ToDictionary(x => int.Parse(x.Key), x => long.Parse(x.Value));
-            _chatToServerIdMap = options.Value.ChatToServerMap.ToDictionary(x => long.Parse(x.Key), x => int.Parse(x.Value)); ;
+            _serverToChatIdMap = (options.Value?.ServerToChatMap ?? new Dictionary<string, string>()).ToDictionary(x => int.Parse(x.Key), x => long.Parse(x.Value));
+            _chatToServerIdMap = (options.Value?.ChatToServerMap ?? new Dictionary<string, string>()).ToDictionary(x => long.Parse(x.Key), x => int.Parse(x.Value)); ;
 
             _beServerAggregator.ChatMessageHandler += _beServerAggregator_ChatMessageHandler;
             _botClient = new TelegramBotClient(telegramBotAccessToken);
-            _botClient.OnMessage += _botClient_OnMessage;
-            _botClient.StartReceiving();
+
+            if (_chatToServerIdMap.Any())
+            {
+                _botClient.OnMessage += _botClient_OnMessage;
+                _botClient.StartReceiving();
+            }
         }
 
         private void _botClient_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
