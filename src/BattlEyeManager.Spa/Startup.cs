@@ -57,6 +57,12 @@ namespace BattlEyeManager.Spa
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
+            services.Configure<ChatBotFeatureConfig>(chatBotFeatureConfig =>
+            {
+                Configuration.GetSection("ChatBotFeatureConfig").Bind(chatBotFeatureConfig);
+            });
+
+
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseMySQL(connectionString));
 
@@ -157,13 +163,15 @@ namespace BattlEyeManager.Spa
             services.AddScoped<OnlineBanService, OnlineBanService>();
             services.AddScoped<OnlineMissionService, OnlineMissionService>();
             services.AddScoped<OnlineServerService, OnlineServerService>();
-            services.AddScoped<OnlineChatService, OnlineChatService>();
+
+            services.AddSingleton<OnlineChatService, OnlineChatService>();
 
             services.AddScoped<PlayerSyncService, PlayerSyncService>();
 
             // features
 
             services.AddSingleton<WelcomeFeature, WelcomeFeature>();
+            services.AddSingleton<ChatBotFeature, ChatBotFeature>();
 
             // end features
 
@@ -210,7 +218,10 @@ namespace BattlEyeManager.Spa
             applicationBuilder.ApplicationServices.GetService<DataRegistrator>();
             applicationBuilder.ApplicationServices.GetService<BELogic>();
 
+            applicationBuilder.ApplicationServices.GetService<OnlineChatService>();
+
             applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
+            applicationBuilder.ApplicationServices.GetService<ChatBotFeature>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
