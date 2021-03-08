@@ -27,7 +27,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
             var telegramBotAccessToken = options.Value.TelegramBotAccessToken;
 
-            if (!string.IsNullOrWhiteSpace(telegramBotAccessToken)) return;
+            if (string.IsNullOrWhiteSpace(telegramBotAccessToken)) return;
 
             _serverToChatIdMap = options.Value.ServerToChatMap.ToDictionary(x => int.Parse(x.Key), x => long.Parse(x.Value));
             _chatToServerIdMap = options.Value.ChatToServerMap.ToDictionary(x => long.Parse(x.Key), x => int.Parse(x.Value)); ;
