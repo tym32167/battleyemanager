@@ -1,8 +1,11 @@
 ﻿using BattlEyeManager.Core;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.Services;
+using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Steam;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,13 +20,19 @@ namespace BattlEyeManager.Spa.Api
         private readonly ServerModeratorService _moderatorService;
         private readonly IIpService _ipService;
         private readonly ISteamService _steamService;
+        private readonly IMapper _mapper;
 
-        public OnlineServerSteamController(OnlineServerService onlineServerService, ServerModeratorService moderatorService, IIpService ipService, ISteamService steamService)
+        public OnlineServerSteamController(OnlineServerService onlineServerService,
+            ServerModeratorService moderatorService,
+            IIpService ipService,
+            ISteamService steamService,
+            IMapper mapper)
         {
             _onlineServerService = onlineServerService;
             _moderatorService = moderatorService;
             _ipService = ipService;
             _steamService = steamService;
+            _mapper = mapper;
         }
 
 
@@ -45,7 +54,7 @@ namespace BattlEyeManager.Spa.Api
             var endpoint = new IPEndPoint(ipaddr, item.SteamPort);
             var players = _steamService.GetServerChallengeSync(endpoint);
 
-            return Ok(players);
+            return Ok(new { players?.PlayerCount, Players = players.Players.Select(p => _mapper.Map<OnlineSteamPlayerModel>(p)).ToArray() });
         }
 
         [HttpGet("{id}/info")]

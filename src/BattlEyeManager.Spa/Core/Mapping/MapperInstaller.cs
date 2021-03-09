@@ -5,6 +5,7 @@ using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Api.Sync;
 using BattlEyeManager.Spa.Model;
+using BattlEyeManager.Steam;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Player = BattlEyeManager.DataLayer.Models.Player;
@@ -43,6 +44,10 @@ namespace BattlEyeManager.Spa.Core.Mapping
                 configurationExpression.CreateMap<Server, OnlineServerModel>();
 
                 configurationExpression.CreateMap<Ban, OnlineBanViewModel>();
+
+
+                configurationExpression.CreateMap<ServerPlayers.PlayerInfo, OnlineSteamPlayerModel>();
+
 
                 configurationExpression
                     .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
