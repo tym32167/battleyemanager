@@ -7,6 +7,7 @@ import { ManageServerControl } from './manageServer';
 import { BanList } from './onlineBans/banlist';
 import { List as ChatList } from './onlineChat/list';
 import { List as PlayersList } from './onlinePlayers/list';
+import { PlayerSessionList } from './playerSessions/list';
 import { SteamStatsComponent } from './steam/steamStats';
 
 
@@ -23,6 +24,7 @@ export class OnlineServers extends Component {
                     <DefaultLayout exact={true} path="/online/:serverId/players" component={PlayersList} />
                     <Route exact={true} path="/online/:serverId/steam" component={SteamStatsComponent} />
                     <Route exact={true} path="/online/:serverId/bans" component={BanList} />
+                    <Route exact={true} path="/online/:serverId/sessions" component={PlayerSessionList} />
                     <DefaultLayout exact={true} path="/online/:serverId/chat" component={ChatList} />
 
                     <Route exact={true} path="/online/:serverId/manage" component={ManageServerControl} />

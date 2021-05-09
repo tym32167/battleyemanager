@@ -2,6 +2,7 @@
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
 using BattlEyeManager.DataLayer.Repositories.Players;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
 using BattlEyeManager.Spa.Model;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 using Player = BattlEyeManager.BE.Models.Player;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
@@ -85,6 +85,21 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
                 {
                     var note = $"Banned with reason: {reason}";
                     await repo.AddNoteToPlayer(playerGuid, currentUser, note, note);
+                }
+            }
+        }
+
+        public async Task BanOfflineAsync(int serverId, int playerId, string reason, long minutes, string currentUser)
+        {
+            reason = _messageHelper.GetBanMessage(reason, minutes, currentUser);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
+                {
+                    var player = await repo.GetById(playerId);
+                    _serverAggregator.Send(serverId, BattlEyeCommand.AddBan, $"{player.GUID} {minutes} {reason}");
+                    var note = $"Banned with reason: {reason}";
+                    await repo.AddNoteToPlayer(player.GUID, currentUser, note, note);
                 }
             }
         }

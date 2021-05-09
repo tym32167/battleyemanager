@@ -21,9 +21,19 @@ class OnlinePlayersService {
 
 
     public BanPlayerOnline(serverId: string | number, minutes: number, reason: string, player: IOnlinePlayer) {
-        return axios.post(this.baseUrl + serverId + '/ban', {
+        return axios.post(this.baseUrl + serverId + '/ban/online', {
             minutes,
             player,
+            reason,
+            serverId
+        })
+            .catch(error => Promise.reject(this.service.getError(error)));
+    }
+
+    public BanPlayerOffline(serverId: string | number, minutes: number, reason: string, playerId: number) {
+        return axios.post(this.baseUrl + serverId + '/ban/offline', {
+            minutes,
+            playerId,
             reason,
             serverId
         })

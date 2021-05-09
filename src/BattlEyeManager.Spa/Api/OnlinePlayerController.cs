@@ -54,8 +54,8 @@ namespace BattlEyeManager.Spa.Api
 
 
         [HttpPost("{serverId}")]
-        [Route("api/onlineserver/{serverId}/ban")]
-        public async Task<IActionResult> Ban(int serverId, [FromBody] BanPlayerModel model)
+        [Route("api/onlineserver/{serverId}/ban/online")]
+        public async Task<IActionResult> OnlineBan(int serverId, [FromBody] BanPlayerModel model)
         {
             _moderatorService.CheckAccess(User, serverId);
 
@@ -65,6 +65,23 @@ namespace BattlEyeManager.Spa.Api
                 return BadRequest();
 
             await _onlinePlayerService.BanGuidOnlineAsync(serverId, model.Player.Num, model.Player.Guid, model.Reason,
+                model.Minutes,
+                user.DisplayName);
+            return Ok(model);
+        }
+
+        [HttpPost("{serverId}")]
+        [Route("api/onlineserver/{serverId}/ban/offline")]
+        public async Task<IActionResult> OfflineBan(int serverId, [FromBody] OfflineBanPlayerModel model)
+        {
+            _moderatorService.CheckAccess(User, serverId);
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (user == null)
+                return BadRequest();
+
+            await _onlinePlayerService.BanOfflineAsync(serverId, model.PlayerId, model.Reason,
                 model.Minutes,
                 user.DisplayName);
             return Ok(model);

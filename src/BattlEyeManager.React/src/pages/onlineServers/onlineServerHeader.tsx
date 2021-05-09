@@ -14,6 +14,8 @@ const ServerHeader = ({ id, title }: IServerHeaderProps) => (
         <h4 className="p-0 m-0">{title}</h4>
         <Link to={'/online/' + id}> <Trans>Dashboard</Trans></Link>
         {' '}
+        <Link to={'/online/' + id + '/sessions'}><Trans>Sessions</Trans></Link>
+        {' '}
         <Link to={'/online/' + id + '/bans'}><Trans>Bans</Trans></Link>
         {' '}
         <Link to={'/online/' + id + '/manage'}><Trans>Manage</Trans></Link>

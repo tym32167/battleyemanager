@@ -1,10 +1,11 @@
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Infrastructure.Extensions;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Infrastructure.Extensions;
 
 namespace BattlEyeManager.Spa.Api
 {
@@ -47,12 +48,42 @@ namespace BattlEyeManager.Spa.Api
         }
 
         [HttpPost("{serverId}/command")]
-        public async Task<IActionResult> Command(int serverId, [FromBody]OnlineServerCommandModel command)
+        public async Task<IActionResult> Command(int serverId, [FromBody] OnlineServerCommandModel command)
         {
             _moderatorService.CheckAccess(User, serverId);
             if (serverId != command.ServerId) return BadRequest();
             await _onlineServerService.Execute(command);
             return Ok(new { serverId, command });
+        }
+
+        [HttpGet("{serverId}/sessions/count")]
+        public async Task<IActionResult> GetPlayerSessionCount(int serverId)
+        {
+            _moderatorService.CheckAccess(User, serverId);
+            var count = await _onlineServerService.GetPlayerSessionCount(serverId);
+            return Ok(new { serverId = serverId, PlayerSessionCount = count });
+        }
+
+        [HttpGet("{serverId}/sessions")]
+        public async Task<IActionResult> GetSessions(int serverId, int skip, int take)
+        {
+            _moderatorService.CheckAccess(User, serverId);
+
+            if (skip < 0 || take > 5000 || take < 0) return BadRequest();
+
+            var startSearch = DateTime.UtcNow.AddDays(-1);
+            var endSearch = DateTime.UtcNow;
+
+            var sessions = await _onlineServerService.GetPlayerSessions(serverId, skip, take, startSearch, endSearch);
+
+            var ret = new PagedResult<PlayerSessionModel>()
+            {
+                Skip = skip,
+                Take = take,
+                Data = sessions
+            };
+
+            return Ok(ret);
         }
     }
 }

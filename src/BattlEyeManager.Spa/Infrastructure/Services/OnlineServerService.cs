@@ -1,6 +1,7 @@
 ﻿using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
@@ -104,6 +104,45 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             var c = _commands[command.Command];
             _beServerAggregator.Send(command.ServerId, c);
             return Task.FromResult(true);
+        }
+
+
+        public async Task<int> GetPlayerSessionCount(int serverId)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                {
+                    return await ctx.PlayerSessions
+                        .Where(x => x.ServerId == serverId)
+                        .CountAsync();
+                }
+            }
+        }
+
+        public async Task<PlayerSessionModel[]> GetPlayerSessions(int serverId, int skip, int take, DateTime startSearh, DateTime endSearch)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                {
+                    var dbItems = await ctx.PlayerSessions
+                        .Where(x => x.ServerId == serverId
+                                && x.StartDate != x.EndDate
+                                && x.StartDate > startSearh
+                                && x.StartDate < endSearch)
+                        .OrderByDescending(x => x.StartDate)
+                        .Skip(skip)
+                        .Take(take)
+                        .ToArrayAsync();
+
+                    var items = dbItems
+                        .Select(x => _mapper.Map<PlayerSessionModel>(x))
+                        .ToArray();
+
+                    return items;
+                }
+            }
         }
     }
 }

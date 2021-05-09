@@ -18,6 +18,13 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             _playersCache = playersCache;
         }
 
+        public async Task<Player> GetById(int id)
+        {
+            var player = await _dbContext.Players
+                    .FirstOrDefaultAsync(x => x.Id == id);
+            return player;
+        }
+
 
         public async Task AddNoteToPlayer(string playerGuid, string author, string note, string comment = null)
         {

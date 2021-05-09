@@ -45,6 +45,8 @@ namespace BattlEyeManager.Spa.Core.Mapping
 
                 configurationExpression.CreateMap<Ban, OnlineBanViewModel>();
 
+                configurationExpression.CreateMap<PlayerSession, PlayerSessionModel>();
+
 
                 configurationExpression.CreateMap<ServerPlayers.PlayerInfo, OnlineSteamPlayerModel>();
 
