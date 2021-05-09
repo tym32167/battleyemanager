@@ -3,7 +3,6 @@ using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.State;
-using BattlEyeManager.Spa.Infrastructure.Utils;
 using BattlEyeManager.Spa.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -139,7 +138,6 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
                     var items = dbItems
                         .Select(x => _mapper.Map<PlayerSessionModel>(x))
-                        .Consolidate()
                         .ToArray();
 
                     return items;
