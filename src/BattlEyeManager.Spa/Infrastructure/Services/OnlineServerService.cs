@@ -1,10 +1,9 @@
 ﻿using BattleNET;
 using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -39,12 +38,9 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IServerRepository>())
                 {
-                    var dbItems = await ctx.Servers
-                        .Where(x => x.Active)
-                        .OrderBy(x => x.Name)
-                        .ToArrayAsync();
+                    var dbItems = await repo.GetActiveServers();
 
                     var items = dbItems
                         .Select(x => Update(_mapper.Map<OnlineServerModel>(x)))
@@ -59,9 +55,9 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IServerRepository>())
                 {
-                    var item = await ctx.Servers.FindAsync(serverId);
+                    var item = await repo.GetById(serverId);
                     if (item == null) return null;
 
                     var ret = _mapper.Map<OnlineServerModel>(item);
@@ -111,30 +107,21 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                 {
-                    return await ctx.PlayerSessions
-                        .Where(x => x.ServerId == serverId)
-                        .CountAsync();
+                    return await repo.GetPlayerSessionsCount(serverId);
                 }
             }
         }
 
-        public async Task<PlayerSessionModel[]> GetPlayerSessions(int serverId, int skip, int take, DateTime startSearh, DateTime endSearch)
+        public async Task<PlayerSessionModel[]> GetPlayerSessions(int serverId, int skip, int take, DateTime startSearch, DateTime endSearch)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                 {
-                    var dbItems = await ctx.PlayerSessions
-                        .Where(x => x.ServerId == serverId
-                                && x.StartDate != x.EndDate
-                                && x.StartDate > startSearh
-                                && x.StartDate < endSearch)
-                        .OrderByDescending(x => x.StartDate)
-                        .Skip(skip)
-                        .Take(take)
-                        .ToArrayAsync();
+
+                    var dbItems = await repo.GetPlayerSessions(serverId, startSearch, endSearch, skip, take);
 
                     var items = dbItems
                         .Select(x => _mapper.Map<PlayerSessionModel>(x))

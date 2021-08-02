@@ -1,4 +1,6 @@
 
+using BattlEyeManager.Core;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories.Players
 {
-    public class PlayerRepository : IDisposable
+    public class PlayerRepository : DisposeObject, IPlayerRepository
     {
         private readonly AppDbContext _dbContext;
         private readonly PlayersCache _playersCache;

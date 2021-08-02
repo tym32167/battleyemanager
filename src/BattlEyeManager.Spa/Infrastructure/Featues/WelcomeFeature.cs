@@ -1,14 +1,12 @@
 ﻿using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Player = BattlEyeManager.BE.Models.Player;
 
 namespace BattlEyeManager.Spa.Infrastructure.Featues
@@ -17,7 +15,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
     {
         private readonly ServerStateService _serverStateService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private Dictionary<int, ServerInfoDto> _enabledServers = new Dictionary<int, ServerInfoDto>();
+        private Dictionary<int, WelcomeServerSettings> _enabledServers = new Dictionary<int, WelcomeServerSettings>();
 
         private Dictionary<int, HashSet<string>> _welcomeFeatureBlackLists = new Dictionary<int, HashSet<string>>();
 
@@ -55,35 +53,30 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             playerStateService.PlayersJoined += _playerStateService_PlayersJoined;
         }
 
-        public void SetEnabled(ServerInfoDto server)
+        public async Task SetEnabled(WelcomeServerSettings server)
         {
             if (server.WelcomeFeatureEnabled)
             {
-                _enabledServers[server.Id] = server;
+                _enabledServers[server.ServerId] = server;
 
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    using (var repo = scope.ServiceProvider.GetService<IWelcomeFeatureRepository>())
                     {
-                        var blackList =
-                            ctx.WelcomeFeatureBlackList
-                                .Where(x => x.ServerId == server.Id)
-                                .Select(x => x.Guid)
-                                .Distinct();
-
-                        _welcomeFeatureBlackLists[server.Id] = new HashSet<string>(blackList);
+                        string[] guids = await repo.GetFeatureBlackList(server.ServerId);
+                        _welcomeFeatureBlackLists[server.ServerId] = new HashSet<string>(guids);
                     }
                 }
             }
 
             else
             {
-                _enabledServers.Remove(server.Id);
-                _welcomeFeatureBlackLists.Remove(server.Id);
+                _enabledServers.Remove(server.ServerId);
+                _welcomeFeatureBlackLists.Remove(server.ServerId);
             }
         }
 
-        private string GetWelcomeMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string GetWelcomeMessage(WelcomeServerSettings server, Player player, BattlEyeManager.Core.DataContracts.Models.PlayerSession[] sessions)
         {
             if (sessions.Length != 0)
             {
@@ -106,7 +99,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
-        private string? GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string? GetNewNickameMessage(Player player, BattlEyeManager.Core.DataContracts.Models.PlayerSession[] sessions)
         {
 
             var newName = player.Name;
@@ -128,10 +121,10 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             if (!_enabledServers.ContainsKey(e.Server.Id)) return;
 
             var server = _enabledServers[e.Server.Id];
-            var blackList = _welcomeFeatureBlackLists[server.Id];
+            var blackList = _welcomeFeatureBlackLists[server.ServerId];
 
             var players = e.Data.ToArray();
-            if (players.Length > 5) return;
+            if (players.Length > 2) return;
 
             var serverId = e.Server.Id;
 
@@ -141,18 +134,16 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                 {
                     foreach (var player in whitelistedPlayers)
                     {
-                        var sessions = await ctx.PlayerSessions
-                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
-                            .ToArrayAsync();
+                        var sessions = await repo.GetComletedPlayerSessions(serverId, player.Guid);
 
                         var message = GetWelcomeMessage(server, player, sessions);
                         _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
 
-                        var newNameMessage = GetNewNickameMessage(server, player, sessions);
+                        var newNameMessage = GetNewNickameMessage(player, sessions);
                         if (!string.IsNullOrWhiteSpace(newNameMessage)) _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
                     }
                 }

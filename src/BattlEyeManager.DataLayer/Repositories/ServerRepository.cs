@@ -1,15 +1,9 @@
 using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public interface IServerRepository : IGenericRepository<Server, int>
-    {
-
-    }
-
-    public class ServerRepository : GenericRepository<Server, int>, IServerRepository
+    public class ServerRepository
     {
         private readonly AppDbContext _context;
 

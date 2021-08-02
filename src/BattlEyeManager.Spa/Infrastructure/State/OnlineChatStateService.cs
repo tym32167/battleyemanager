@@ -1,12 +1,11 @@
-﻿using System;
+﻿using BattlEyeManager.BE.Models;
+using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core.DataContracts.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using BattlEyeManager.BE.Models;
-using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BattlEyeManager.Spa.Infrastructure.State
 {
@@ -81,11 +80,9 @@ namespace BattlEyeManager.Spa.Infrastructure.State
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IChatRepository>())
                 {
-                    var history = await ctx.ChatMessages.Where(c => c.ServerId == server.Id)
-                        .OrderByDescending(x => x.Date)
-                        .Take(100).OrderBy(x => x.Date).ToListAsync();
+                    var history = await repo.GetLastMessages(server.Id, 100);
 
                     foreach (var chat in history)
                     {

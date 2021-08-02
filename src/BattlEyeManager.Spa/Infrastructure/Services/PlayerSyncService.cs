@@ -1,12 +1,10 @@
-﻿using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Api.Sync;
-using Microsoft.EntityFrameworkCore;
+using BattlEyeManager.Spa.Core.Mapping;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Infrastructure.Services
 {
@@ -25,25 +23,20 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IPlayerRepository>())
                 {
-                    return await ctx.Players.CountAsync();
+                    return await repo.PlayersTotalCount();
                 }
             }
         }
 
-        public async Task<PlayerSyncDto[]> GetPlayers(int offset, int count)
+        public async Task<PlayerSyncDto[]> GetPlayers(int skip, int take)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IPlayerRepository>())
                 {
-                    var dbItems = await ctx.Players
-
-                        .OrderBy(x => x.Id)
-                        .Skip(offset)
-                        .Take(count)
-                        .ToArrayAsync();
+                    var dbItems = await repo.GetPlayers(skip, take);
 
                     var items = dbItems
                         .Select(x => _mapper.Map<PlayerSyncDto>(x))
@@ -66,37 +59,20 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IPlayerRepository>())
                 {
-                    var dbItems = await ctx.Players.Where(x => ids.Contains(x.GUID)).ToArrayAsync();
 
-                    var actualData = dbItems.GroupBy(x => x.GUID)
-                        .Select(x => x.First())
-                        .ToDictionary(x => x.GUID);
-
-                    foreach (var player in impoerData.Values)
+                    var request = requestPlayers.Select(x => new BattlEyeManager.Core.DataContracts.Models.Player()
                     {
-                        if (actualData.ContainsKey(player.GUID))
-                        {
-                            var actual = actualData[player.GUID];
-                            if (string.IsNullOrEmpty(actual.SteamId) && !string.IsNullOrEmpty(player.SteamId)) actual.SteamId = player.SteamId;
-                            if (string.IsNullOrEmpty(actual.Comment) && !string.IsNullOrEmpty(player.Comment)) actual.Comment = player.Comment;
-                        }
+                        Name = x.Name,
+                        Comment = x.Comment,
+                        GUID = x.GUID,
+                        IP = x.IP,
+                        LastSeen = new DateTime(x.LastSeen.Ticks, DateTimeKind.Utc),
+                        SteamId = x.SteamId
+                    }).ToArray();
 
-                        else
-                        {
-                            var dto = new Player();
-                            dto.Name = player.Name;
-                            dto.Comment = player.Comment;
-                            dto.LastSeen = new DateTime(player.LastSeen.Ticks, DateTimeKind.Utc);
-                            dto.SteamId = player.SteamId;
-                            dto.GUID = player.GUID;
-                            dto.IP = player.IP;
-                            ctx.Players.Add(dto);
-                        }
-                    }
-
-                    await ctx.SaveChangesAsync();
+                    await repo.ImportPlayers(request);
                 }
             }
         }

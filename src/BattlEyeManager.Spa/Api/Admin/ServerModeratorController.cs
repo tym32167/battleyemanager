@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.DataLayer.Repositories;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Infrastructure.Services;
@@ -34,7 +34,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             var dbItems = _moderatorService.GetServersByUserId(userId);
 
             var items =
-                (await _serverRepository.GetItemsAsync())
+                (await _serverRepository.GetAllServers())
                 .Select(x =>
                     new ServerModeratorItem()
                     {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core.DataContracts.Models.Values;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Api.Sync;

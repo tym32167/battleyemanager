@@ -1,12 +1,9 @@
 ﻿using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories.Players;
-using Microsoft.EntityFrameworkCore;
+using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,21 +25,10 @@ namespace BattlEyeManager.Spa.Infrastructure
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                 {
-                    var openedSessions = ctx.PlayerSessions.Where(x => x.EndDate == null).ToArray();
-
-                    foreach (var session in openedSessions)
-                    {
-                        session.EndDate = session.StartDate;
-                    }
-
-                    foreach (var session in ctx.Admins.Where(x => x.EndDate == null).ToArray())
-                    {
-                        session.EndDate = session.StartDate;
-                    }
-
-                    await ctx.SaveChangesAsync();
+                    await repo.EndOpenedPlayerSessions();
+                    await repo.EndOpenedAdminSessions();
                 }
             }
         }
@@ -51,18 +37,14 @@ namespace BattlEyeManager.Spa.Infrastructure
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IChatRepository>())
                 {
-
-                    await ctx.ChatMessages.AddAsync(
-                        new DataLayer.Models.ChatMessage
-                        {
-                            Date = e.Data.Date,
-                            ServerId = e.Server.Id,
-                            Text = e.Data.Message
-                        });
-
-                    await ctx.SaveChangesAsync();
+                    await repo.AddAsync(new ChatMessage
+                    {
+                        Date = e.Data.Date,
+                        ServerId = e.Server.Id,
+                        Text = e.Data.Message
+                    });
                 }
             }
         }
@@ -75,79 +57,38 @@ namespace BattlEyeManager.Spa.Infrastructure
 
             joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
 
+            if (!joined.Any()) return;
+
             _logger.LogInformation($"Server {server.Id}:{server.Name} Register JOINED:{joined.Length}");
 
             try
             {
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    using (var repo = scope.ServiceProvider.GetService<IPlayerRepository>())
                     {
-                        if (joined.Any())
+                        var now = DateTime.UtcNow;
+
+                        var players =
+                                await repo.RegisterJoinedPlayers(
+                                        joined.Select(x => new Player()
+                                        {
+                                            GUID = x.Guid,
+                                            IP = x.IP,
+                                            Name = x.Name,
+                                            LastSeen = now
+                                        }).ToArray());
+
+                        using (var sessionRepo = scope.ServiceProvider.GetService<ISessionRepository>())
                         {
-
-                            var guidIds = joined.Select(x => x.Guid).ToArray();
-                            var dbPlayers = await ctx.Players.Where(x => guidIds.Contains(x.GUID)).ToListAsync();
-                            var pdict = joined.ToDictionary(x => x.Guid);
-
-                            var newPlayers = joined.Where(p => dbPlayers.All(z => z.GUID != p.Guid))
-                                .Select(p => new Player
-                                {
-                                    GUID = p.Guid,
-                                    IP = p.IP,
-                                    LastSeen = DateTime.UtcNow,
-                                    Name = p.Name,
-                                })
-                                .ToArray();
-
-                            await ctx.Players.AddRangeAsync(newPlayers);
-
-
-                            foreach (var dbPlayer in dbPlayers)
+                            await sessionRepo.CreateSessions(players.Select(x => new PlayerSession()
                             {
-                                if (pdict.ContainsKey(dbPlayer.GUID))
-                                {
-                                    var p = pdict[dbPlayer.GUID];
-                                    dbPlayer.Name = p.Name;
-                                    dbPlayer.IP = p.IP;
-                                    dbPlayer.LastSeen = DateTime.UtcNow;
-                                }
-                            }
-
-                            await ctx.SaveChangesAsync();
-
-                            var sessions = new List<PlayerSession>();
-
-                            foreach (var p in newPlayers)
-                            {
-                                sessions.Add(new PlayerSession
-                                {
-                                    IP = p.IP,
-                                    Name = p.Name,
-                                    PlayerId = p.Id,
-                                    ServerId = server.Id,
-                                    StartDate = DateTime.UtcNow
-                                });
-                            }
-
-                            foreach (var p in dbPlayers)
-                            {
-                                sessions.Add(new PlayerSession
-                                {
-                                    IP = p.IP,
-                                    Name = p.Name,
-                                    PlayerId = p.Id,
-                                    ServerId = server.Id,
-                                    StartDate = DateTime.UtcNow
-                                });
-                            }
-
-                            await ctx.PlayerSessions.AddRangeAsync(sessions);
-
-                            await ctx.SaveChangesAsync();
-
-                            var cache = scope.ServiceProvider.GetService<PlayersCache>();
-                            await cache.Reload(guidIds);
+                                IP = x.IP,
+                                Name = x.Name,
+                                PlayerId = x.Id,
+                                StartDate = now,
+                                ServerId = server.Id
+                            }).ToArray());
                         }
                     }
                 }
@@ -164,34 +105,17 @@ namespace BattlEyeManager.Spa.Infrastructure
 
             leaved = leaved.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
 
+            if (!leaved.Any()) return;
+
             _logger.LogInformation($"Server {server.Id}:{server.Name} Register LEAVED:{leaved.Length}");
 
             try
             {
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                     {
-                        if (leaved.Any())
-                        {
-
-                            var leavingPlayersIds = leaved.Select(x => x.Guid).ToArray();
-
-                            var threeDaysAgo = DateTime.UtcNow.AddDays(-3);
-
-                            var sessionsToClose =
-                                await ctx.PlayerSessions
-                                    .Where(x => x.EndDate == null && leavingPlayersIds.Contains(x.Player.GUID) &&
-                                                x.StartDate > threeDaysAgo)
-                                    .ToListAsync();
-
-                            foreach (var session in sessionsToClose)
-                            {
-                                session.EndDate = DateTime.UtcNow;
-                            }
-
-                            await ctx.SaveChangesAsync();
-                        }
+                        await repo.EndPlayerSessions(leaved.Select(x => x.Guid).ToArray());
                     }
                 }
             }
@@ -212,30 +136,29 @@ namespace BattlEyeManager.Spa.Infrastructure
             {
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    using (var repo = scope.ServiceProvider.GetService<ISessionRepository>())
                     {
-                        await ctx.Admins.AddRangeAsync(
-                            joined.Select(x => new Admin
+                        await repo.CreateSessions(
+                            joined.Select(x => new AdminSession
                             {
                                 IP = x.IP,
                                 Num = x.Num,
                                 Port = x.Port,
                                 ServerId = server.Id,
                                 StartDate = DateTime.UtcNow
-                            })
+                            }).ToArray()
                         );
 
-                        var leavedHosts = leaved.Select(x => x.IP).ToArray();
-
-                        foreach (var adm in await ctx.Admins.Where(a => a.EndDate == null && a.ServerId == server.Id && leavedHosts.Contains(a.IP)).ToListAsync())
-                        {
-                            if (leaved.Any(a => a.IP == adm.IP && a.Port == adm.Port && a.Num == adm.Num))
+                        await repo.EndAdminSessions(
+                            leaved.Select(x => new AdminSession
                             {
-                                adm.EndDate = DateTime.UtcNow;
-                            }
-                        }
-
-                        await ctx.SaveChangesAsync();
+                                IP = x.IP,
+                                Num = x.Num,
+                                Port = x.Port,
+                                ServerId = server.Id,
+                                StartDate = DateTime.UtcNow
+                            }).ToArray()
+                        );
                     }
                 }
             }
@@ -255,34 +178,19 @@ namespace BattlEyeManager.Spa.Infrastructure
             {
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                    using (var repo = scope.ServiceProvider.GetService<IBanRepository>())
                     {
-                        var dbBans = await ctx.ServerBans.Where(x => x.IsActive && x.ServerId == server.Id)
-                            .ToListAsync();
-
-
-                        foreach (var serverBan in dbBans.Where(b => !all.Any(r => r.GuidIp == b.GuidIp && r.Reason == b.Reason && r.Num == b.Num)))
+                        await repo.RegisterActualBans(server.Id, all.Select(b => new ServerBan
                         {
-                            serverBan.IsActive = false;
-                            serverBan.CloseDate = DateTime.UtcNow;
-                        }
-
-
-                        var toAdd = all.Where(b => !dbBans.Any(r => r.GuidIp == b.GuidIp && r.Reason == b.Reason && r.Num == b.Num))
-                            .Select(b => new ServerBan
-                            {
-                                Date = DateTime.UtcNow,
-                                GuidIp = b.GuidIp,
-                                IsActive = true,
-                                Minutes = b.Minutesleft,
-                                MinutesLeft = b.Minutesleft,
-                                Num = b.Num,
-                                Reason = b.Reason,
-                                ServerId = server.Id
-                            });
-
-                        await ctx.ServerBans.AddRangeAsync(toAdd);
-                        await ctx.SaveChangesAsync();
+                            Date = DateTime.UtcNow,
+                            GuidIp = b.GuidIp,
+                            IsActive = true,
+                            Minutes = b.Minutesleft,
+                            MinutesLeft = b.Minutesleft,
+                            Num = b.Num,
+                            Reason = b.Reason,
+                            ServerId = server.Id
+                        }).ToArray());
                     }
                 }
             }

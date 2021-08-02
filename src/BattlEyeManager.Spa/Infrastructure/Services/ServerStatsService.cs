@@ -1,6 +1,5 @@
 ﻿using BattlEyeManager.BE.Services;
-using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Infrastructure.State;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -47,20 +46,19 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                using (var dc = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IStatsRepository>())
                 {
                     var date = DateTime.UtcNow;
                     var servers = _serverStateService.GetConnectedServers() ?? Enumerable.Empty<ServerInfo>();
 
-                    var records = servers.Select(s => new ServerUserCount
+                    var records = servers.Select(s => new BattlEyeManager.Core.DataContracts.Models.ServerUserCount
                     {
                         ServerId = s.Id,
                         PlayersCount = _playerStateService.GetPlayersCount(s.Id),
                         Time = date
                     }).ToArray();
 
-                    dc.ServerUserCounts.AddRange(records);
-                    await dc.SaveChangesAsync();
+                    await repo.PushServerUserCount(records);
                 }
             }
         }

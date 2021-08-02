@@ -1,16 +1,16 @@
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.Featues;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -18,7 +18,7 @@ namespace BattlEyeManager.Spa.Api.Admin
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class ServerController : GenericController<Server, int, ServerModel>
+    public class ServerController : BaseController // : GenericController<Server, int, ServerModel>
     {
         private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
@@ -34,11 +34,11 @@ namespace BattlEyeManager.Spa.Api.Admin
         }
 
         [HttpGet]
-        public override async Task<IActionResult> Get()
+        public async Task<IActionResult> Get()
         {
-            var dbItems = await _repository.GetItems()
+            var dbItems = (await _repository.GetAllServers())
                 .OrderBy(x => x.Name)
-                .ToArrayAsync();
+                .ToArray();
 
             var items = dbItems
                 .Select(_mapper.Map<ServerModel>)
@@ -48,7 +48,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         }
 
         [HttpPost("{id}")]
-        public override async Task<IActionResult> Post(int id, [FromBody] ServerModel model)
+        public async Task<IActionResult> Post(int id, [FromBody] ServerModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -58,23 +58,23 @@ namespace BattlEyeManager.Spa.Api.Admin
             var isActive = model.Active;
             if (id <= 0) return NotFound();
 
-            var ret = await base.Post(id, model);
+            var ret = await _repository.Update(_mapper.Map<BattlEyeManager.Core.DataContracts.Models.Server>(model));
 
             if (isActive)
                 _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
             else
                 _beServerAggregator.RemoveServer(model.Id);
 
-            _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
+            await _welcomeFeature.SetEnabled(_mapper.Map<WelcomeServerSettings>(model));
 
-            return ret;
+            return Ok(ret);
         }
 
 
         [HttpPut]
         [ProducesResponseType(201, Type = typeof(ServerModel))]
         [ProducesResponseType(400)]
-        public override async Task<IActionResult> Put([FromBody] ServerModel model)
+        public async Task<IActionResult> Put([FromBody] ServerModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,13 +88,13 @@ namespace BattlEyeManager.Spa.Api.Admin
             if (item.Active)
                 _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
 
-            _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
+            await _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
 
             return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
 
         [HttpDelete("{id}")]
-        public override async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return NotFound();
 
@@ -106,7 +106,7 @@ namespace BattlEyeManager.Spa.Api.Admin
 
             item.WelcomeFeatureEnabled = false;
 
-            _welcomeFeature.SetEnabled(item);
+            await _welcomeFeature.SetEnabled(item);
             _beServerAggregator.RemoveServer(id);
             return await base.Delete(id);
         }

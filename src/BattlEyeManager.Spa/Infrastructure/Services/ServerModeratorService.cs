@@ -1,7 +1,5 @@
-﻿using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Infrastructure.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -27,9 +25,9 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             _priviledges.Clear();
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var dc = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IServerModeratorRepository>())
                 {
-                    var data = await dc.ServerModerators.ToArrayAsync();
+                    var data = await repo.GetServerModerators();
 
                     foreach (var group in data.GroupBy(x => x.UserId))
                     {
@@ -60,21 +58,11 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var dc = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var repo = scope.ServiceProvider.GetService<IServerModeratorRepository>())
                 {
-                    var data = await dc.ServerModerators.Where(x => x.UserId == userId).ToListAsync();
-                    var actual = new HashSet<int>(data.Select(d => d.ServerId));
-                    dc.ServerModerators.RemoveRange(data.Where(d => !update.Contains(d.ServerId)));
 
-                    dc.ServerModerators.AddRange(
-                        update.Where(u => !actual.Contains(u))
-                            .Select(x => new ServerModerators()
-                            {
-                                ServerId = x,
-                                UserId = userId
-                            }));
+                    await repo.UpdateServerModeratorForUser(userId, update);
 
-                    await dc.SaveChangesAsync();
                     _priviledges.AddOrUpdate(userId, key => new HashSet<int>(update),
                         (key, value) => new HashSet<int>(update));
                 }

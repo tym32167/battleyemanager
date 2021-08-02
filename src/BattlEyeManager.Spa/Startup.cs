@@ -2,6 +2,7 @@ using BattlEyeManager.BE.Abstract;
 using BattlEyeManager.BE.ServerFactory;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using BattlEyeManager.DataLayer.Repositories;
@@ -29,7 +30,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -175,19 +175,6 @@ namespace BattlEyeManager.Spa
 
             // end features
 
-
-            services.AddTransient<IGenericRepository<BanReason, int>, BanReasonRepository>();
-            services.AddTransient<IGenericRepository<KickReason, int>, KickReasonRepository>();
-            services.AddTransient<IGenericRepository<Server, int>, ServerRepository>();
-            services.AddTransient<ServerScriptRepository, ServerScriptRepository>();
-            services.AddTransient<IServerRepository, ServerRepository>();
-            services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
-            services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
-            services.AddTransient<PlayerRepository, PlayerRepository>();
-
-
-            services.AddSingleton<PlayersCache, PlayersCache>();
-
             services.AddInternalMapper();
 
             services.AddTransient<UserRepository, UserRepository>();
@@ -229,7 +216,9 @@ namespace BattlEyeManager.Spa
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IBeServerAggregator beServerAggregator,
-            AppDbContext store,
+            IServerRepository serverRepository,
+            IWelcomeFeatureRepository welcomeFeatureRepository,
+            IUtilRepository utilRepository,
             ServerStateService service,
             DataRegistrator dataRegistrator,
             BELogic beLogic,
@@ -238,7 +227,7 @@ namespace BattlEyeManager.Spa
             PlayersCache playersCache
         )
         {
-            store.Database.Migrate();
+            utilRepository.InitStore().Wait();
 
             if (env.IsDevelopment())
             {
@@ -272,21 +261,21 @@ namespace BattlEyeManager.Spa
             beLogic.Init();
 
             CheckAdminUser(userManager, roleManager).Wait();
-            RunActiveServers(beServerAggregator, store, service).Wait();
+            RunActiveServers(beServerAggregator, serverRepository, service).Wait();
 
             InitSingletones(app);
-            InitFeatures(store, app);
+            InitFeatures(welcomeFeatureRepository, app);
 
             serverStatsService.Start();
         }
 
-        private void InitFeatures(AppDbContext store, IApplicationBuilder applicationBuilder)
+        private void InitFeatures(IWelcomeFeatureRepository repo, IApplicationBuilder applicationBuilder)
         {
-            var servers = store.Servers.Where(x => x.WelcomeFeatureEnabled).ToArray();
+            var servers = repo.GetWelcomeServerSettings().Result;
             var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
             foreach (var server in servers)
             {
-                welcomeFeature?.SetEnabled(server);
+                welcomeFeature.SetEnabled(server).Wait();
             }
         }
 
@@ -311,11 +300,11 @@ namespace BattlEyeManager.Spa
             }
         }
 
-        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, AppDbContext store, ServerStateService service)
+        private async Task RunActiveServers(IBeServerAggregator beServerAggregator, IServerRepository repository, ServerStateService service)
         {
             await service.InitAsync();
 
-            var activeServers = await store.Servers.Where(s => s.Active).ToListAsync();
+            var activeServers = await repository.GetActiveServers();
             foreach (var server in activeServers)
             {
                 beServerAggregator.AddServer(new ServerInfo

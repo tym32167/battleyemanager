@@ -1,11 +1,11 @@
-﻿using BattlEyeManager.DataLayer.Repositories;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -27,7 +27,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         [HttpGet("{id}")]
         public virtual async Task<IActionResult> Get(int id)
         {
-            var item = await _repository.GetItemByIdAsync(id);
+            var item = await _repository.GetById(id);
             if (item == null)
             {
                 return NotFound();
