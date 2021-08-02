@@ -35,9 +35,8 @@ namespace BattlEyeManager.Spa.Api
                 .OrderBy(x => x.Num)
                 .ToArray());
         }
-
-        [HttpPost("{serverId}")]
-        [Route("api/onlineserver/{serverId}/kick")]
+                
+        [HttpPost("api/onlineserver/{serverId}/kick")]
         public async Task<IActionResult> Kick(int serverId, [FromBody] KickPlayerModel model)
         {
             _moderatorService.CheckAccess(User, serverId);
@@ -52,9 +51,7 @@ namespace BattlEyeManager.Spa.Api
             return Ok(model);
         }
 
-
-        [HttpPost("{serverId}")]
-        [Route("api/onlineserver/{serverId}/ban/online")]
+        [HttpPost("api/onlineserver/{serverId}/ban/online")]
         public async Task<IActionResult> OnlineBan(int serverId, [FromBody] BanPlayerModel model)
         {
             _moderatorService.CheckAccess(User, serverId);
@@ -70,8 +67,7 @@ namespace BattlEyeManager.Spa.Api
             return Ok(model);
         }
 
-        [HttpPost("{serverId}")]
-        [Route("api/onlineserver/{serverId}/ban/offline")]
+        [HttpPost("api/onlineserver/{serverId}/ban/offline")]
         public async Task<IActionResult> OfflineBan(int serverId, [FromBody] OfflineBanPlayerModel model)
         {
             _moderatorService.CheckAccess(User, serverId);
