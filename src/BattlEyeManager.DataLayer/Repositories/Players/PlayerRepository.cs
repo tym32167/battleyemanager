@@ -55,5 +55,25 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
         {
             _dbContext?.Dispose();
         }
+
+        public Task<Core.DataContracts.Models.Player[]> RegisterJoinedPlayers(Core.DataContracts.Models.Player[] joined)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> PlayersTotalCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Core.DataContracts.Models.Player[]> GetPlayers(int skip, int take)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ImportPlayers(Core.DataContracts.Models.Player[] request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             var dbItems = _moderatorService.GetServersByUserId(userId);
 
             var items =
-                (await _serverRepository.GetAllServers())
+                (await _serverRepository.GetAll())
                 .Select(x =>
                     new ServerModeratorItem()
                     {

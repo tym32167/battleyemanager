@@ -1,7 +1,6 @@
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Core.Mapping;
@@ -18,7 +17,7 @@ namespace BattlEyeManager.Spa.Api.Admin
     [Authorize(Roles = RoleConstants.Administrator)]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class ServerController : BaseController // : GenericController<Server, int, ServerModel>
+    public class ServerController : GenericController<BattlEyeManager.Core.DataContracts.Models.Server, int, ServerModel>
     {
         private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
@@ -36,7 +35,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var dbItems = (await _repository.GetAllServers())
+            var dbItems = (await _repository.GetAll())
                 .OrderBy(x => x.Name)
                 .ToArray();
 
@@ -88,7 +87,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             if (item.Active)
                 _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
 
-            await _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
+            await _welcomeFeature.SetEnabled(_mapper.Map<WelcomeServerSettings>(model));
 
             return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
@@ -98,15 +97,16 @@ namespace BattlEyeManager.Spa.Api.Admin
         {
             if (id <= 0) return NotFound();
 
-            var item = await _repository.GetItemByIdAsync(id);
+            var item = await _repository.GetById(id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            item.WelcomeFeatureEnabled = false;
+            var feature = _mapper.Map<WelcomeServerSettings>(item);
+            feature.WelcomeFeatureEnabled = false;
 
-            await _welcomeFeature.SetEnabled(item);
+            await _welcomeFeature.SetEnabled(feature);
             _beServerAggregator.RemoveServer(id);
             return await base.Delete(id);
         }

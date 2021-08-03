@@ -1,4 +1,5 @@
 ﻿using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Models.Values;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,6 +8,25 @@ namespace BattlEyeManager.Core.DataContracts.Repositories
 {
     public interface IRepository : IDisposable
     {
+    }
+
+    public interface IGenericRepository<TItem, TKey> : IDisposable
+    {
+        Task<TItem[]> GetAll();
+        Task<TItem> GetById(TKey key);
+        Task Delete(TKey key);
+        Task<TItem> Add(TItem item);
+        Task<TItem> Update(TItem item);
+    }
+
+    public interface IBanReasonRepository : IGenericRepository<BanReason, int>
+    {
+
+    }
+
+    public interface IKickReasonRepository : IGenericRepository<KickReason, int>
+    {
+
     }
 
     public interface ISessionRepository : IRepository
@@ -46,7 +66,7 @@ namespace BattlEyeManager.Core.DataContracts.Repositories
     public interface IChatRepository : IRepository
     {
         Task AddAsync(ChatMessage chatMessage);
-        Task<ChatMessage[]> GetLastMessages(int serverId, int take);
+        Task<ChatMessage[]> GetLastMessages(int serverId, int count);
     }
 
     public interface IStatsRepository : IRepository
@@ -55,12 +75,9 @@ namespace BattlEyeManager.Core.DataContracts.Repositories
     }
 
 
-    public interface IServerRepository : IRepository
+    public interface IServerRepository : IGenericRepository<Server, int>
     {
         Task<Server[]> GetActiveServers();
-        Task<Server[]> GetAllServers();
-        Task<Server> GetById(int serverId);
-        Task<Server> Update(Server server);
     }
 
     public interface IServerModeratorRepository : IRepository

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using BattlEyeManager.Spa.Core.Mapping;
+using BattlEyeManager.Core.DataContracts.Repositories;
 
 namespace BattlEyeManager.Spa.Core
 {
@@ -21,7 +22,7 @@ namespace BattlEyeManager.Spa.Core
         [HttpGet]
         public virtual async Task<IActionResult> Get()
         {
-            var dbItems = await _repository.GetItemsAsync();
+            var dbItems = await _repository.GetAll();
 
             var items = dbItems
                 .Select(_mapper.Map<TModel>)
@@ -32,7 +33,7 @@ namespace BattlEyeManager.Spa.Core
         [HttpGet("{id}")]
         public virtual async Task<IActionResult> Get(TKey id)
         {
-            var item = await _repository.GetItemByIdAsync(id);
+            var item = await _repository.GetById(id);
             if (item == null)
             {
                 return NotFound();
@@ -54,7 +55,7 @@ namespace BattlEyeManager.Spa.Core
 
             _mapper.Map(model, item);
 
-            await _repository.UpdateItemAsync(item);
+            await _repository.Update(item);
 
             return NoContent();
         }
@@ -72,7 +73,7 @@ namespace BattlEyeManager.Spa.Core
 
             var item = _mapper.Map<T>(model);
 
-            await _repository.AddItemAsync(item);
+            await _repository.Add(item);
 
             return Ok(item);
         }
@@ -80,7 +81,7 @@ namespace BattlEyeManager.Spa.Core
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(TKey id)
         {
-            await _repository.DeleteItemByIdAsync(id);
+            await _repository.Delete(id);
             return NoContent();
         }
     }
