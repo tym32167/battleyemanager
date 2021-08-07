@@ -1,5 +1,5 @@
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Model;
@@ -19,9 +19,9 @@ namespace BattlEyeManager.Spa.Api.Admin
     public class UserController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(UserManager<ApplicationUser> userManager, UserRepository userRepository)
+        public UserController(UserManager<ApplicationUser> userManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
@@ -119,7 +119,7 @@ namespace BattlEyeManager.Spa.Api.Admin
 
             if (user.DisplayName != model.DisplayName)
             {
-                await _userRepository.UpdateUserDisaplyName(user.Id, model.DisplayName);
+                await _userRepository.UpdateUserDisplayName(user.Id, model.DisplayName);
             }
 
             return NoContent();

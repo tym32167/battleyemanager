@@ -1,46 +1,52 @@
+using BattlEyeManager.Core.DataContracts.Models;
 using BattlEyeManager.DataLayer.Context;
 using System.ComponentModel.DataAnnotations;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class ServerRepository
+    public class ServerRepository : GenericRepository<Server, int, ServerInfoDto, int>
     {
-        private readonly AppDbContext _context;
-
         public ServerRepository(AppDbContext context) : base(context)
         {
-            _context = context;
         }
 
+        protected override Server ToItem(ServerInfoDto model)
+        {
+            return new Server()
+            {
+                Id = model.Id,
+                Host = model.Host,
+                Port = model.Port,
+                SteamPort = model.SteamPort,
+                Password = model.Password,
+                Name = model.Name,
+                Active = model.Active,
+            };
+        }
 
+        protected override int ToItemKey(int modelKey)
+        {
+            return modelKey;
+        }
 
-        //private ServerInfoDto ToDto(Server info)
-        //{
-        //    return new ServerInfoDto()
-        //    {
-        //        Id = info.Id,
-        //        Host = info.Host,
-        //        Port = info.Port,
-        //        SteamPort = info.SteamPort,
-        //        Password = info.Password,
-        //        Name = info.Name,
-        //        Active = info.Active,
-        //    };
-        //}
+        protected override ServerInfoDto ToModel(Server item)
+        {
+            return new ServerInfoDto()
+            {
+                Id = item.Id,
+                Host = item.Host,
+                Port = item.Port,
+                SteamPort = item.SteamPort,
+                Password = item.Password,
+                Name = item.Name,
+                Active = item.Active,
+            };
+        }
 
-        //private Server FromDto(ServerInfoDto info)
-        //{
-        //    return new Server()
-        //    {
-        //        Id = info.Id,
-        //        Host = info.Host,
-        //        Port = info.Port,
-        //        SteamPort = info.SteamPort,
-        //        Password = info.Password,
-        //        Name = info.Name,
-        //        Active = info.Active,
-        //    };
-        //}
+        protected override int ToModelKey(int itemKey)
+        {
+            return itemKey;
+        }
     }
 
 

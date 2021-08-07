@@ -1,4 +1,4 @@
-﻿using BattlEyeManager.DataLayer.Repositories;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Infrastructure.Extensions;
 using BattlEyeManager.Spa.Infrastructure.Services;
@@ -15,11 +15,11 @@ namespace BattlEyeManager.Spa.Api
     [Produces("application/json")]
     public class ServerStatsController : BaseController
     {
-        private readonly ServerStatsRepository _repository;
+        private readonly IServerStatsRepository _repository;
         private readonly ServerModeratorService _moderatorService;
         private readonly OnlineServerService _onlineServerService;
 
-        public ServerStatsController(ServerStatsRepository repository, ServerModeratorService moderatorService, OnlineServerService onlineServerService)
+        public ServerStatsController(IServerStatsRepository repository, ServerModeratorService moderatorService, OnlineServerService onlineServerService)
         {
             _repository = repository;
             _moderatorService = moderatorService;

@@ -1,48 +1,57 @@
+using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Models;
+
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class ServerScriptRepository
+    public class ServerScriptRepository : GenericRepository<ServerScript, int, Models.ServerScript, int>, IServerScriptRepository
     {
         private readonly AppDbContext _context;
 
-        public ServerScriptRepository(AppDbContext context)
+        public ServerScriptRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
 
         public async Task<ServerScript[]> GetByServerAsync(int serverId)
         {
-            return await _context.ServerScripts.Where(s => s.ServerId == serverId).ToArrayAsync();
+            return await _context.ServerScripts.Where(s => s.ServerId == serverId).Select(x => ToItem(x)).ToArrayAsync();
         }
 
-        public async Task<ServerScript> GetByIdAsync(int id)
+        protected override ServerScript ToItem(Models.ServerScript model)
         {
-            return await _context.ServerScripts.FindAsync(id);
+            return new ServerScript()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Path = model.Path,
+                ServerId = model.ServerId
+            };
         }
 
-        public async Task UpdateAsync(ServerScript item)
+        protected override int ToItemKey(int modelKey)
         {
-            _context.ServerScripts.Attach(item);
-            _context.Entry(item).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-        public async Task AddAsync(ServerScript item)
-        {
-            _context.ServerScripts.Attach(item);
-            _context.Entry(item).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+            return modelKey;
         }
 
-        public async Task DeleteAsync(int id)
+        protected override Models.ServerScript ToModel(ServerScript item)
         {
-            var item = await _context.ServerScripts.FindAsync(id);
-            _context.ServerScripts.Remove(item);
-            await _context.SaveChangesAsync();
+            return new Models.ServerScript()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Path = item.Path,
+                ServerId = item.ServerId
+            };
+        }
+
+        protected override int ToModelKey(int itemKey)
+        {
+            return itemKey;
         }
     }
 }

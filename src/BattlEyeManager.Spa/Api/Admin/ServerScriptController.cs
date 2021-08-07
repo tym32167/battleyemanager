@@ -1,14 +1,14 @@
-using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories;
+using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Constants;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using BattlEyeManager.Spa.Core.Mapping;
 
 namespace BattlEyeManager.Spa.Api.Admin
 {
@@ -18,10 +18,10 @@ namespace BattlEyeManager.Spa.Api.Admin
     [Produces("application/json")]
     public class ServerScriptController : BaseController
     {
-        private readonly ServerScriptRepository _repository;
+        private readonly IServerScriptRepository _repository;
         private readonly IMapper _mapper;
 
-        public ServerScriptController(ServerScriptRepository repository, IMapper mapper)
+        public ServerScriptController(IServerScriptRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -47,8 +47,8 @@ namespace BattlEyeManager.Spa.Api.Admin
             item.Id = id;
             item.ServerId = serverId;
             var db = _mapper.Map<ServerScriptModel, ServerScript>(item);
-            await _repository.UpdateAsync(db);
-            var refreshed = await _repository.GetByIdAsync(db.Id);
+            await _repository.Update(db);
+            var refreshed = await _repository.GetById(db.Id);
             var ret = _mapper.Map<ServerScript, ServerScriptModel>(refreshed);
             return Ok(ret);
         }
@@ -59,8 +59,8 @@ namespace BattlEyeManager.Spa.Api.Admin
         {
             item.ServerId = serverId;
             var db = _mapper.Map<ServerScriptModel, ServerScript>(item);
-            await _repository.AddAsync(db);
-            var refreshed = await _repository.GetByIdAsync(db.Id);
+            await _repository.Add(db);
+            var refreshed = await _repository.GetById(db.Id);
             var ret = _mapper.Map<ServerScript, ServerScriptModel>(refreshed);
             return Ok(ret);
         }
@@ -68,7 +68,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _repository.DeleteAsync(id);
+            await _repository.Delete(id);
             return Ok();
         }
 
@@ -94,7 +94,7 @@ namespace BattlEyeManager.Spa.Api.Admin
         [HttpPost("{id}/run")]
         public async Task<IActionResult> Post(int id)
         {
-            var item = await _repository.GetByIdAsync(id);
+            var item = await _repository.GetById(id);
             var ret = await Task.Run(() => Bash(item.Path));
             return Ok(ret);
         }

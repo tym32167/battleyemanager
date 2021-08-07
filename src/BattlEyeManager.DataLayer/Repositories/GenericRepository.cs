@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public abstract class GenericRepository<TItem, TKey, TModel, TModelKey> : IGenericRepository<TItem, TKey> where TModel : class
+    public abstract class GenericRepository<TItem, TKey, TModel, TModelKey> : BaseRepository, IGenericRepository<TItem, TKey> where TModel : class
     {
         private readonly AppDbContext _context;
 
@@ -17,7 +17,7 @@ namespace BattlEyeManager.DataLayer.Repositories
         protected abstract TKey ToItemKey(TModelKey modelKey);
 
 
-        protected GenericRepository(AppDbContext context)
+        protected GenericRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
@@ -56,11 +56,6 @@ namespace BattlEyeManager.DataLayer.Repositories
             var item = await _context.Set<TModel>().FindAsync(ToModelKey(id));
             _context.Set<TModel>().Remove(item);
             await _context.SaveChangesAsync();
-        }
-
-        public virtual void Dispose()
-        {
-            _context?.Dispose();
         }
     }
 }

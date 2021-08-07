@@ -1,7 +1,5 @@
 ﻿using BattlEyeManager.Core.DataContracts.Models;
-using BattlEyeManager.Core.DataContracts.Models.Values;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.Core.DataContracts.Repositories
@@ -10,85 +8,17 @@ namespace BattlEyeManager.Core.DataContracts.Repositories
     {
     }
 
-    public interface IGenericRepository<TItem, TKey> : IDisposable
+    public interface IServerScriptRepository : IGenericRepository<ServerScript, int>
     {
-        Task<TItem[]> GetAll();
-        Task<TItem> GetById(TKey key);
-        Task Delete(TKey key);
-        Task<TItem> Add(TItem item);
-        Task<TItem> Update(TItem item);
+        Task<ServerScript[]> GetByServerAsync(int serverId);
+    }
+    public interface IServerStatsRepository : IRepository
+    {
+        Task<ServerStatsResult> GetServersStats(int[] serverIds, DateTime start, DateTime end, TimeSpan step);
     }
 
-    public interface IBanReasonRepository : IGenericRepository<BanReason, int>
+    public interface IUserRepository : IRepository
     {
-
+        Task UpdateUserDisplayName(string userId, string displayName);
     }
-
-    public interface IKickReasonRepository : IGenericRepository<KickReason, int>
-    {
-
-    }
-
-    public interface ISessionRepository : IRepository
-    {
-        Task EndOpenedPlayerSessions();
-        Task EndOpenedAdminSessions();
-        Task CreateSessions(PlayerSession[] playerSessions);
-        Task CreateSessions(AdminSession[] adminSessions);
-
-        Task EndPlayerSessions(string[] guids);
-        Task EndAdminSessions(AdminSession[] adminSessions);
-        Task<PlayerSession[]> GetPlayerSessions(int serverId, DateTime startSearch, DateTime endSearch, int skip, int take);
-        Task<PlayerSession[]> GetComletedPlayerSessions(int serverId, string playerGuid);
-        Task<int> GetPlayerSessionsCount(int serverId);
-    }
-
-
-    public interface IPlayerRepository : IRepository
-    {
-        Task<Player[]> RegisterJoinedPlayers(Player[] joined);
-        Task<int> PlayersTotalCount();
-        Task<Player[]> GetPlayers(int skip, int take);
-        Task ImportPlayers(Player[] request);
-    }
-
-    public interface IBanRepository : IRepository
-    {
-        Task RegisterActualBans(int serverId, ServerBan[] actualBans);
-    }
-
-    public interface IPlayerNoteRepository : IRepository
-    {
-
-    }
-
-
-    public interface IChatRepository : IRepository
-    {
-        Task AddAsync(ChatMessage chatMessage);
-        Task<ChatMessage[]> GetLastMessages(int serverId, int count);
-    }
-
-    public interface IStatsRepository : IRepository
-    {
-        Task PushServerUserCount(ServerUserCount[] records);
-    }
-
-
-    public interface IServerRepository : IGenericRepository<Server, int>
-    {
-        Task<Server[]> GetActiveServers();
-    }
-
-    public interface IServerModeratorRepository : IRepository
-    {
-        Task<ServerModerator[]> GetServerModerators();
-        Task UpdateServerModeratorForUser(string userId, HashSet<int> update);
-    }
-
-    public interface IUtilRepository : IRepository
-    {
-        Task InitStore();
-    }
-
 }

@@ -1,27 +1,19 @@
-using BattlEyeManager.Core;
 using BattlEyeManager.Core.DataContracts.Models;
 using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
-using BattlEyeManager.DataLayer.Repositories.Players;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class ChatRepository : DisposeObject, IChatRepository
+    public class ChatRepository : BaseRepository, IChatRepository
     {
         private readonly AppDbContext context;
 
-        public ChatRepository(AppDbContext context)
+        public ChatRepository(AppDbContext context) : base(context)
         {
             this.context = context;
-        }
-
-        protected override void DisposeManagedResources()
-        {
-            base.DisposeManagedResources();
-            context.Dispose();
         }
 
         public async Task AddAsync(ChatMessage chatMessage)
@@ -47,7 +39,7 @@ namespace BattlEyeManager.DataLayer.Repositories
                 .Select(x => new ChatMessage()
                 {
                     Date = x.Date,
-                    Id = x.Id, 
+                    Id = x.Id,
                     ServerId = x.ServerId,
                     Text = x.Text
                 }).ToArrayAsync();

@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
 using BattlEyeManager.BE.Models;
 using BattlEyeManager.BE.Services;
+using BattlEyeManager.Core.DataContracts.Models;
 using BattlEyeManager.Core.DataContracts.Models.Values;
-using BattlEyeManager.DataLayer.Models;
-using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Api.Sync;
 using BattlEyeManager.Spa.Model;
 using BattlEyeManager.Steam;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Player = BattlEyeManager.DataLayer.Models.Player;
 
 namespace BattlEyeManager.Spa.Core.Mapping
 {
@@ -37,7 +35,7 @@ namespace BattlEyeManager.Spa.Core.Mapping
 
                 configurationExpression.CreateMap<Server, ServerInfo>();
                 configurationExpression.CreateMap<ServerModel, ServerInfo>();
-                configurationExpression.CreateMap<ServerModel, ServerInfoDto>();
+                // configurationExpression.CreateMap<ServerModel, ServerInfoDto>();
 
                 configurationExpression.CreateMap<ServerScript, ServerScriptModel>();
                 configurationExpression.CreateMap<ServerScriptModel, ServerScript>();
@@ -52,16 +50,16 @@ namespace BattlEyeManager.Spa.Core.Mapping
                 configurationExpression.CreateMap<ServerPlayers.PlayerInfo, OnlineSteamPlayerModel>();
 
 
-                configurationExpression
-                    .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
-                    .ForMember(x => x.Country, opt => opt.Ignore());
+                //configurationExpression
+                //    .CreateMap<Player, OnlinePlayerModel>(MemberList.None)
+                //    .ForMember(x => x.Country, opt => opt.Ignore());
 
                 configurationExpression
                     .CreateMap<BattlEyeManager.BE.Models.Player, OnlinePlayerModel>(MemberList.None)
                     .ForMember(x => x.Country, opt => opt.Ignore());
 
 
-                configurationExpression.CreateMap<Player, PlayerSyncDto>();
+                // configurationExpression.CreateMap<Player, PlayerSyncDto>();
 
                 configurationExpression.CreateMap<Mission, OnlineMissionModel>();
 

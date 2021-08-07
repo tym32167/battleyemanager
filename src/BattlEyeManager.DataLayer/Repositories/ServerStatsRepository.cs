@@ -1,17 +1,18 @@
-﻿using BattlEyeManager.DataLayer.Context;
+﻿using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
+using BattlEyeManager.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class ServerStatsRepository
+    public class ServerStatsRepository : BaseRepository, IServerStatsRepository
     {
         private readonly AppDbContext _context;
 
-        public ServerStatsRepository(AppDbContext context)
+        public ServerStatsRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
@@ -60,29 +61,5 @@ namespace BattlEyeManager.DataLayer.Repositories
 
             return ret;
         }
-    }
-
-    public class ServerStatsResult
-    {
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-
-        public List<ServerStatInfo> Servers { get; set; } = new List<ServerStatInfo>();
-
-        public List<ServerStatItemResult> Data { get; set; } = new List<ServerStatItemResult>();
-    }
-
-    public class ServerStatItemResult
-    {
-        public DateTime Date { get; set; }
-        public int ServerId { get; set; }
-        public string ServerName { get; set; }
-        public int PlayerCount { get; set; }
-    }
-
-    public class ServerStatInfo
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
 }
