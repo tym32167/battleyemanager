@@ -179,7 +179,7 @@ namespace BattlEyeManager.Spa
 
             services.AddInternalMapper();
 
-            services.AddTransient<UserRepository, UserRepository>();
+            RegisterDataLayer(services);
 
             services.AddTransient<MessageHelper, MessageHelper>();
             services.AddTransient<ISettingsStore, SettingsStore>();
@@ -229,6 +229,28 @@ namespace BattlEyeManager.Spa
                     }
                 });
             });
+        }
+
+
+        private void RegisterDataLayer(IServiceCollection services)
+        {
+            services.AddTransient<IUserRepository, UserRepository>();
+
+            services.AddTransient<IBanReasonRepository, BanReasonRepository>();
+            services.AddTransient<IChatRepository, ChatRepository>();
+            services.AddTransient<IKickReasonRepository, KickReasonRepository>();
+
+            services.AddTransient<IPlayerNoteRepository, PlayerNoteRepository>();
+
+            services.AddTransient<IPlayerRepository, PlayerRepository>();
+            services.AddTransient<IServerModeratorRepository, ServerModeratorRepository>();
+            services.AddTransient<IServerRepository, ServerRepository>();
+            services.AddTransient<IServerScriptRepository, ServerScriptRepository>();
+            services.AddTransient<IServerStatsRepository, ServerStatsRepository>();
+            services.AddTransient<ISessionRepository, SessionRepository>();
+
+            services.AddTransient<IStatsRepository, StatsRepository>();
+            services.AddTransient<IUtilRepository, UtilRepository>();
         }
 
         private void InitSingletones(IApplicationBuilder applicationBuilder)
@@ -283,7 +305,7 @@ namespace BattlEyeManager.Spa
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-            }           
+            }
 
 
             app.UseDefaultFiles();
@@ -365,7 +387,5 @@ namespace BattlEyeManager.Spa
                 });
             }
         }
-
-
     }
 }

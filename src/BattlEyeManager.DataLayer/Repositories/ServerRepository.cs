@@ -1,13 +1,26 @@
 using BattlEyeManager.Core.DataContracts.Models;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories
 {
-    public class ServerRepository : GenericRepository<Server, int, ServerInfoDto, int>
+    public class ServerRepository : GenericRepository<Server, int, ServerInfoDto, int>, IServerRepository
     {
+        private readonly AppDbContext context;
+
         public ServerRepository(AppDbContext context) : base(context)
         {
+            this.context = context;
+        }
+
+        public async Task<Server[]> GetActiveServers()
+        {
+            return await context.Servers.Where(s => s.Active).Select(x => ToItem(x)).ToArrayAsync();
+
         }
 
         protected override Server ToItem(ServerInfoDto model)
