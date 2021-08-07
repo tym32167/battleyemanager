@@ -4,7 +4,7 @@ namespace BattlEyeManager.Core.DataContracts.Repositories
 {
     public interface IWelcomeFeatureRepository : IRepository
     {
-        Task<string[]> GetFeatureBlackList(int id);
+        Task<string[]> GetFeatureBlackList(int serverId);
 
         Task<WelcomeServerSettings[]> GetWelcomeServerSettings();
     }

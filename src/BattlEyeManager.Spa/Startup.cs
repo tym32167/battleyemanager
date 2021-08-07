@@ -250,6 +250,8 @@ namespace BattlEyeManager.Spa
             services.AddTransient<ISessionRepository, SessionRepository>();
 
             services.AddTransient<IStatsRepository, StatsRepository>();
+            services.AddTransient<IWelcomeFeatureRepository, WelcomeFeatureRepository>();
+
             services.AddTransient<IUtilRepository, UtilRepository>();
         }
 
