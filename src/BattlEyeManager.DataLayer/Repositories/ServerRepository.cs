@@ -19,22 +19,13 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         public async Task<Server[]> GetActiveServers()
         {
-            return await context.Servers.Where(s => s.Active).Select(x => ToItem(x)).ToArrayAsync();
+            return await context.Servers.Where(s => s.Active).Select(x => ServerRepository.Mapper.ToItem(x)).ToArrayAsync();
 
         }
 
         protected override Server ToItem(ServerInfoDto model)
         {
-            return new Server()
-            {
-                Id = model.Id,
-                Host = model.Host,
-                Port = model.Port,
-                SteamPort = model.SteamPort,
-                Password = model.Password,
-                Name = model.Name,
-                Active = model.Active,
-            };
+            return ServerRepository.Mapper.ToItem(model);
         }
 
         protected override int ToItemKey(int modelKey)
@@ -44,21 +35,43 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         protected override ServerInfoDto ToModel(Server item)
         {
-            return new ServerInfoDto()
-            {
-                Id = item.Id,
-                Host = item.Host,
-                Port = item.Port,
-                SteamPort = item.SteamPort,
-                Password = item.Password,
-                Name = item.Name,
-                Active = item.Active,
-            };
+            return ServerRepository.Mapper.ToModel(item);
         }
 
         protected override int ToModelKey(int itemKey)
         {
             return itemKey;
+        }
+
+        private static class Mapper
+        {
+            public static Server ToItem(ServerInfoDto model)
+            {
+                return new Server()
+                {
+                    Id = model.Id,
+                    Host = model.Host,
+                    Port = model.Port,
+                    SteamPort = model.SteamPort,
+                    Password = model.Password,
+                    Name = model.Name,
+                    Active = model.Active,
+                };
+            }
+
+            public static ServerInfoDto ToModel(Server item)
+            {
+                return new ServerInfoDto()
+                {
+                    Id = item.Id,
+                    Host = item.Host,
+                    Port = item.Port,
+                    SteamPort = item.SteamPort,
+                    Password = item.Password,
+                    Name = item.Name,
+                    Active = item.Active,
+                };
+            }
         }
     }
 

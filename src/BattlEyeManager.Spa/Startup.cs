@@ -244,7 +244,9 @@ namespace BattlEyeManager.Spa
 
             services.AddTransient<IPlayerRepository, PlayerRepository>();
             services.AddTransient<IServerModeratorRepository, ServerModeratorRepository>();
+
             services.AddTransient<IServerRepository, ServerRepository>();
+
             services.AddTransient<IServerScriptRepository, ServerScriptRepository>();
             services.AddTransient<IServerStatsRepository, ServerStatsRepository>();
             services.AddTransient<ISessionRepository, SessionRepository>();

@@ -20,7 +20,7 @@ namespace BattlEyeManager.DataLayer.Repositories
             return await context.WelcomeFeatureBlackList.Where(x => x.ServerId == serverId).Select(x => x.Guid).ToArrayAsync();
         }
 
-        private WelcomeServerSettings ToItem(Models.Server server)
+        private static WelcomeServerSettings ToItem(Models.Server server)
         {
             return new WelcomeServerSettings()
             {

@@ -18,7 +18,7 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             _dbContext = dbContext;
         }
 
-        private Core.DataContracts.Models.Player ToItem(Player model)
+        private static Core.DataContracts.Models.Player ToItem(Player model)
         {
             return new Core.DataContracts.Models.Player()
             {
@@ -82,10 +82,11 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, Core.DataContracts.Models.Player>> GetPlayers(string[] guids)
+        public async Task<Dictionary<string, Core.DataContracts.Models.Player>> GetPlayers(string[] guids)
         {
-            throw new NotImplementedException();
-            // return _playersCache.GetPlayers(guids);
+            var players = await _dbContext.Players.Where(x => guids.Contains(x.GUID))
+                .Select(x => ToItem(x)).ToDictionaryAsync(x => x.GUID);
+            return players;
         }
 
         public async Task<Core.DataContracts.Models.Player> GetById(int playerId)

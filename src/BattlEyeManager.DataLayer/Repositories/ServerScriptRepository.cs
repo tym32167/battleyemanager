@@ -19,18 +19,12 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         public async Task<ServerScript[]> GetByServerAsync(int serverId)
         {
-            return await _context.ServerScripts.Where(s => s.ServerId == serverId).Select(x => ToItem(x)).ToArrayAsync();
+            return await _context.ServerScripts.Where(s => s.ServerId == serverId).Select(x => ServerScriptRepository.Mapper.ToItem(x)).ToArrayAsync();
         }
 
         protected override ServerScript ToItem(Models.ServerScript model)
         {
-            return new ServerScript()
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Path = model.Path,
-                ServerId = model.ServerId
-            };
+            return ServerScriptRepository.Mapper.ToItem(model);
         }
 
         protected override int ToItemKey(int modelKey)
@@ -40,18 +34,37 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         protected override Models.ServerScript ToModel(ServerScript item)
         {
-            return new Models.ServerScript()
-            {
-                Id = item.Id,
-                Name = item.Name,
-                Path = item.Path,
-                ServerId = item.ServerId
-            };
+            return ServerScriptRepository.Mapper.ToModel(item);
         }
 
         protected override int ToModelKey(int itemKey)
         {
             return itemKey;
+        }
+
+        private static class Mapper
+        {
+            public static ServerScript ToItem(Models.ServerScript model)
+            {
+                return new ServerScript()
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Path = model.Path,
+                    ServerId = model.ServerId
+                };
+            }
+
+            public static Models.ServerScript ToModel(ServerScript item)
+            {
+                return new Models.ServerScript()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Path = item.Path,
+                    ServerId = item.ServerId
+                };
+            }
         }
     }
 }

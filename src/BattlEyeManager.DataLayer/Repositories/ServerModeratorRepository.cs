@@ -27,7 +27,7 @@ namespace BattlEyeManager.DataLayer.Repositories
             return list.Cast<ServerInfoDto>().ToList();
         }
 
-        private ServerModerator ModelToItem(Models.ServerModerators model)
+        private static ServerModerator ModelToItem(Models.ServerModerators model)
         {
             return new ServerModerator()
             {
@@ -39,7 +39,8 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         public async Task<ServerModerator[]> GetServerModerators()
         {
-            return await _context.ServerModerators.Select(x => ModelToItem(x)).ToArrayAsync();
+            var ret = await _context.ServerModerators.Select(x => ModelToItem(x)).ToArrayAsync();
+            return ret;
         }
 
         public async Task UpdateServerModeratorForUser(string userId, HashSet<int> update)
