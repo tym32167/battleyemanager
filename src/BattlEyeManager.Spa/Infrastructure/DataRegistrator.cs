@@ -55,33 +55,34 @@ namespace BattlEyeManager.Spa.Infrastructure
         {
             await SemaphoreSlimPlayers.WaitAsync();
 
-            joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
-
-            if (!joined.Any()) return;
-
-            _logger.LogInformation($"Server {server.Id}:{server.Name} Register JOINED:{joined.Length}");
-
             try
             {
+                joined = joined.GroupBy(x => x.Guid).Select(x => x.First()).ToArray();
+
+                if (!joined.Any()) return;
+
+                _logger.LogInformation($"Server {server.Id}:{server.Name} Register JOINED:{joined.Length}");
+
                 using (var scope = _scopeFactory.CreateScope())
                 {
                     using (var repo = scope.ServiceProvider.GetService<IPlayerRepository>())
                     {
                         var now = DateTime.UtcNow;
 
-                        var players =
-                                await repo.RegisterJoinedPlayers(
-                                        joined.Select(x => new Player()
-                                        {
-                                            GUID = x.Guid,
-                                            IP = x.IP,
-                                            Name = x.Name,
-                                            LastSeen = now
-                                        }).ToArray());
+                        await repo.RegisterJoinedPlayers(server.Id,
+                                joined.Select(x => new Player()
+                                {
+                                    GUID = x.Guid,
+                                    IP = x.IP,
+                                    Name = x.Name,
+                                    LastSeen = now
+                                }).ToArray());
+
+                        var players = await repo.GetPlayers(joined.Select(x => x.Guid).ToArray());
 
                         using (var sessionRepo = scope.ServiceProvider.GetService<ISessionRepository>())
                         {
-                            await sessionRepo.CreateSessions(players.Select(x => new PlayerSession()
+                            await sessionRepo.CreateSessions(players.Values.Select(x => new PlayerSession()
                             {
                                 IP = x.IP,
                                 Name = x.Name,

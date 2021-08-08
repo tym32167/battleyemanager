@@ -284,9 +284,7 @@ namespace BattlEyeManager.Spa
             DataRegistrator dataRegistrator,
             BELogic beLogic,
             ServerModeratorService moderatorService,
-            ServerStatsService serverStatsService,
-            PlayersCache playersCache
-        )
+            ServerStatsService serverStatsService)
         {
             utilRepository.InitStore().Wait();
 
@@ -325,11 +323,9 @@ namespace BattlEyeManager.Spa
                 endPoints.MapFallbackToController("Index", "Home");
             });
 
-
-
             moderatorService.Init().Wait();
             dataRegistrator.Init().Wait();
-            playersCache.Reload().Wait();
+
             beLogic.Init();
 
             CheckAdminUser(userManager, roleManager).Wait();

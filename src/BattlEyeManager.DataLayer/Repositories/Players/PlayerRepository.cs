@@ -1,79 +1,97 @@
-
-using BattlEyeManager.Core;
 using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BattlEyeManager.DataLayer.Repositories.Players
 {
-    public class PlayerRepository : DisposeObject, IPlayerRepository
+    public class PlayerRepository : BaseRepository, IPlayerRepository
     {
         private readonly AppDbContext _dbContext;
-        private readonly PlayersCache _playersCache;
 
-        public PlayerRepository(AppDbContext dbContext, PlayersCache playersCache)
+        public PlayerRepository(AppDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _playersCache = playersCache;
         }
 
-        public async Task<Player> GetById(int id)
+        private Core.DataContracts.Models.Player ToItem(Player model)
         {
-            var player = await _dbContext.Players
-                    .FirstOrDefaultAsync(x => x.Id == id);
-            return player;
-        }
-
-
-        public async Task AddNoteToPlayer(string playerGuid, string author, string note, string comment = null)
-        {
-            var player = await _dbContext.Players
-                    .FirstOrDefaultAsync(x => x.GUID == playerGuid);
-            if (player != null)
+            return new Core.DataContracts.Models.Player()
             {
-                _dbContext.PlayerNotes.Add(new PlayerNote()
-                {
-                    Author = author,
-                    Date = DateTime.UtcNow,
-                    PlayerId = player.Id,
-                    Text = note
-                });
+                Id = model.Id,
+                Comment = model.Comment,
+                GUID = model.GUID,
+                IP = model.IP,
+                LastSeen = model.LastSeen,
+                Name = model.Name,
+                SteamId = model.SteamId
+            };
+        }
 
-                if (comment != null) player.Comment = $"{player.Comment} | {comment}";
+        public async Task RegisterJoinedPlayers(int serverId, Core.DataContracts.Models.Player[] joined)
+        {
+            if (!joined.Any()) return;
+
+            var guidIds = joined.Select(x => x.GUID).ToArray();
+            var dbPlayers = await _dbContext.Players.Where(x => guidIds.Contains(x.GUID)).ToListAsync();
+            var pdict = joined.ToDictionary(x => x.GUID);
+
+            var newPlayers = joined.Where(p => dbPlayers.All(z => z.GUID != p.GUID))
+                .Select(p => new Player
+                {
+                    GUID = p.GUID,
+                    IP = p.IP,
+                    LastSeen = DateTime.UtcNow,
+                    Name = p.Name,
+                })
+                .ToArray();
+
+            await _dbContext.Players.AddRangeAsync(newPlayers);
+
+
+            foreach (var dbPlayer in dbPlayers)
+            {
+                if (pdict.ContainsKey(dbPlayer.GUID))
+                {
+                    var p = pdict[dbPlayer.GUID];
+                    dbPlayer.Name = p.Name;
+                    dbPlayer.IP = p.IP;
+                    dbPlayer.LastSeen = DateTime.UtcNow;
+                }
             }
 
             await _dbContext.SaveChangesAsync();
-
-            await _playersCache.Reload(player);
         }
 
-
-        public void Dispose()
+        public async Task<int> PlayersTotalCount()
         {
-            _dbContext?.Dispose();
+            return await _dbContext.Players.CountAsync();
         }
 
-        public Task<Core.DataContracts.Models.Player[]> RegisterJoinedPlayers(Core.DataContracts.Models.Player[] joined)
+        public async Task<Core.DataContracts.Models.Player[]> GetPlayers(int skip, int take)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> PlayersTotalCount()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Core.DataContracts.Models.Player[]> GetPlayers(int skip, int take)
-        {
-            throw new NotImplementedException();
+            return await _dbContext.Players.OrderBy(x => x.Id).Skip(skip).Take(take).Select(x => ToItem(x)).ToArrayAsync();
         }
 
         public Task ImportPlayers(Core.DataContracts.Models.Player[] request)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<Dictionary<string, Core.DataContracts.Models.Player>> GetPlayers(string[] guids)
+        {
+            throw new NotImplementedException();
+            // return _playersCache.GetPlayers(guids);
+        }
+
+        public async Task<Core.DataContracts.Models.Player> GetById(int playerId)
+        {
+            var ret = await _dbContext.Players.FindAsync(playerId);
+            return ToItem(ret);
         }
     }
 }

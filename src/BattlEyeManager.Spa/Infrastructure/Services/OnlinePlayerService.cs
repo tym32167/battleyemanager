@@ -1,7 +1,7 @@
 ﻿using BattleNET;
 using BattlEyeManager.BE.Services;
 using BattlEyeManager.Core;
-using BattlEyeManager.DataLayer.Repositories.Players;
+using BattlEyeManager.Core.DataContracts.Repositories;
 using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
@@ -63,7 +63,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
+                using (var repo = scope.ServiceProvider.GetService<IPlayerNoteRepository>())
                 {
                     var note = $"Kicked with reason: {reason}";
                     await repo.AddNoteToPlayer(playerGuid, currentUser, note);
@@ -81,7 +81,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
+                using (var repo = scope.ServiceProvider.GetService<IPlayerNoteRepository>())
                 {
                     var note = $"Banned with reason: {reason}";
                     await repo.AddNoteToPlayer(playerGuid, currentUser, note, note);
@@ -94,12 +94,15 @@ namespace BattlEyeManager.Spa.Infrastructure.Services
             reason = _messageHelper.GetBanMessage(reason, minutes, currentUser);
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var repo = scope.ServiceProvider.GetService<PlayerRepository>())
+                using (var notesRepo = scope.ServiceProvider.GetService<IPlayerNoteRepository>())
                 {
-                    var player = await repo.GetById(playerId);
-                    _serverAggregator.Send(serverId, BattlEyeCommand.AddBan, $"{player.GUID} {minutes} {reason}");
-                    var note = $"Banned with reason: {reason}";
-                    await repo.AddNoteToPlayer(player.GUID, currentUser, note, note);
+                    using (var playerRepo = scope.ServiceProvider.GetService<IPlayerRepository>())
+                    {
+                        var player = await playerRepo.GetById(playerId);
+                        _serverAggregator.Send(serverId, BattlEyeCommand.AddBan, $"{player.GUID} {minutes} {reason}");
+                        var note = $"Banned with reason: {reason}";
+                        await notesRepo.AddNoteToPlayer(player.GUID, currentUser, note, note);
+                    }
                 }
             }
         }

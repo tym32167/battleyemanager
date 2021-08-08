@@ -1,4 +1,5 @@
-﻿using BattlEyeManager.DataLayer.Repositories.Players;
+﻿using BattlEyeManager.Core.DataContracts.Repositories;
+using BattlEyeManager.DataLayer.Repositories.Players;
 using BattlEyeManager.Spa.Core;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,15 @@ namespace BattlEyeManager.Spa.Api
     {
         private readonly OnlineBanService _onlineBanService;
         private readonly ServerModeratorService _moderatorService;
-        private readonly PlayersCache _playersCache;
+        private readonly IPlayerRepository _playerRepository;        
 
         public OnlineBanController(OnlineBanService onlineBanService,
             ServerModeratorService moderatorService,
-            PlayersCache playersCache)
+            IPlayerRepository playerRepository)
         {
             _onlineBanService = onlineBanService;
             _moderatorService = moderatorService;
-            _playersCache = playersCache;
+            _playerRepository = playerRepository;
         }
 
         [HttpGet("api/onlineserver/{serverId}/bans")]
@@ -31,7 +32,7 @@ namespace BattlEyeManager.Spa.Api
 
             var bans = await _onlineBanService.GetOnlineBans(serverId);
 
-            var players = await _playersCache.GetPlayers(bans.Select(b => b.GuidIp).ToArray());
+            var players = await _playerRepository.GetPlayers(bans.Select(b => b.GuidIp).ToArray());
 
             foreach (var ban in bans)
             {

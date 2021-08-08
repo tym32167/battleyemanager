@@ -61,19 +61,33 @@ namespace BattlEyeManager.DataLayer.Repositories.Players
             }
         }
 
-        public Task<Dictionary<string, PlayerDto>> GetPlayers(string[] playerIds)
+        public Task<Dictionary<string, Core.DataContracts.Models.Player>> GetPlayers(string[] playerIds)
         {
-            var ret = new Dictionary<string, PlayerDto>();
+            var ret = new Dictionary<string, Core.DataContracts.Models.Player>();
 
             foreach (var id in playerIds)
             {
                 if (_guidCache.TryGetValue(id, out PlayerDto p))
                 {
-                    ret[id] = p;
+                    ret[id] = ToItem(p);
                 }
             }
 
             return Task.FromResult(ret);
+        }
+
+        private Core.DataContracts.Models.Player ToItem(PlayerDto model)
+        {
+            return new Core.DataContracts.Models.Player()
+            {
+                Id = model.Id,
+                Comment = model.Comment,
+                GUID = model.GUID,
+                IP = model.IP,
+                LastSeen = model.LastSeen,
+                Name = model.Name,
+                SteamId = model.SteamId
+            };
         }
 
     }
