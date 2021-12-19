@@ -21,7 +21,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         private Dictionary<int, HashSet<string>> _welcomeFeatureBlackLists = new Dictionary<int, HashSet<string>>();
 
-        private static string WelcomeGreater50MessageTemplate = "Welcome, {name}! More than 50 hours on server!";
+        private static string WelcomeGreater300MessageTemplate = "Welcome, {name}! More than 300 hours on server!";
         private static string WelcomeMessageTemplate = "Welcome, {name}! {sessions} sessions and {hours} hours on server!";
         private static string WelcomeEmptyMessageTemplate = "Welcome, {name}! First time on server!";
 
@@ -88,9 +88,9 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             if (sessions.Length != 0)
             {
                 int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-                if (hours > 50)
+                if (hours > 300)
                 {
-                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater50MessageTemplate), player.Name, sessions.Length, hours);
+                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater300MessageTemplate), player.Name, sessions.Length, hours);
                     return message;
                 }
                 else
