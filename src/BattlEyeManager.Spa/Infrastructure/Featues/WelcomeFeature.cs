@@ -132,12 +132,12 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
             var players = e.Data.ToArray();
             if (players.Length > 5) return;
+            if (players.Length == 0) return;
 
             var serverId = e.Server.Id;
 
             var whitelistedPlayers = players.Where(p => !blackList.Contains(p.Guid)).ToArray();
-
-            if (!whitelistedPlayers.Any()) return;
+            var blackListedPlayers = players.Where(p => blackList.Contains(p.Guid)).ToArray();
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -154,6 +154,16 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
                         var newNameMessage = GetNewNickameMessage(server, player, sessions);
                         if (!string.IsNullOrWhiteSpace(newNameMessage)) _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
+                    }
+
+                    foreach (var player in blackListedPlayers)
+                    {
+                        var sessions = await ctx.PlayerSessions
+                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId && x.Name == player.Name)
+                            .ToArrayAsync();
+
+                        var message = GetWelcomeMessage(server, player, sessions);
+                        _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
                     }
                 }
             }
