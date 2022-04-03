@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaxMind.Db" Version="3.0.0" />
-    <PackageReference Include="MaxMind.GeoIP2" Version="4.0.1" />
+    <PackageReference Include="MaxMind.Db" Version="4.0.0" />
+    <PackageReference Include="MaxMind.GeoIP2" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>

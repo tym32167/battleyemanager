@@ -46,17 +46,11 @@ namespace BattlEyeManager.Spa
             Configuration = configuration;
         }
 
-        private IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        private IConfiguration Configuration { get; }        
         public void ConfigureServices(IServiceCollection services)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            // Console.WriteLine("-------------------------------------------------");
-            // Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
-            // Console.WriteLine("--------------------------------------------------");
-
+            
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.Configure<ChatBotFeatureConfig>(chatBotFeatureConfig =>
