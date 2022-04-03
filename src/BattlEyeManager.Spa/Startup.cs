@@ -165,6 +165,7 @@ namespace BattlEyeManager.Spa
             // features
 
             services.AddSingleton<WelcomeFeature, WelcomeFeature>();
+            services.AddSingleton<ThresholdFeature, ThresholdFeature>();
             services.AddSingleton<ChatBotFeature, ChatBotFeature>();
 
             // end features
@@ -250,6 +251,7 @@ namespace BattlEyeManager.Spa
             applicationBuilder.ApplicationServices.GetService<OnlineChatService>();
 
             applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
+            applicationBuilder.ApplicationServices.GetService<ThresholdFeature>();
             applicationBuilder.ApplicationServices.GetService<ChatBotFeature>();
         }
 
@@ -324,9 +326,11 @@ namespace BattlEyeManager.Spa
         {
             var servers = store.Servers.Where(x => x.WelcomeFeatureEnabled).ToArray();
             var welcomeFeature = applicationBuilder.ApplicationServices.GetService<WelcomeFeature>();
+            var thresholdFeature = applicationBuilder.ApplicationServices.GetService<ThresholdFeature>();
             foreach (var server in servers)
             {
                 welcomeFeature?.SetEnabled(server);
+                thresholdFeature?.SetEnabled(server);
             }
         }
 

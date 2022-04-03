@@ -30,6 +30,12 @@ const EditForm = props => {
             <Field name="welcomeFeatureEmptyTemplate" component={FormInputField} type="text" label="Welcome Feature Empty Template (Welcome, {name}! First time on server!)" />
             <Field name="welcomeGreater50MessageTemplate" component={FormInputField} type="text" label="Welcome, {name}! More than 50 hours on server!" />
 
+
+            <Field name="thresholdFeatureEnabled" component={FormInputField} type="checkbox" label="Threshold Feature Enabled" />
+            <Field name="thresholdMinHoursCap" component={FormInputField} type="number" label="Threshold min hours cap" />
+            <Field name="thresholdFeatureMessageTemplate" component={FormInputField} type="text" label="Server is full now, try again later." />
+
+
             <Field name="active" component={FormInputField} type="checkbox" label="Active" />
 
             <Button color="primary" type="submit"><Trans>Save</Trans></Button>

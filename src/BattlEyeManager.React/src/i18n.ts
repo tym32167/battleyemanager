@@ -47,6 +47,7 @@ const resources = {
             "Ban player": "Бан игрока",
             "Cancel": "Отмена",
             "Welcome feature": "Приветствие",
+            "Threshold feature": "Блок новичков",
             "Edit": "Редактировать",
             "Delete": "Удалить",
             "Create": "Создать",

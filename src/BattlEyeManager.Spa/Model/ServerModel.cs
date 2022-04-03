@@ -26,6 +26,10 @@ namespace BattlEyeManager.Spa.Model
         public string WelcomeFeatureTemplate { get; set; }
         public string WelcomeFeatureEmptyTemplate { get; set; }
         public string WelcomeGreater50MessageTemplate { get; set; }
+
+        public bool ThresholdFeatureEnabled { get; set; }
+        public int ThresholdMinHoursCap { get; set; }        
+        public string ThresholdFeatureMessageTemplate { get; set; }
     }
 
     public class ServerSimpleModel

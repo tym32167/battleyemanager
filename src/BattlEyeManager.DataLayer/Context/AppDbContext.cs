@@ -13,7 +13,9 @@ namespace BattlEyeManager.DataLayer.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseMySql(@"server=localhost; database=battleyemanager; port=3306; user=root ");
+            // var connectionString = @"server=localhost; database=battleyemanager; port=3306; user=root; password=123; ";
+            // optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
             base.OnConfiguring(optionsBuilder);
         }
 

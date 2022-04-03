@@ -4,7 +4,6 @@
     {
         public int Id { get; set; }
 
-
         public int ServerId { get; set; }
 
         public string Guid { get; set; }

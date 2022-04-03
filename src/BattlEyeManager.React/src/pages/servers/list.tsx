@@ -47,6 +47,7 @@ export class List extends Component<any, IGridParentProps<IServer>> {
                         <ClientGridColumn header="Port" name="port" />
                         <ClientGridColumn header="Active" name="active" />
                         <ClientGridColumn header="Welcome feature" name="welcomeFeatureEnabled" />
+                        <ClientGridColumn header="Threshold feature" name="thresholdFeatureEnabled" />
                         <ClientGridColumn header="" name="" renderer={scriptsRender} />
                         <ClientGridColumn header="" name="" renderer={editRender} />
                         <ClientGridColumn header="" name="" renderer={deleteRender} />

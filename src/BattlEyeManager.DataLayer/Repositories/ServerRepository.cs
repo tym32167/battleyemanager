@@ -16,37 +16,7 @@ namespace BattlEyeManager.DataLayer.Repositories
         public ServerRepository(AppDbContext context) : base(context)
         {
             _context = context;
-        }
-
-
-
-        //private ServerInfoDto ToDto(Server info)
-        //{
-        //    return new ServerInfoDto()
-        //    {
-        //        Id = info.Id,
-        //        Host = info.Host,
-        //        Port = info.Port,
-        //        SteamPort = info.SteamPort,
-        //        Password = info.Password,
-        //        Name = info.Name,
-        //        Active = info.Active,
-        //    };
-        //}
-
-        //private Server FromDto(ServerInfoDto info)
-        //{
-        //    return new Server()
-        //    {
-        //        Id = info.Id,
-        //        Host = info.Host,
-        //        Port = info.Port,
-        //        SteamPort = info.SteamPort,
-        //        Password = info.Password,
-        //        Name = info.Name,
-        //        Active = info.Active,
-        //    };
-        //}
+        }     
     }
 
 
@@ -81,5 +51,12 @@ namespace BattlEyeManager.DataLayer.Repositories
 
         [MaxLength(255)]
         public string WelcomeGreater50MessageTemplate { get; set; }
+
+
+        public bool ThresholdFeatureEnabled { get; set; }
+        public int ThresholdMinHoursCap { get; set; }
+
+        [MaxLength(255)]
+        public string ThresholdFeatureMessageTemplate { get; set; }        
     }
 }

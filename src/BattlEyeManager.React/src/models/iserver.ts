@@ -5,6 +5,9 @@ export interface IServer extends IOnlineServer {
     welcomeFeatureEnabled: boolean,
     welcomeFeatureTemplate: string,
     welcomeFeatureEmptyTemplate: string,
-    welcomeGreater50MessageTemplate: string
+    welcomeGreater50MessageTemplate: string,
+    thresholdFeatureEnabled: boolean,
+    thresholdMinHoursCap: number,
+    thresholdFeatureMessageTemplate: string
 }
 

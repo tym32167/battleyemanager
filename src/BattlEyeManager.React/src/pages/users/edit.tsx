@@ -31,7 +31,7 @@ export class Edit extends Component<any, IEditState> {
     public async Update(item: IUser) {
         userService.updateItem(item).then(
             () => history.push("/users"),
-            (error: any) => this.setState({ error }))
+            (error: any) => this.setState({ error }));
     }
 
     public render() {

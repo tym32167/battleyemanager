@@ -23,13 +23,18 @@ namespace BattlEyeManager.Spa.Api.Admin
         private readonly IServerRepository _repository;
         private readonly IBeServerAggregator _beServerAggregator;
         private readonly WelcomeFeature _welcomeFeature;
+        private readonly ThresholdFeature thresholdFeature;
         private readonly IMapper _mapper;
 
-        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator, WelcomeFeature welcomeFeature, IMapper mapper) : base(repository, mapper)
+        public ServerController(IServerRepository repository, IBeServerAggregator beServerAggregator, 
+            WelcomeFeature welcomeFeature, 
+            ThresholdFeature thresholdFeature,
+            IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _beServerAggregator = beServerAggregator;
             _welcomeFeature = welcomeFeature;
+            this.thresholdFeature = thresholdFeature;
             _mapper = mapper;
         }
 
@@ -66,6 +71,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 _beServerAggregator.RemoveServer(model.Id);
 
             _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
+            thresholdFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
 
             return ret;
         }
@@ -89,6 +95,7 @@ namespace BattlEyeManager.Spa.Api.Admin
                 _beServerAggregator.AddServer(_mapper.Map<ServerInfo>(model));
 
             _welcomeFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
+            thresholdFeature.SetEnabled(_mapper.Map<ServerInfoDto>(model));
 
             return CreatedAtAction(nameof(Get), new { id = item.Id }, await Get(item.Id));
         }
@@ -107,6 +114,7 @@ namespace BattlEyeManager.Spa.Api.Admin
             item.WelcomeFeatureEnabled = false;
 
             _welcomeFeature.SetEnabled(item);
+            thresholdFeature.SetEnabled(item);
             _beServerAggregator.RemoveServer(id);
             return await base.Delete(id);
         }
