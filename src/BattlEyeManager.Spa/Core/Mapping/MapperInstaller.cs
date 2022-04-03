@@ -42,6 +42,7 @@ namespace BattlEyeManager.Spa.Core.Mapping
                 configurationExpression.CreateMap<ServerScriptModel, ServerScript>();
 
                 configurationExpression.CreateMap<Server, OnlineServerModel>();
+                configurationExpression.CreateMap<Server, ServerOptionsModel>();
 
                 configurationExpression.CreateMap<Ban, OnlineBanViewModel>();
 

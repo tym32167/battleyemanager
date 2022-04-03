@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IOnlineServer, IPagedResponse, IPlayerSession } from 'src/models';
+import { IOnlineServer, IPagedResponse, IPlayerSession, IServerOptions } from 'src/models';
 import { IReadonlyService } from '.';
 import { ReadonlyCommonService } from './core/readonlycommonservice';
 
@@ -22,6 +22,20 @@ class OnlineServerService22 extends ReadonlyCommonService<IOnlineServer>{
     public getPlayerSessions(serverId: number, skip: number, take: number) {
         const url = this.baseUrl + serverId + '/sessions';
         return axios.get<IPagedResponse<IPlayerSession>>(url, { params: { skip, take } })
+            .then(response => response.data)
+            .catch(error => Promise.reject(this.getError(error)));
+    }
+
+    public getServerOptions(serverId: number) {
+        const url = this.baseUrl + serverId + '/options';
+        return axios.get<IServerOptions>(url)
+            .then(response => response.data)
+            .catch(error => Promise.reject(this.getError(error)));
+    }
+
+    public saveServerOptions(serverOptions: IServerOptions) {
+        const url = this.baseUrl + serverOptions.id + '/options';
+        return axios.post<IServerOptions>(url, serverOptions)
             .then(response => response.data)
             .catch(error => Promise.reject(this.getError(error)));
     }

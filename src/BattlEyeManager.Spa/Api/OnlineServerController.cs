@@ -1,5 +1,8 @@
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.Spa.Core;
+using BattlEyeManager.Spa.Core.Mapping;
 using BattlEyeManager.Spa.Infrastructure.Extensions;
+using BattlEyeManager.Spa.Infrastructure.Featues;
 using BattlEyeManager.Spa.Infrastructure.Services;
 using BattlEyeManager.Spa.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +19,19 @@ namespace BattlEyeManager.Spa.Api
     {
         private readonly OnlineServerService _onlineServerService;
         private readonly ServerModeratorService _moderatorService;
+        private readonly IServerRepository serverRepository;
+        private readonly IMapper mapper;
+        private readonly ThresholdFeature thresholdFeature;
 
-        public OnlineServerController(OnlineServerService onlineServerService, ServerModeratorService moderatorService)
+        public OnlineServerController(OnlineServerService onlineServerService, 
+            ServerModeratorService moderatorService, IServerRepository serverRepository,
+            IMapper mapper, ThresholdFeature thresholdFeature)
         {
             _onlineServerService = onlineServerService;
             _moderatorService = moderatorService;
+            this.serverRepository = serverRepository;
+            this.mapper = mapper;
+            this.thresholdFeature = thresholdFeature;
         }
 
         [HttpGet]
@@ -84,6 +95,38 @@ namespace BattlEyeManager.Spa.Api
             };
 
             return Ok(ret);
+        }
+
+
+        [HttpGet("{serverId}/options")]
+        public async Task<IActionResult> GetOptions(int serverId)
+        {
+            _moderatorService.CheckAccess(User, serverId);
+
+            var server = await serverRepository.GetItemByIdAsync(serverId);
+            var options = mapper.Map<ServerOptionsModel>(server);            
+
+            return Ok(options);
+        }
+
+        [HttpPost("{serverId}/options")]
+        public async Task<IActionResult> SaveOptions(ServerOptionsModel model)
+        {
+            _moderatorService.CheckAccess(User, model.Id);
+
+            var server = await serverRepository.GetItemByIdAsync(model.Id);
+
+            server.ThresholdFeatureEnabled = model.ThresholdFeatureEnabled; 
+            server.ThresholdFeatureMessageTemplate = model.ThresholdFeatureMessageTemplate; 
+            server.ThresholdMinHoursCap = model.ThresholdMinHoursCap;
+
+            await serverRepository.UpdateItemAsync(server);
+            server = await serverRepository.GetItemByIdAsync(model.Id);
+
+            thresholdFeature.SetEnabled(mapper.Map<ServerInfoDto>(server));
+            var options = mapper.Map<ServerOptionsModel>(server);
+
+            return Ok(options);
         }
     }
 }
