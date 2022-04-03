@@ -106,7 +106,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
-        private string? GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
         {
 
             var newName = player.Name;

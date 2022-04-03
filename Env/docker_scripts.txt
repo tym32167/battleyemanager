@@ -1,0 +1,7 @@
+Setup mysql 
+
+docker run --detach --name bemanager-mariadb --env MARIADB_USER=be_user --env MARIADB_PASSWORD=123 --env MARIADB_ROOT_PASSWORD=123 -p 3306:3306  mariadb:10.5.10
+
+ALTER DATABASE battleyemanager 
+  CHARACTER SET = 'utf8'
+  COLLATE = 'utf8_general_ci';

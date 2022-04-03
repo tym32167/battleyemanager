@@ -64,10 +64,8 @@ namespace BattlEyeManager.Spa
                 Configuration.GetSection("ChatBotFeatureConfig").Bind(chatBotFeatureConfig);
             });
 
-
-            services.AddDbContext<AppDbContext>(opt =>
-                opt.UseMySQL(connectionString));
-
+            services.AddDbContext<AppDbContext>(opt => opt
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -294,7 +292,7 @@ namespace BattlEyeManager.Spa
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-            }           
+            }
 
 
             app.UseDefaultFiles();
