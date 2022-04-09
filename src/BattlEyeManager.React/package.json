@@ -15,7 +15,7 @@
     "history": "^4.10.1",
     "i18next": "^17.0.18",
     "i18next-browser-languagedetector": "^4.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-chartjs-2": "^2.8.0",
