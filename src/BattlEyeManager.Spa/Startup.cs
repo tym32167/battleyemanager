@@ -179,7 +179,7 @@ namespace BattlEyeManager.Spa
             services.AddTransient<ServerModeratorRepository, ServerModeratorRepository>();
             services.AddTransient<ServerStatsRepository, ServerStatsRepository>();
             services.AddTransient<PlayerRepository, PlayerRepository>();
-
+            services.AddTransient<PlayerPointsRepository, PlayerPointsRepository>();
 
             services.AddSingleton<PlayersCache, PlayersCache>();
 

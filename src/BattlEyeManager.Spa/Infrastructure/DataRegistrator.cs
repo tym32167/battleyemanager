@@ -1,6 +1,7 @@
 ﻿using BattlEyeManager.BE.Services;
 using BattlEyeManager.DataLayer.Context;
 using BattlEyeManager.DataLayer.Models;
+using BattlEyeManager.DataLayer.Repositories;
 using BattlEyeManager.DataLayer.Repositories.Players;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -174,23 +175,27 @@ namespace BattlEyeManager.Spa.Infrastructure
                     {
                         if (leaved.Any())
                         {
-
-                            var leavingPlayersIds = leaved.Select(x => x.Guid).ToArray();
-
-                            var threeDaysAgo = DateTime.UtcNow.AddDays(-3);
-
-                            var sessionsToClose =
-                                await ctx.PlayerSessions
-                                    .Where(x => x.EndDate == null && leavingPlayersIds.Contains(x.Player.GUID) &&
-                                                x.StartDate > threeDaysAgo)
-                                    .ToListAsync();
-
-                            foreach (var session in sessionsToClose)
+                            using (var playerPoints = scope.ServiceProvider.GetService<PlayerPointsRepository>())
                             {
-                                session.EndDate = DateTime.UtcNow;
-                            }
+                                var leavingPlayersIds = leaved.Select(x => x.Guid).ToArray();
 
-                            await ctx.SaveChangesAsync();
+                                var threeDaysAgo = DateTime.UtcNow.AddDays(-3);
+
+                                var sessionsToClose =
+                                    await ctx.PlayerSessions
+                                        .Where(x => x.EndDate == null && leavingPlayersIds.Contains(x.Player.GUID) &&
+                                                    x.StartDate > threeDaysAgo)
+                                        .ToListAsync();
+
+                                foreach (var session in sessionsToClose)
+                                {
+                                    session.EndDate = DateTime.UtcNow;
+                                }
+
+                                await ctx.SaveChangesAsync();
+
+                                await playerPoints.RegisterSessionsAsync(sessionsToClose);
+                            }
                         }
                     }
                 }

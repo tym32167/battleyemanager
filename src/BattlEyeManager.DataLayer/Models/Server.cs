@@ -10,7 +10,8 @@ namespace BattlEyeManager.DataLayer.Models
         public ICollection<ServerBan> ServerBans { get; set; }
         public ICollection<Admin> Admins { get; set; }
         public ICollection<ServerModerators> Servers { get; set; }
-
         public ICollection<ServerScript> ServerScripts { get; set; }
+        public ICollection<PlayerPoints> PlayerPoints { get; set; }
+        public ICollection<PlayerPointsHistory> PlayerPointsHistory { get; set; }
     }
 }

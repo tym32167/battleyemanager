@@ -60,6 +60,10 @@ namespace BattlEyeManager.DataLayer.Context
         public DbSet<ChatMessage> ChatMessages { get; set; }
 
         public DbSet<Player> Players { get; set; }
+
+        public DbSet<PlayerPoints> PlayerPoints { get; set; }
+        public DbSet<PlayerPointsHistory> PlayerPointsHistory { get; set; }
+
         public DbSet<PlayerSession> PlayerSessions { get; set; }
         public DbSet<ServerBan> ServerBans { get; set; }
         public DbSet<PlayerNote> PlayerNotes { get; set; }

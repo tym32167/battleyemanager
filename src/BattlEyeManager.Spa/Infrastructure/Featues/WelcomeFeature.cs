@@ -6,6 +6,7 @@ using BattlEyeManager.Spa.Infrastructure.State;
 using BattlEyeManager.Spa.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
     {
         private readonly ServerStateService _serverStateService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly ILogger<WelcomeFeature> logger;
         private Dictionary<int, ServerInfoDto> _enabledServers = new Dictionary<int, ServerInfoDto>();
 
         private Dictionary<int, HashSet<string>> _welcomeFeatureBlackLists = new Dictionary<int, HashSet<string>>();
@@ -27,12 +29,17 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         private static string WelcomeNewNicknameTemplate = "Внимание! Игрок {newName} сменил ник. Его прошлый ник {oldName}!";
 
-        private static string GetMessageString(string template, string name, int sessions, int hours)
+        private static string GetMessageString(string template, string name, int sessions, int hours, decimal points)
         {
             var templater = new StringTemplater();
             templater.AddParameter("name", name);
+            // templater.AddParameter("sessions", sessions.ToString());
+            // templater.AddParameter("hours", hours.ToString());
+
             templater.AddParameter("sessions", sessions.ToString());
-            templater.AddParameter("hours", hours.ToString());
+            templater.AddParameter("hours", ((int)points).ToString());
+
+            templater.AddParameter("points", ((int)points).ToString());
 
             return templater.Template(template);
         }
@@ -48,10 +55,12 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         public WelcomeFeature(OnlinePlayerStateService playerStateService,
             ServerStateService serverStateService,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory,
+            ILogger<WelcomeFeature> logger)
         {
             _serverStateService = serverStateService;
             _serviceScopeFactory = serviceScopeFactory;
+            this.logger = logger;
             playerStateService.PlayersJoined += _playerStateService_PlayersJoined;
         }
 
@@ -83,32 +92,34 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
-        private string GetWelcomeMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string GetWelcomeMessage(ServerInfoDto server, Player player, PlayerSession[] sessions, decimal points)
         {
             if (sessions.Length != 0)
             {
                 int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-                if (hours > 300)
+
+                logger.LogInformation($"LOGGING FOR POINS: Server:{server.Id} Player: [{player.Name}]({player.Guid}) HOURS:{hours} POINTS:{(int)points}");
+
+                if (points > 300)
                 {
-                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater300MessageTemplate), player.Name, sessions.Length, hours);
+                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater300MessageTemplate), player.Name, sessions.Length, hours, points);
                     return message;
                 }
                 else
                 {
-                    var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours);
+                    var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours, points);
                     return message;
                 }
             }
             else
             {
-                var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0);
+                var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0, points);
                 return message;
             }
         }
 
         private string GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
         {
-
             var newName = player.Name;
             var oldName = sessions.OrderByDescending(x => x.StartDate).FirstOrDefault()?.Name;
 
@@ -118,7 +129,6 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                 var message = GetNewNameMessageString(WelcomeNewNicknameTemplate, newName, oldName);
                 return message;
             }
-
 
             return null;
         }
@@ -141,29 +151,47 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
+                using (var pointsRepo = scope.ServiceProvider.GetService<PlayerPointsRepository>())
                 {
-                    foreach (var player in whitelistedPlayers)
+                    using (var ctx = scope.ServiceProvider.GetService<AppDbContext>())
                     {
-                        var sessions = await ctx.PlayerSessions
-                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
-                            .ToArrayAsync();
+                        foreach (var player in whitelistedPlayers)
+                        {
+                            var sessions = await ctx.PlayerSessions
+                                .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
+                                .ToArrayAsync();
 
-                        var message = GetWelcomeMessage(server, player, sessions);
-                        _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
+                            var playerDb = await ctx.Players.Where(x => x.GUID == player.Guid).FirstOrDefaultAsync();
+                            decimal points = 0;
+                            if (playerDb != null) points = await pointsRepo.GetPlayerPointsAsync(serverId, playerDb.Id);                                                                       
 
-                        var newNameMessage = GetNewNickameMessage(server, player, sessions);
-                        if (!string.IsNullOrWhiteSpace(newNameMessage)) _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
-                    }
+                            var message = GetWelcomeMessage(server, player, sessions, points);
 
-                    foreach (var player in blackListedPlayers)
-                    {
-                        var sessions = await ctx.PlayerSessions
-                            .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId && x.Name == player.Name)
-                            .ToArrayAsync();
+                            logger.LogInformation($"POST CHAT {e.Server.Id}: {message}");
+                            // _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
 
-                        var message = GetWelcomeMessage(server, player, sessions);
-                        _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
+                            var newNameMessage = GetNewNickameMessage(server, player, sessions);
+                            if (!string.IsNullOrWhiteSpace(newNameMessage))
+                            {
+                                logger.LogInformation($"POST CHAT {e.Server.Id}: {newNameMessage}");
+                                // _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
+                            }
+                            
+                        }
+
+                        foreach (var player in blackListedPlayers)
+                        {
+                            var sessions = await ctx.PlayerSessions
+                                .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId && x.Name == player.Name)
+                                .ToArrayAsync();
+
+                            var points = await pointsRepo.GetPlayerPointsFromSessionsAsync(sessions);
+
+                            var message = GetWelcomeMessage(server, player, sessions, points);
+
+                            logger.LogInformation($"POST CHAT {e.Server.Id}: {message}");
+                            // _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
+                        }
                     }
                 }
             }
