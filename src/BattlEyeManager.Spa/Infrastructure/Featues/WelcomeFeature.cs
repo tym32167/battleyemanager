@@ -29,12 +29,10 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
         private static string WelcomeNewNicknameTemplate = "Внимание! Игрок {newName} сменил ник. Его прошлый ник {oldName}!";
 
-        private static string GetMessageString(string template, string name, int sessions, int hours, decimal points)
+        private static string GetMessageString(string template, string name, int sessions, decimal points)
         {
             var templater = new StringTemplater();
-            templater.AddParameter("name", name);
-            // templater.AddParameter("sessions", sessions.ToString());
-            // templater.AddParameter("hours", hours.ToString());
+            templater.AddParameter("name", name);           
 
             templater.AddParameter("sessions", sessions.ToString());
             templater.AddParameter("hours", ((int)points).ToString());
@@ -92,36 +90,32 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
             }
         }
 
-        private string GetWelcomeMessage(ServerInfoDto server, Player player, PlayerSession[] sessions, decimal points)
+        private string GetWelcomeMessage(ServerInfoDto server, Player player, DataLayer.Models.Player playerDb, int sessionsCount, decimal points)
         {
-            if (sessions.Length != 0)
+            if (sessionsCount != 0)
             {
-                int hours = (int)sessions.Select(s => ((s.EndDate ?? s.StartDate) - s.StartDate).TotalHours).Sum();
-
-                logger.LogInformation($"LOGGING FOR POINS: Server:{server.Id} Player: [{player.Name}]({player.Guid}) HOURS:{hours} POINTS:{(int)points}");
-
                 if (points > 300)
                 {
-                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater300MessageTemplate), player.Name, sessions.Length, hours, points);
+                    var message = GetMessageString(server.WelcomeGreater50MessageTemplate.DefaultIfNullOrEmpty(WelcomeGreater300MessageTemplate), player.Name, sessionsCount, points);
                     return message;
                 }
                 else
                 {
-                    var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessions.Length, hours, points);
+                    var message = GetMessageString(server.WelcomeFeatureTemplate.DefaultIfNullOrEmpty(WelcomeMessageTemplate), player.Name, sessionsCount, points);
                     return message;
                 }
             }
             else
             {
-                var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessions.Length, 0, points);
+                var message = GetMessageString(server.WelcomeFeatureEmptyTemplate.DefaultIfNullOrEmpty(WelcomeEmptyMessageTemplate), player.Name, sessionsCount, 0);
                 return message;
             }
         }
 
-        private string GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession[] sessions)
+        private string GetNewNickameMessage(ServerInfoDto server, Player player, PlayerSession prevSession)
         {
             var newName = player.Name;
-            var oldName = sessions.OrderByDescending(x => x.StartDate).FirstOrDefault()?.Name;
+            var oldName = prevSession?.Name;
 
             if (!string.IsNullOrEmpty(oldName) &&
                 string.Compare(newName, oldName, StringComparison.InvariantCultureIgnoreCase) != 0)
@@ -157,24 +151,27 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
                     {
                         foreach (var player in whitelistedPlayers)
                         {
-                            var sessions = await ctx.PlayerSessions
+                            var sessionsCount = await ctx.PlayerSessions
                                 .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
-                                .ToArrayAsync();
+                                .CountAsync();
+
+                            var prevSession = await ctx.PlayerSessions
+                               .Where(x => x.EndDate != null && player.Guid == x.Player.GUID && x.ServerId == serverId)
+                               .OrderByDescending(x => x.StartDate)
+                               .FirstOrDefaultAsync();
 
                             var playerDb = await ctx.Players.Where(x => x.GUID == player.Guid).FirstOrDefaultAsync();
                             decimal points = 0;
                             if (playerDb != null) points = await pointsRepo.GetPlayerPointsAsync(serverId, playerDb.Id);                                                                       
 
-                            var message = GetWelcomeMessage(server, player, sessions, points);
+                            var message = GetWelcomeMessage(server, player, playerDb, sessionsCount, points);
+                            
+                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
 
-                            logger.LogInformation($"POST CHAT {e.Server.Id}: {message}");
-                            // _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
-
-                            var newNameMessage = GetNewNickameMessage(server, player, sessions);
+                            var newNameMessage = GetNewNickameMessage(server, player, prevSession);
                             if (!string.IsNullOrWhiteSpace(newNameMessage))
-                            {
-                                logger.LogInformation($"POST CHAT {e.Server.Id}: {newNameMessage}");
-                                // _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
+                            {                                
+                                _serverStateService.PostChat(e.Server.Id, "bot", -1, newNameMessage);
                             }
                             
                         }
@@ -187,10 +184,11 @@ namespace BattlEyeManager.Spa.Infrastructure.Featues
 
                             var points = await pointsRepo.GetPlayerPointsFromSessionsAsync(sessions);
 
-                            var message = GetWelcomeMessage(server, player, sessions, points);
+                            var playerDb = await ctx.Players.Where(x => x.GUID == player.Guid).FirstOrDefaultAsync();
 
-                            logger.LogInformation($"POST CHAT {e.Server.Id}: {message}");
-                            // _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
+                            var message = GetWelcomeMessage(server, player, playerDb, sessions.Length, points);
+                            
+                            _serverStateService.PostChat(e.Server.Id, "bot", -1, message);
                         }
                     }
                 }
