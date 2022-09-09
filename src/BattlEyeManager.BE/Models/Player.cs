@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace BattlEyeManager.BE.Models
@@ -78,9 +77,6 @@ namespace BattlEyeManager.BE.Models
                     int num;
                     if (!int.TryParse(match.Groups[1].Value, out num)) return null;
                     var ip = match.Groups[2].Value;
-
-                    ip = string.Join(".", ip.Split('.').Reverse());
-
                     int port;
                     if (!int.TryParse(match.Groups[3].Value, out port)) return null;
 
