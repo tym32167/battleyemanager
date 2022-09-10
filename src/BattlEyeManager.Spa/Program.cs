@@ -28,14 +28,15 @@ namespace BattlEyeManager.Spa
             {
                 // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
                 NLog.LogManager.Shutdown();
-            }
+            } 
         }
 
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config)=>
-            {                
-                config.AddJsonFile($"appsettings.json", optional: false);                
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddJsonFile($"appsettings.json", optional: false);
+                config.AddEnvironmentVariables();
             })
                 //.UseUrls("http://localhost:58175", "http://192.168.0.10:58175")
                 .UseStartup<Startup>()

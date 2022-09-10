@@ -6,6 +6,11 @@ cd BattlEyeManager.React
 npm run build
 cd ..
 cd ..
-docker build -t battleyemanager .
-docker run -d -p 8080:80 --name BattlEyeManager.Spa battleyemanager
-docker save battleyemanager -o battleyemanager.tar
+
+docker build -t tym32167/battleyemanager .
+
+:: docker run -d -p 8080:80 --name BattlEyeManager.Spa -e "ConnectionStrings__DefaultConnection=..." tym32167/battleyemanager
+:: docker save tym32167/battleyemanager -o battleyemanager.tar
+
+:: docker push tym32167/battleyemanager
+
