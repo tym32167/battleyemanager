@@ -23,7 +23,7 @@
     "react-i18next": "^10.13.1",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts-ts": "^3.1.0",
+    "react-scripts-ts": "^4.0.8",
     "reactstrap": "^8.0.1",
     "redux": "^4.0.4",
     "redux-form": "^8.2.6",
